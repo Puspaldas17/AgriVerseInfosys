@@ -18,10 +18,6 @@ _A full-stack, multilingual, offline-capable smart farming platform_
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.x-brightgreen?style=flat-square)](https://spring.io/projects/spring-boot)
 [![Infosys](https://img.shields.io/badge/Infosys-Training%20Project-blue?style=flat-square)](https://github.com/Puspaldas17)
 
-🌐 **Live Demo:** [https://agriverse-bwqw.onrender.com](https://agriverse-bwqw.onrender.com)
-
-> ⚠️ Hosted on Render free tier — first load may take **30–60 seconds** (cold start).
-
 </div>
 
 ---
