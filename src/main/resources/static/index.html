@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriVerse</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<header>
+    <nav class="navbar">
+
+        <div class="logo">
+            🌱 AgriVerse
+        </div>
+    <ul class="nav-links">
+
+        <li>
+            <a href="#about">About</a>
+        </li>
+
+        <li>
+           <select id="language">
+    <option value="en">English</option>
+    <option value="te">తెలుగు</option>
+    <option value="hi">हिन्दी</option>
+</select>
+        </li>
+
+        <!-- Theme -->
+        <li>
+           <button id="theme-toggle" class="theme-btn">
+    🌙
+</button>
+        </li>
+	 <!-- Notification -->
+        <li class="notification">
+            <button class="notify-btn">
+                <i class="fas fa-bell"></i>
+                <span class="badge-count">3</span>
+            </button>
+        </li>
+
+
+    </ul>
+
+    <div class="nav-buttons">
+
+        <a href="login.html" class="login">
+            Farmer Login
+        </a>
+
+        <a href="login.html" class="login">
+            Get Started
+        </a>
+
+    </div>
+
+</nav>
+
+</header>
+<!-- Hero -->
+
+<section class="hero">
+
+<div class="left">
+
+<span class="badge">
+🌱 Smart farming, built for the web
+</span>
+
+<h1 id="title">
+    Cultivating Success,
+    <span>Harvesting Innovation</span>
+</h1>
+
+<p>
+Empowering every harvest with precision data,
+weather forecasting, AI crop advisory,
+real-time market prices and disease detection.
+</p>
+
+<div class="buttons">
+
+<button class="green">
+See Solution
+</button>
+
+<button class="white">
+Technical Approach
+</button>
+
+</div>
+
+<div class="tags">
+
+<span>☀ Weather Aware</span>
+
+<span>🎤 Voice & Chat</span>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="dashboard">
+    <img src="images/farm.jpg" alt="AgriVerse" class="dashboard-image">
+
+    <div class="dashboard-features">
+    <div>Weather</div>
+    <div>Advisory</div>
+    <div>Chat</div>
+	</div>
+    <p>Personalised Data-Driven Farming</p>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<!-- Features -->
+
+<section class="features">
+<h2>What You Get</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>🌱 Smart Crop Advisory</h3>
+
+<p>
+Expert guidance on fertilizers,
+irrigation and seeds.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>☁ Precision Weather</h3>
+
+<p>
+Real-time weather forecasting.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>🤖 AI Farming Assistant</h3>
+
+<p>
+24×7 Chatbot for farmers.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>🌍 Native Language</h3>
+
+<p>
+Supports Telugu, Hindi and English.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>📷 Disease Detection</h3>
+
+<p>
+Upload crop image to detect diseases.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>🔒 Secure & Private</h3>
+
+<p>
+End-to-end encrypted farming data.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- How It Works -->
+
+<section class="works">
+
+<h2>How It Works</h2>
+
+<div class="steps">
+
+<div class="step">
+
+<h3>1</h3>
+
+<h4>Create Profile</h4>
+
+<p>Enter farm details.</p>
+
+</div>
+
+<div class="step">
+
+<h3>2</h3>
+
+<h4>Collect Data</h4>
+
+<p>Weather and soil information.</p>
+
+</div>
+
+<div class="step">
+
+<h3>3</h3>
+
+<h4>AI Advice</h4>
+
+<p>Get personalized recommendations.</p>
+
+</div>
+
+<div class="step">
+
+<h3>4</h3>
+
+<h4>Improve</h4>
+
+<p>Track your crop performance.</p>
+
+</div>
+
+</div>
+
+</section>
+<!-- Join CTA -->
+
+<section class="cta">
+
+<div class="cta-content">
+
+<h2>Ready to modernize your farming?</h2>
+
+<p>
+Join the Revolution Ready to modernize your farming?<br>
+Join thousands of farmers using AgriVerse to make data-driven decisions
+and improve productivity season after season.
+</p>
+
+<div class="buttons">
+
+<a href="login.html" class="login">
+    		Get Start Now
+	</a>
+
+<button class="white">
+Learn More
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Proposed Solution -->
+
+<!-- Technical Approach -->
+
+<section class="solution" id="about">
+
+    <h2>Technical Approach</h2>
+
+    <p class="subtitle">
+        Learn more about the technology, feasibility and real-world impact behind this platform.
+    </p>
+
+    <div class="tab-buttons">
+
+        <button class="tab-btn active" onclick="showTab('solution')">
+            Proposed Solution
+        </button>
+
+        <button class="tab-btn" onclick="showTab('tech')">
+            Tech Stack
+        </button>
+
+        <button class="tab-btn" onclick="showTab('feasibility')">
+            Feasibility
+        </button>
+
+        <button class="tab-btn" onclick="showTab('impact')">
+            Impact
+        </button>
+
+        <button class="tab-btn" onclick="showTab('research')">
+            Research
+        </button>
+
+    </div>
+
+    <!-- Proposed Solution -->
+
+    <div id="solution" class="tab-content active">
+
+        <div class="solution-grid">
+
+            <div class="card">
+                <h3>🌱 AI Crop Advisory</h3>
+                <p>Personalized fertilizer and irrigation recommendations.</p>
+            </div>
+
+            <div class="card">
+                <h3>☁ Real-Time Data</h3>
+                <p>Weather forecasts and market prices.</p>
+            </div>
+
+            <div class="card">
+                <h3>🎤 Voice & Multilingual</h3>
+                <p>Supports Telugu, English and Hindi.</p>
+            </div>
+
+            <div class="card">
+                <h3>📶 Offline First</h3>
+                <p>Works even without internet.</p>
+            </div>
+
+            <div class="card">
+                <h3>📷 Disease Detection</h3>
+                <p>Upload leaf image for AI diagnosis.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔒 Privacy</h3>
+                <p>Farmer data remains secure.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Tech Stack -->
+
+    <div id="tech" class="tab-content">
+
+        <div class="card">
+
+            <h3>Tech Stack</h3>
+
+            <ul>
+                <li>React (Vite)</li>
+                <li>Node.js + Express</li>
+                <li>MongoDB</li>
+                <li>TensorFlow CNN</li>
+                <li>OpenWeather API</li>
+                <li>Google Speech-to-Text API</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- Feasibility -->
+
+    <div id="feasibility" class="tab-content">
+
+        <div class="solution-grid">
+
+            <div class="card">
+                <h3>✅ Strengths</h3>
+                <p>Low cost, scalable and cloud-based.</p>
+            </div>
+
+            <div class="card">
+                <h3>⚠ Risks</h3>
+                <p>Internet availability in rural areas.</p>
+            </div>
+
+            <div class="card">
+                <h3>🛡 Mitigation</h3>
+                <p>Offline mode and SMS support.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Impact -->
+
+    <div id="impact" class="tab-content">
+
+        <div class="solution-grid">
+
+            <div class="card">
+                <h2>20–30%</h2>
+                <p>Yield Increase</p>
+            </div>
+
+            <div class="card">
+                <h2>86%</h2>
+                <p>Small Farmers Benefited</p>
+            </div>
+
+            <div class="card">
+                <h2>24×7</h2>
+                <p>AI Advisory Support</p>
+            </div>
+
+            <div class="card">
+                <h2>3+</h2>
+                <p>Languages Supported</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Research -->
+
+    <div id="research" class="tab-content">
+
+        <div class="card">
+
+            <h3>Research Sources</h3>
+
+            <ul>
+                <li>OpenWeather API</li>
+                <li>eNAM Market API</li>
+                <li>Google Speech API</li>
+                <li>PlantVillage Dataset</li>
+                <li>ICAR Reports</li>
+                <li>NABARD Reports</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- Footer -->
+
+<footer>
+
+<h2>🌱 AgriVerse</h2>
+
+<p>
+Smart farming powered by Artificial Intelligence, weather intelligence,
+and precision agriculture.
+</p>
+
+<p class="copy">
+© 2026 AgriVerse. All Rights Reserved.
+</p>
+
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

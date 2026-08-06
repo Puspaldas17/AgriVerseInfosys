@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AgriVerse - Sign Up</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:linear-gradient(135deg,#E8F5E9,#A5D6A7);
+
+}
+
+.container{
+
+width:1000px;
+
+height:620px;
+
+background:white;
+
+display:flex;
+
+border-radius:20px;
+
+overflow:hidden;
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+.left{
+
+width:45%;
+
+background:linear-gradient(135deg,#2E7D32,#66BB6A);
+
+color:white;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+padding:40px;
+
+text-align:center;
+
+}
+
+.left i{
+
+font-size:80px;
+
+margin-bottom:20px;
+
+}
+
+.left h1{
+
+font-size:38px;
+
+margin-bottom:15px;
+
+}
+
+.left p{
+
+line-height:28px;
+
+font-size:16px;
+
+}
+
+.right{
+
+width:55%;
+
+padding:40px;
+
+overflow-y:auto;
+
+}
+
+.right h2{
+
+font-size:34px;
+
+color:#2E7D32;
+
+margin-bottom:10px;
+
+}
+
+.right p{
+
+color:#777;
+
+margin-bottom:25px;
+
+}
+
+.row{
+
+display:flex;
+
+gap:15px;
+
+}
+
+.input-box{
+
+position:relative;
+
+margin-bottom:20px;
+
+flex:1;
+
+}
+
+.input-box input,
+
+.input-box select{
+
+width:100%;
+
+padding:14px 45px;
+
+border:1px solid #ccc;
+
+border-radius:10px;
+
+outline:none;
+
+font-size:15px;
+
+}
+
+.input-box i{
+
+position:absolute;
+
+left:15px;
+
+top:16px;
+
+color:#2E7D32;
+
+}
+
+.gender{
+
+margin-bottom:20px;
+
+}
+
+.gender label{
+
+margin-right:20px;
+
+}
+
+.checkbox{
+
+font-size:14px;
+
+margin-bottom:20px;
+
+}
+
+.checkbox a{
+
+color:#2E7D32;
+
+text-decoration:none;
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+background:#2E7D32;
+
+border:none;
+
+color:white;
+
+font-size:18px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#1B5E20;
+
+}
+
+.login{
+
+text-align:center;
+
+margin-top:20px;
+
+}
+
+.login a{
+
+color:#2E7D32;
+
+font-weight:600;
+
+text-decoration:none;
+
+}
+
+.social{
+
+display:flex;
+
+justify-content:center;
+
+gap:20px;
+
+margin-top:25px;
+
+}
+
+.social i{
+
+width:45px;
+
+height:45px;
+
+background:#E8F5E9;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:20px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.social i:hover{
+
+background:#2E7D32;
+
+color:white;
+
+}
+
+@media(max-width:900px){
+
+.container{
+
+flex-direction:column;
+
+width:95%;
+
+height:auto;
+
+}
+
+.left,.right{
+
+width:100%;
+
+}
+
+.row{
+
+flex-direction:column;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<i class="fa-solid fa-seedling"></i>
+
+<h1>AgriVerse</h1>
+
+<p>
+
+Join India's Smart Farming Platform
+
+Manage crops,
+
+AI recommendations,
+
+weather alerts,
+
+and market prices.
+
+</p>
+
+</div>
+
+<div class="right">
+
+<h2>Create Account</h2>
+
+<p>Register to start smart farming</p>
+
+<form id="signupForm">
+
+<div class="row">
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input type="text"
+
+id="fname"
+
+placeholder="First Name"
+
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input type="text"
+
+id="lname"
+
+placeholder="Last Name"
+
+required>
+
+</div>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input type="email"
+
+id="email"
+
+placeholder="Email Address"
+
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-phone"></i>
+
+<input type="tel"
+
+id="phone"
+
+placeholder="Phone Number"
+
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-location-dot"></i>
+
+<input type="text"
+
+id="village"
+
+placeholder="Village / City"
+
+required>
+
+</div>
+
+<div class="row">
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input type="password"
+
+id="password"
+
+placeholder="Password"
+
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input type="password"
+
+id="confirm"
+
+placeholder="Confirm Password"
+
+required>
+
+</div>
+
+</div>
+
+<div class="gender">
+
+<label>
+
+<input type="radio"
+
+name="gender"
+
+required>
+
+Male
+
+</label>
+
+<label>
+
+<input type="radio"
+
+name="gender">
+
+Female
+
+</label>
+
+<label>
+
+<input type="radio"
+
+name="gender">
+
+Other
+
+</label>
+
+</div>
+
+<div class="checkbox">
+
+<input type="checkbox"
+
+required>
+
+I agree to the
+
+<a href="#">Terms & Conditions</a>
+
+</div>
+
+<button type="submit">
+
+Create Account
+
+</button>
+
+</form>
+
+<div class="login">
+
+Already have an account?
+
+<a href="login.html">
+
+Login
+
+</a>
+
+</div>
+
+<div class="social">
+
+<i class="fab fa-google"></i>
+
+<i class="fab fa-facebook-f"></i>
+
+<i class="fab fa-linkedin-in"></i>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    let pass = document.getElementById("password").value;
+    let confirm = document.getElementById("confirm").value;
+
+    if(pass !== confirm){
+        alert("Passwords do not match!");
+        return;
+    }
+
+    let firstName = document.getElementById("fname").value;
+    let lastName = document.getElementById("lname").value;
+    let email = document.getElementById("email").value;
+
+    let response = await fetch("http://localhost:8082/api/auth/register", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            name: firstName + " " + lastName,
+            email: email,
+            password: pass
+        })
+
+    });
+
+    if(response.ok){
+
+        alert("Registration Successful!");
+        window.location.href = "login.html";
+
+    }else{
+
+        let msg = await response.text();
+        alert("Registration Failed\n" + msg);
+
+    }
+
+});
+</script>
+</body>
+</html>
