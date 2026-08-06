@@ -1,18 +1,20 @@
 package com.agriverse1.agriverse1.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * JPA entity representing a platform user (Farmer / Vet / Admin).
+ * MongoDB document representing a platform user (Farmer / Vet / Admin).
  * Lombok @Data generates all getters, setters, equals, hashCode & toString.
  * @Builder enables clean object construction in UserService.
  */
-@Entity
-@Table(name = "users")
+@Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,19 +22,15 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Indexed(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     /** Allowed values: USER, VET, ADMIN */
-    @Column(nullable = false)
     private String role;
 }
