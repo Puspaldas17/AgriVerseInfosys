@@ -1,72 +1,64 @@
 package com.agriverse1.agriverse1.controller;
 
-
 import com.agriverse1.agriverse1.dto.*;
 import com.agriverse1.agriverse1.entity.User;
-import com.agriverse1.agriverse1.repository.UserRepository;
 import com.agriverse1.agriverse1.security.JwtService;
 import com.agriverse1.agriverse1.service.UserService;
 
+import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * REST controller for authentication operations.
+ *
+ * POST /api/auth/register  — register a new user
+ * POST /api/auth/login     — authenticate and receive a JWT
+ *
+ * CORS: configured globally in SecurityConfig; local dev allows localhost:5173.
+ * Repository access is intentionally kept inside UserService only.
+ */
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
 public class AuthController {
 
-
     private final UserService userService;
-
-    private final UserRepository userRepository;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
-
-
 
     public AuthController(
             UserService userService,
-            UserRepository userRepository,
             AuthenticationManager authenticationManager,
             JwtService jwtService) {
 
         this.userService = userService;
-        this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-
     }
 
 
-
+    /** Register a new user account. */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(
-            @RequestBody RegisterRequest request) {
-
+            @Valid @RequestBody RegisterRequest request) {
 
         userService.registerUser(request);
-
 
         return ResponseEntity.ok(
                 new ApiResponse("User Registered Successfully")
         );
-
     }
 
 
-
+    /** Authenticate and return a signed JWT. */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody LoginRequest request) {
+            @Valid @RequestBody LoginRequest request) {
 
-
+        // Throws BadCredentialsException if credentials are wrong (handled by GlobalExceptionHandler)
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -74,24 +66,11 @@ public class AuthController {
                 )
         );
 
+        // Look up user through the service layer only
+        User user = userService.findByEmail(request.getEmail());
 
-        User user =
-                userRepository.findByEmail(
-                        request.getEmail()
-                ).orElseThrow();
+        String token = jwtService.generateToken(user.getEmail());
 
-
-
-        String token =
-                jwtService.generateToken(
-                        user.getEmail()
-                );
-
-
-        return ResponseEntity.ok(
-                new AuthResponse(token)
-        );
-
+        return ResponseEntity.ok(new AuthResponse(token));
     }
-
 }

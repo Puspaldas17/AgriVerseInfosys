@@ -1,54 +1,36 @@
 package com.agriverse1.agriverse1.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "users")
+/**
+ * MongoDB document representing a platform user (Farmer / Vet / Admin).
+ * Lombok @Data generates all getters, setters, equals, hashCode & toString.
+ * @Builder enables clean object construction in UserService.
+ */
+@Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Indexed(unique = true)
     private String email;
 
     private String password;
 
+    /** Allowed values: USER, VET, ADMIN */
     private String role;
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getRole() {
-        return role;
-        
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
