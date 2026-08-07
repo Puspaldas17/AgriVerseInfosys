@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriVerse — Precision Agriculture Dashboard</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Dashboard Stylesheet -->
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR HEADER ================= -->
+    <header class="navbar-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="dashboard.html" class="logo">
+                    🌱 AgriVerse
+                </a>
+            </div>
+
+            <!-- Hamburger Button for Mobile -->
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Main Navigation Links -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-chart-line"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
+                <li><a href="#leaderboard-section" class="nav-link" id="nav-leaderboard"><i class="fas fa-trophy"></i> <span data-i18n="nav_leaderboard">Leaderboard</span></a></li>
+                <li><a href="#marketplace" class="nav-link" id="nav-marketplace"><i class="fas fa-store"></i> <span data-i18n="nav_marketplace">Marketplace</span></a></li>
+                <li><a href="#calendar" class="nav-link" id="nav-calendar"><i class="fas fa-calendar-alt"></i> <span data-i18n="nav_calendar">Calendar</span></a></li>
+            </ul>
+
+            <!-- Header Right Controls -->
+            <div class="nav-actions">
+                <!-- Language Selector -->
+                <div class="select-wrapper">
+                    <i class="fas fa-globe select-icon"></i>
+                    <select id="language-select" class="language-select" aria-label="Select Language">
+                        <option value="en" selected>English</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                    </select>
+                </div>
+
+                <!-- Dark Mode Toggle Button -->
+                <button id="theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+                    🌙
+                </button>
+
+                <!-- Notifications Button -->
+                <div class="notification-container">
+                    <button id="notify-btn" class="notify-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-count" id="notification-count">2</span>
+                    </button>
+
+                    <!-- Notifications Dropdown Panel -->
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="dropdown-header">
+                            <h3><i class="fas fa-bell text-green"></i> <span data-i18n="notif_header">Notifications</span></h3>
+                            <button id="clear-notifications" class="clear-btn" data-i18n="notif_clear">Clear All</button>
+                        </div>
+                        <ul class="notification-list">
+                            <li class="unread">
+                                <i class="fas fa-exclamation-triangle text-amber"></i>
+                                <div class="notif-content">
+                                    <p class="notif-title" data-i18n="notif_1_title">High Pest Risk Alert</p>
+                                    <p class="notif-desc" data-i18n="notif_1_desc">Brown Planthopper outbreak predicted in Rice fields.</p>
+                                    <span class="notif-time">10 mins ago</span>
+                                </div>
+                            </li>
+                            <li class="unread">
+                                <i class="fas fa-award text-green"></i>
+                                <div class="notif-content">
+                                    <p class="notif-title" data-i18n="notif_2_title">Streak Reward Unlocked!</p>
+                                    <p class="notif-desc" data-i18n="notif_2_desc">You are on a 4-day streak (+40 XP awarded).</p>
+                                    <span class="notif-time">Yesterday</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- User Profile Menu Badge -->
+                <div class="profile-menu-container">
+                    <button class="profile-badge-btn" id="profile-menu-btn">
+                        <div class="avatar-circle" id="header-avatar">F</div>
+                        <span class="user-name-label" id="header-user-name">Farmer User</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <div class="dropdown-user-info">
+                            <p class="dropdown-name" id="dropdown-user-name">Farmer User</p>
+                            <p class="dropdown-email" id="dropdown-user-email">farmer@agriverse.com</p>
+                        </div>
+                        <hr>
+                        <a href="#profile" class="dropdown-item" id="dropdown-profile-btn"><i class="fas fa-user-circle"></i> <span data-i18n="nav_dashboard">My Profile</span></a>
+                        <a href="#settings" class="dropdown-item" id="dropdown-settings-btn"><i class="fas fa-cog"></i> <span>Settings</span></a>
+                        <button class="dropdown-item text-red" id="header-logout-btn"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout_btn">Logout</span></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================= MAIN DASHBOARD CONTAINER ================= -->
+    <main class="dashboard-container">
+
+        <!-- ================= SECTION 1: USER PROFILE & GAMIFICATION CARD ================= -->
+        <section class="card profile-overview-card" id="profile-section">
+            <div class="profile-header">
+                <div class="user-identity">
+                    <h1 class="user-fullname" id="user-display-name">Farmer User</h1>
+                    <div class="gamification-badges">
+                        <span class="badge badge-level"><i class="fas fa-star text-gold"></i> <span data-i18n="profile_level">Lvl 1</span></span>
+                        <span class="badge badge-streak"><i class="fas fa-fire text-orange"></i> <span data-i18n="profile_streak">4 Day Streak</span></span>
+                        <span class="badge badge-xp" id="user-total-xp">40 XP</span>
+                    </div>
+                </div>
+                <button class="btn btn-outline-danger" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> <span data-i18n="logout_btn">Logout</span>
+                </button>
+            </div>
+
+            <!-- XP Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-label" data-i18n="progress_label">Progress to Level 2</span>
+                    <span class="progress-ratio" id="xp-ratio-label">40 / 100 XP</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="xp-progress-fill" style="width: 40%;"></div>
+                </div>
+            </div>
+
+            <!-- User Detail Metrics Grid -->
+            <div class="farmer-details-grid">
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="detail_phone">Phone</span>
+                    <strong class="detail-value" id="user-phone">Not Available</strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="detail_soil">Soil Type</span>
+                    <strong class="detail-value" id="user-soil" data-i18n="soil_val">Not specified</strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="detail_land">Land Size</span>
+                    <strong class="detail-value" id="user-land" data-i18n="land_val">— acres</strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="detail_lang">Language</span>
+                    <strong class="detail-value" id="user-lang-display">English</strong>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="profile-actions">
+                <button class="btn btn-green" id="edit-profile-btn">
+                    <i class="fas fa-user-edit"></i> Profile
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: SUBSCRIPTION & USAGE CARD ================= -->
+        <section class="card subscription-card" id="subscription-section">
+            <div class="card-title-bar">
+                <h2 data-i18n="sub_title">Subscription & Usage</h2>
+                <span class="plan-badge plan-free" id="current-plan-badge">
+                    <i class="fas fa-info-circle"></i> <span id="user-plan-name" data-i18n="plan_free">Free Plan</span>
+                </span>
+            </div>
+
+            <div class="subscription-metrics-grid">
+                <div class="stat-card">
+                    <span class="stat-label" data-i18n="stat_status">Plan Status</span>
+                    <span class="stat-value text-capitalize" id="plan-status" data-i18n="stat_status_active">Active Free</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label" data-i18n="stat_current_plan">Current Plan</span>
+                    <span class="stat-value" id="member-since">2026</span>
+                </div>
+            </div>
+
+            <div class="subscription-action">
+                <button class="btn btn-upgrade" id="open-premium-modal-btn">
+                    <i class="fas fa-crown"></i> <span data-i18n="upgrade_btn">⚡ Upgrade to Premium</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: SUB-TAB NAVIGATION BAR ================= -->
+        <div class="tab-navigation-bar">
+            <button class="tab-btn active" data-tab="tab-missions">
+                <i class="fas fa-bullseye"></i> <span data-i18n="tab_missions">Daily Missions</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-ai-assistant">
+                <i class="fas fa-robot"></i> <span data-i18n="tab_ai_assistant">AI Assistant</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-pest-detector">
+                <i class="fas fa-bug"></i> <span data-i18n="tab_pest_detector">Pest Detector</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-advisory-history">
+                <i class="fas fa-history"></i> <span data-i18n="tab_advisory_history">Advisory History</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-usage-stats">
+                <i class="fas fa-chart-pie"></i> <span data-i18n="tab_usage_stats">Usage Stats</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-analytics">
+                <i class="fas fa-chart-bar"></i> <span data-i18n="tab_analytics">Analytics</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-vet-inbox">
+                <i class="fas fa-user-md"></i> <span data-i18n="tab_vet_inbox">Vet Inbox</span>
+            </button>
+        </div>
+
+        <!-- ================= SECTION 4: TAB CONTENT PANELS ================= -->
+        <div class="tab-content-container">
+
+            <!-- ---------------- TAB 1: MISSIONS PANEL (DEFAULT ACTIVE) ---------------- -->
+            <div class="tab-panel active" id="tab-missions">
+                <div class="dashboard-two-column-layout">
+
+                    <!-- LEFT COLUMN: Daily Missions & Achievements -->
+                    <div class="main-content-column">
+
+                        <!-- Daily Missions Section -->
+                        <div class="section-block">
+                            <div class="block-header">
+                                <h3><i class="fas fa-tasks text-green"></i> <span data-i18n="missions_title">Today's Farming Missions</span></h3>
+                                <span class="reset-timer"><i class="far fa-clock"></i> <span data-i18n="reset_timer">Resets in 14h 22m</span></span>
+                            </div>
+
+                            <div class="missions-grid">
+                                <!-- Mission 1 -->
+                                <div class="mission-card" data-mission-id="1">
+                                    <div class="mission-icon bg-light-green"><i class="fas fa-tint"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_1_title">Irrigate Paddy Field</h4>
+                                        <p data-i18n="mission_1_desc">Apply 45 mins drip irrigation during morning hours.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+50 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="50">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 2 -->
+                                <div class="mission-card" data-mission-id="2">
+                                    <div class="mission-icon bg-light-yellow"><i class="fas fa-leaf"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_2_title">Inspect Tomato Leaves</h4>
+                                        <p data-i18n="mission_2_desc">Check for Early Blight fungal spots on lower leaves.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+20 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="20">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 3 -->
+                                <div class="mission-card" data-mission-id="3">
+                                    <div class="mission-icon bg-light-blue"><i class="fas fa-seedling"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_3_title">Apply NPK Fertilizer</h4>
+                                        <p data-i18n="mission_3_desc">Broadcast 50kg/acre NPK (10-26-26) on tillering crops.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+30 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="30">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 4 -->
+                                <div class="mission-card" data-mission-id="4">
+                                    <div class="mission-icon bg-light-purple"><i class="fas fa-cloud-sun-rain"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_4_title">Log Weather Observation</h4>
+                                        <p data-i18n="mission_4_desc">Record humidity and wind direction in farm journal.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+15 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="15">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 5 -->
+                                <div class="mission-card" data-mission-id="5">
+                                    <div class="mission-icon bg-light-pink"><i class="fas fa-shower"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_5_title">Clean Drip Lines</h4>
+                                        <p data-i18n="mission_5_desc">Flush sub-main lines to remove silt buildup.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+25 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="25">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 6 -->
+                                <div class="mission-card" data-mission-id="6">
+                                    <div class="mission-icon bg-light-teal"><i class="fas fa-bug"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_6_title">Check Pheromone Traps</h4>
+                                        <p data-i18n="mission_6_desc">Count Spodoptera moth catches per trap.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+40 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="40">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Mission 7 -->
+                                <div class="mission-card" data-mission-id="7">
+                                    <div class="mission-icon bg-light-gold"><i class="fas fa-flask"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="mission_7_title">Record Soil Moisture</h4>
+                                        <p data-i18n="mission_7_desc">Upload sensor readings for root zone moisture.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+35 XP</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="mission-checkbox" data-xp="35">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Bonus Mission -->
+                                <div class="mission-card bonus-card" id="bonus-mission-card">
+                                    <div class="mission-icon bg-light-gold"><i class="fas fa-gift text-gold"></i></div>
+                                    <div class="mission-info">
+                                        <h4 data-i18n="bonus_mission_title">Complete All Daily Tasks</h4>
+                                        <p data-i18n="bonus_mission_desc">Claim bonus reward after finishing all 7 daily missions.</p>
+                                        <div class="mission-meta">
+                                            <span class="xp-tag">+60 XP BONUS</span>
+                                        </div>
+                                    </div>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="bonus-mission-check" disabled>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Achievements Grid Section -->
+                        <div class="card achievements-card">
+                            <h3><i class="fas fa-medal text-gold"></i> <span data-i18n="achievements_title">Farmer Achievements</span></h3>
+                            <div class="achievements-grid">
+                                <div class="achievement-badge unlocked">
+                                    <i class="fas fa-tractor ach-icon"></i>
+                                    <span class="ach-title" data-i18n="ach_1">First Harvest</span>
+                                </div>
+                                <div class="achievement-badge unlocked">
+                                    <i class="fas fa-mountain ach-icon"></i>
+                                    <span class="ach-title" data-i18n="ach_2">Soil Master</span>
+                                </div>
+                                <div class="achievement-badge unlocked">
+                                    <i class="fas fa-shield-virus ach-icon"></i>
+                                    <span class="ach-title" data-i18n="ach_3">Pest Hunter</span>
+                                </div>
+                                <div class="achievement-badge locked">
+                                    <i class="fas fa-brain ach-icon"></i>
+                                    <span class="ach-title" data-i18n="ach_4">AI Pioneer</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: Village Leaderboard & Pest Alerts -->
+                    <div class="sidebar-column">
+
+                        <!-- Village Leaderboard Widget -->
+                        <div class="card leaderboard-widget-card" id="leaderboard-section">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-trophy text-gold"></i> <span data-i18n="leaderboard_title">Village Leaderboard</span></h3>
+                                <p class="widget-subtitle" data-i18n="leaderboard_sub">Top ranked precision farmers in your sector</p>
+                            </div>
+
+                            <div class="leaderboard-list">
+                                <div class="leaderboard-item top-rank">
+                                    <span class="rank-badge rank-1">🥇</span>
+                                    <span class="farmer-name">Ramesh Patel</span>
+                                    <strong class="farmer-xp">2450 XP</strong>
+                                </div>
+                                <div class="leaderboard-item top-rank">
+                                    <span class="rank-badge rank-2">🥈</span>
+                                    <span class="farmer-name">Suresh Kumar</span>
+                                    <strong class="farmer-xp">2100 XP</strong>
+                                </div>
+                                <div class="leaderboard-item top-rank">
+                                    <span class="rank-badge rank-3">🥉</span>
+                                    <span class="farmer-name">Anita Devi</span>
+                                    <strong class="farmer-xp">1950 XP</strong>
+                                </div>
+                                <div class="leaderboard-item">
+                                    <span class="rank-badge">#4</span>
+                                    <span class="farmer-name">Vikram Singh</span>
+                                    <strong class="farmer-xp">1200 XP</strong>
+                                </div>
+                                <div class="leaderboard-item current-user-row">
+                                    <span class="rank-badge rank-user">#5</span>
+                                    <span class="farmer-name" id="sidebar-user-name">You (Farmer User)</span>
+                                    <strong class="farmer-xp" id="leaderboard-user-xp">40 XP</strong>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-link block-btn" id="open-full-leaderboard-btn" data-i18n="view_full_leaderboard">
+                                View Full Leaderboard
+                            </button>
+                        </div>
+
+                        <!-- Predictive Pest Alerts Widget -->
+                        <div class="card pest-alerts-widget-card">
+                            <div class="widget-header">
+                                <div class="title-with-badge">
+                                    <h3><i class="fas fa-exclamation-triangle text-amber"></i> <span data-i18n="pest_alert_title">Predictive Pest Alerts</span></h3>
+                                    <span class="severity-badge badge-high-alert" data-i18n="severity_high">HIGH ALERT</span>
+                                </div>
+                                <p class="forecast-meta" data-i18n="forecast_meta">48-Hour Outbreak Radar</p>
+                            </div>
+
+                            <div class="pest-alerts-list">
+                                <div class="pest-card pest-high">
+                                    <div class="pest-header">
+                                        <div class="crop-info">
+                                            <h4>🌾 Rice / Paddy</h4>
+                                        </div>
+                                        <div class="pest-tags">
+                                            <span class="risk-pill risk-high" data-i18n="legend_high">High Risk</span>
+                                        </div>
+                                    </div>
+                                    <h5 class="pest-name" data-i18n="pest_1_title">Brown Planthopper</h5>
+                                    <p class="pest-desc" data-i18n="pest_1_desc">High risk vector detected due to recent humidity spike.</p>
+                                    <div class="pest-action">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span data-i18n="pest_1_action">Spray Neem oil 10,000 PPM @ 3ml/litre.</span>
+                                    </div>
+                                </div>
+
+                                <div class="pest-card pest-medium">
+                                    <div class="pest-header">
+                                        <div class="crop-info">
+                                            <h4>🍅 Tomato</h4>
+                                        </div>
+                                        <div class="pest-tags">
+                                            <span class="risk-pill risk-medium" data-i18n="legend_medium">Medium Risk</span>
+                                        </div>
+                                    </div>
+                                    <h5 class="pest-name" data-i18n="pest_2_title">Whitefly / Leaf Curl Virus</h5>
+                                    <p class="pest-desc" data-i18n="pest_2_desc">Medium vector threat observed in neighboring plots.</p>
+                                    <div class="pest-action">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span data-i18n="pest_2_action">Install yellow sticky traps @ 10/acre.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pest-footer-legend">
+                                <div class="legend-dots">
+                                    <span class="dot dot-high"></span> <span data-i18n="legend_high">High Risk</span>
+                                    <span class="dot dot-medium"></span> <span data-i18n="legend_medium">Medium Risk</span>
+                                    <span class="dot dot-low"></span> <span data-i18n="legend_low">Low Risk</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 2: AI ASSISTANT PANEL ---------------- -->
+            <div class="tab-panel" id="tab-ai-assistant">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-robot text-green"></i> <span data-i18n="ai_header_title">AgriVerse AI Agricultural Advisor</span></h3>
+                        <p class="panel-subtitle" data-i18n="ai_header_sub">Ask questions about crop diseases, fertilizers, and weather advisory.</p>
+                    </div>
+
+                    <div class="chat-interface">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-bubble bot-bubble">
+                                <div class="bubble-avatar">🤖</div>
+                                <div class="bubble-text">
+                                    Hello! I am your AgriVerse AI Assistant. How can I help your farm today?
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-row">
+                            <input type="text" id="chat-input-text" class="form-input" placeholder="Ask AI about crop disease, soil, or irrigation..." data-i18n-placeholder="ai_placeholder">
+                            <button class="btn btn-green" id="chat-send-btn">
+                                <i class="fas fa-paper-plane"></i> <span data-i18n="ai_send">Send</span>
+                            </button>
+                        </div>
+
+                        <div class="quick-questions-chips">
+                            <button class="chip" data-i18n="chip_1">"What fertilizer is best for paddy?"</button>
+                            <button class="chip" data-i18n="chip_2">"How to control tomato blight?"</button>
+                            <button class="chip" data-i18n="chip_3">"Best irrigation time tomorrow?"</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 3: PEST DETECTOR PANEL ---------------- -->
+            <div class="tab-panel" id="tab-pest-detector">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-bug text-green"></i> <span data-i18n="detector_title">AI Crop Pest & Disease Diagnostic Scanner</span></h3>
+                        <p class="panel-subtitle" data-i18n="detector_sub">Upload a clear photo of your crop leaf or stem for instant AI diagnosis.</p>
+                    </div>
+
+                    <div class="detector-upload-box" id="drop-zone">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h4 data-i18n="detector_drop_text">Click or drag & drop leaf photo here to scan</h4>
+                        <p class="text-muted" data-i18n="detector_file_hint">Supports JPG, PNG, WEBP up to 10MB</p>
+                        <input type="file" id="pest-file-input" class="file-input-hidden" accept="image/*">
+                    </div>
+
+                    <div id="detector-result-card" class="detector-result-card" style="display:none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 4: ADVISORY HISTORY PANEL ---------------- -->
+            <div class="tab-panel" id="tab-advisory-history">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-history text-green"></i> <span data-i18n="history_title">Recent AI Advisories History</span></h3>
+                        <p class="panel-subtitle" data-i18n="history_sub">Log of recommendations generated by AgriVerse Precision Engine</p>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_date">Date</th>
+                                    <th data-i18n="th_crop">Crop</th>
+                                    <th data-i18n="th_issue">Diagnosed Issue</th>
+                                    <th data-i18n="th_recommendation">AI Recommendation</th>
+                                    <th data-i18n="th_status">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>07 Aug 2026</td>
+                                    <td>Paddy Field 1</td>
+                                    <td>Nitrogen Deficiency</td>
+                                    <td>Apply 50kg/acre NPK (10-26-26) urea blend</td>
+                                    <td><span class="status-pill status-completed">Applied</span></td>
+                                </tr>
+                                <tr>
+                                    <td>05 Aug 2026</td>
+                                    <td>Tomato Plot B</td>
+                                    <td>Early Blight Fungal Spot</td>
+                                    <td>Spray Mancozeb 75% WP @ 2g/litre</td>
+                                    <td><span class="status-pill status-active">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>01 Aug 2026</td>
+                                    <td>Chilli Sector</td>
+                                    <td>Thrips Vectors</td>
+                                    <td>Install blue sticky traps & Neem oil spray</td>
+                                    <td><span class="status-pill status-completed">Completed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 5: USAGE STATS PANEL ---------------- -->
+            <div class="tab-panel" id="tab-usage-stats">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-chart-pie text-green"></i> <span data-i18n="usage_title">Resource & Quota Usage</span></h3>
+                        <p class="panel-subtitle" data-i18n="usage_sub">Current usage meters for your free tier quota</p>
+                    </div>
+
+                    <div class="usage-grid">
+                        <div class="usage-box">
+                            <h4 data-i18n="quota_scans">Pest Scans Used</h4>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 50%;"></div>
+                            </div>
+                            <span class="text-muted">5 / 10 Scans Used</span>
+                        </div>
+                        <div class="usage-box">
+                            <h4 data-i18n="quota_ai">AI Chat Queries</h4>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 70%;"></div>
+                            </div>
+                            <span class="text-muted">14 / 20 Queries Used</span>
+                        </div>
+                        <div class="usage-box">
+                            <h4 data-i18n="quota_weather">Weather Radar Alerts</h4>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-muted">Unlimited Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 6: ANALYTICS PANEL ---------------- -->
+            <div class="tab-panel" id="tab-analytics">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-chart-bar text-green"></i> <span data-i18n="analytics_title">Farm Analytics & Outbreak Trends</span></h3>
+                        <p class="panel-subtitle" data-i18n="analytics_sub">Historical disease risk and soil moisture trends</p>
+                    </div>
+
+                    <div class="analytics-charts-grid">
+                        <div class="chart-card">
+                            <h4 data-i18n="chart_1_title">Pest Outbreak Risk Trend (7 Days)</h4>
+                            <div class="simulated-chart-box">
+                                <div class="chart-bars">
+                                    <div class="bar-col" style="height: 40%;"><span>Mon</span></div>
+                                    <div class="bar-col" style="height: 55%;"><span>Tue</span></div>
+                                    <div class="bar-col" style="height: 80%;"><span>Wed</span></div>
+                                    <div class="bar-col" style="height: 65%;"><span>Thu</span></div>
+                                    <div class="bar-col" style="height: 90%;"><span>Fri</span></div>
+                                    <div class="bar-col" style="height: 70%;"><span>Sat</span></div>
+                                    <div class="bar-col" style="height: 45%;"><span>Sun</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h4 data-i18n="chart_2_title">Soil Moisture & Temperature Log</h4>
+                            <div class="simulated-chart-box">
+                                <div class="line-graph-placeholder">
+                                    <p class="text-muted"><i class="fas fa-chart-line text-green" style="font-size:2rem;"></i></p>
+                                    <div class="metric-summary-pills">
+                                        <span class="pill-stat">Soil Moisture: 38%</span>
+                                        <span class="pill-stat">Temp: 29°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ---------------- TAB 7: VET INBOX PANEL ---------------- -->
+            <div class="tab-panel" id="tab-vet-inbox">
+                <div class="card panel-card">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-user-md text-green"></i> <span data-i18n="vet_title">Tele-Veterinary & Agronomist Inbox</span></h3>
+                        <p class="panel-subtitle" data-i18n="vet_sub">Direct messages from sector agronomists and livestock specialists</p>
+                    </div>
+
+                    <div class="vet-msg-card">
+                        <div class="vet-avatar">👨‍⚕️</div>
+                        <div class="vet-msg-body" style="flex:1;">
+                            <div class="vet-msg-head">
+                                <h4 data-i18n="vet_1_name">Dr. K. Sastry (Agronomist)</h4>
+                                <span class="msg-date">Today, 10:30 AM</span>
+                            </div>
+                            <p class="text-muted" style="font-size:0.85rem;" data-i18n="vet_1_msg">
+                                Your soil nitrogen levels are slightly low. Recommend adding organic compost before next irrigation cycle.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ================= MODALS SYSTEM ================= -->
+
+    <!-- MODAL 1: FULL VILLAGE LEADERBOARD MODAL -->
+    <div class="modal-overlay" id="leaderboard-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-trophy text-gold"></i> <span data-i18n="modal_leaderboard_title">Village Leaderboard — Top Farmers</span></h3>
+                <button class="modal-close-btn" id="close-leaderboard-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="th_rank">Rank</th>
+                            <th data-i18n="th_farmer">Farmer Name</th>
+                            <th data-i18n="th_sector">Village Sector</th>
+                            <th data-i18n="th_score">XP Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>🥇 1</td><td>Ramesh Patel</td><td>East Sector</td><td>2450 XP</td></tr>
+                        <tr><td>🥈 2</td><td>Suresh Kumar</td><td>North Sector</td><td>2100 XP</td></tr>
+                        <tr><td>🥉 3</td><td>Anita Devi</td><td>South Sector</td><td>1950 XP</td></tr>
+                        <tr><td>4</td><td>Vikram Singh</td><td>West Sector</td><td>1200 XP</td></tr>
+                        <tr class="highlight-row"><td>#5</td><td id="modal-user-name">Farmer User (You)</td><td>Central Plot</td><td id="modal-user-rank-xp">40 XP</td></tr>
+                        <tr><td>6</td><td>Rajesh Reddi</td><td>North Sector</td><td>35 XP</td></tr>
+                        <tr><td>7</td><td>Kavita Sharma</td><td>East Sector</td><td>20 XP</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: PREMIUM SUBSCRIPTION PLAN MODAL -->
+    <div class="modal-overlay" id="premium-modal">
+        <div class="modal-container premium-plan-modal">
+            <button class="modal-close-btn" id="close-premium-modal" aria-label="Close modal">&times;</button>
+
+            <!-- Premium Header Banner -->
+            <div class="modal-header-hero">
+                <div class="crown-badge-header">
+                    <i class="fas fa-bolt"></i> <span data-i18n="premium_modal_badge">Upgrade to Premium</span>
+                </div>
+                <p class="subtitle-text" data-i18n="premium_modal_sub">Unlock the full power of AgriVerse for your farm</p>
+                <div class="pricing-header-box">
+                    <span class="currency">₹</span><span class="price-amount">299</span><span class="duration">/month</span>
+                </div>
+            </div>
+
+            <!-- Free vs Premium Comparison Grid -->
+            <div class="plan-comparison-grid">
+                <!-- Free Plan Card -->
+                <div class="comparison-card plan-card-free">
+                    <h4 class="plan-title" data-i18n="free_plan_title">Free</h4>
+                    <ul class="feature-checklist">
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="free_feat_1">Up to 10 AI advisories/month</span></li>
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="free_feat_2">Basic pest alert forecasts</span></li>
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="free_feat_3">Standard community support</span></li>
+                    </ul>
+                </div>
+
+                <!-- Premium Plan Card -->
+                <div class="comparison-card plan-card-premium">
+                    <span class="recommended-badge" data-i18n="premium_rec">RECOMMENDED</span>
+                    <h4 class="plan-title" data-i18n="premium_plan_title">Premium</h4>
+                    <ul class="feature-checklist">
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="premium_feat_1">Unlimited AI advisories & scans</span></li>
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="premium_feat_2">Real-time 24/7 outbreak radar</span></li>
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="premium_feat_3">Tele-vet priority consultation</span></li>
+                        <li><i class="fas fa-check text-green"></i> <span data-i18n="premium_feat_4">Exportable soil analytics reports</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="modal-action-center">
+                <button class="btn btn-upgrade btn-block" id="proceed-to-payment-btn">
+                    <i class="fas fa-crown"></i> <span data-i18n="proceed_pay_btn">Upgrade Now — ₹299/month</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: PAYMENT CHECKOUT MODAL -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-container payment-checkout-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card text-green"></i> <span data-i18n="pay_modal_title">Pay with</span></h3>
+                <button class="modal-close-btn" id="close-payment-modal" aria-label="Close modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Payment Card Brand Logos -->
+                <div class="payment-brands-row" id="payment-brands-row">
+                    <span class="brand-badge visa-badge selected" data-brand="VISA"><i class="fab fa-cc-visa"></i> VISA</span>
+                    <span class="brand-badge master-badge" data-brand="MasterCard"><i class="fab fa-cc-mastercard"></i> MasterCard</span>
+                    <span class="brand-badge maestro-badge" data-brand="Maestro"><i class="fas fa-credit-card"></i> Maestro</span>
+                    <span class="brand-badge discover-badge" data-brand="Discover"><i class="fab fa-cc-discover"></i> Discover</span>
+                </div>
+
+                <div class="order-summary-box">
+                    <span data-i18n="pay_selected_plan">Selected Plan:</span>
+                    <strong>AgriVerse Premium — ₹299/month</strong>
+                </div>
+
+                <form id="payment-form" novalidate>
+                    <div class="form-group">
+                        <label for="card-name" data-i18n="pay_card_name">Cardholder Name</label>
+                        <input type="text" id="card-name" class="form-input" placeholder="e.g. Cardholder Name" data-i18n-placeholder="pay_card_name" required>
+                        <span class="field-error" id="error-card-name">Please enter cardholder name</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="card-number" data-i18n="pay_card_num">Card Number</label>
+                        <div class="input-icon-wrapper">
+                            <input type="text" id="card-number" class="form-input" placeholder="1234 5678 9101 1121" maxlength="19" required>
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
+                        <span class="field-error" id="error-card-number">Please enter a valid 16-digit card number</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <label for="card-expiry" data-i18n="pay_exp_date">Exp Date (MM/YY)</label>
+                            <input type="text" id="card-expiry" class="form-input" placeholder="MM/YY" maxlength="5" required>
+                            <span class="field-error" id="error-card-expiry">Invalid format (MM/YY)</span>
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="card-cvv" data-i18n="pay_cvv">CVV</label>
+                            <input type="password" id="card-cvv" class="form-input" placeholder="123" maxlength="3" required>
+                            <span class="field-error" id="error-card-cvv">3 digits</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-green btn-block" id="pay-submit-btn" disabled>
+                        <span data-i18n="pay_submit">Pay ₹299/month</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: PAYMENT SUCCESS MODAL -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal-container success-modal-box">
+            <button class="modal-close-btn" id="close-success-modal" aria-label="Close modal">&times;</button>
+            <div class="success-icon-badge">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 data-i18n="success_title">Payment Successful!</h2>
+            <p class="success-message" data-i18n="success_msg">Welcome to AgriVerse Premium.</p>
+            <p class="sub-message" data-i18n="success_sub">Your account has been upgraded. All premium AI advisories, unlimited pest detection, and 24/7 priority support are now active.</p>
+
+            <button class="btn btn-green btn-block" id="return-dashboard-btn" data-i18n="return_dash_btn">
+                Return to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 5: COMING SOON MODAL -->
+    <div class="modal-overlay" id="coming-soon-modal">
+        <div class="modal-container success-modal-box">
+            <button class="modal-close-btn" id="close-coming-soon-modal" aria-label="Close modal">&times;</button>
+            <div class="success-icon-badge" style="background: rgba(2, 132, 199, 0.15); color: var(--color-info);">
+                <i class="fas fa-rocket" id="coming-soon-icon"></i>
+            </div>
+            <h2 id="coming-soon-title">Feature Coming Soon</h2>
+            <p class="sub-message" id="coming-soon-desc">This module is currently under active development. Stay tuned for future updates!</p>
+            <button class="btn btn-green btn-block" id="close-coming-soon-btn">
+                Got it
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER SECTION ================= -->
+    <footer class="dashboard-footer">
+        <div class="footer-container">
+            <p class="copy-text" data-i18n="footer_copy">&copy; 2026 AgriVerse. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#references" id="footer-references" data-i18n="footer_references">References</a>
+                <a href="#benefits" id="footer-benefits" data-i18n="footer_benefits">Benefits</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dashboard JavaScript Logic -->
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
