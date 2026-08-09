@@ -55,11 +55,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
                             "/",
-                            "/index.html",
-                            "/signup.html",
-                            "/login.html",
-                            "/style.css",
-                            "/script.js",
+                            "/*.html",
+                            "/*.css",
+                            "/*.js",
                             "/css/**",
                             "/js/**",
                             "/images/**",
@@ -83,19 +81,16 @@ public class SecurityConfig {
 
 
     /**
-     * CORS policy — allow React dev server and same-origin requests.
-     * In production, replace "http://localhost:5173" with your real frontend URL.
+     * CORS policy — allow all origins for local development.
+     * In production, restrict to your real frontend URL.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",   // React Vite dev server
-                "http://localhost:8082"    // Same-origin (Thymeleaf/static)
-        ));
+        config.addAllowedOriginPattern("*");   // Allow all origins for dev
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);     // Must be false when origin is wildcard
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -3,466 +3,559 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>AgriVerse Login</title>
-
+<title>AgriVerse — Login</title>
+<meta name="description" content="Sign in to AgriVerse Precision Agriculture Platform">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
+/* ─── Reset ─── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+:root {
+  --green-900: #052e16; --green-700: #15803d;
+  --green-600: #16a34a; --green-500: #22c55e;
+  --green-400: #4ade80; --green-100: #dcfce7;
+  --green-50: #f0fdf4;
+  --gray-900: #0f172a; --gray-800: #1e293b;
+  --gray-600: #475569; --gray-500: #64748b;
+  --gray-400: #94a3b8; --gray-300: #cbd5e1;
+  --gray-200: #e2e8f0; --gray-100: #f1f5f9;
 }
 
-body{
-
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-
-background:linear-gradient(135deg,#d4fc79,#96e6a1);
-
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #052e16 0%, #065f46 35%, #0d9488 70%, #1a7a4a 100%);
+  background-size: 300% 300%;
+  animation: gradShift 8s ease infinite;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-container{
-
-width:950px;
-background:#fff;
-display:flex;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 15px 40px rgba(0,0,0,.15);
-
+/* Animated background blobs */
+body::before, body::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+body::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(74,222,128,.15), transparent 70%);
+  top: -150px; left: -150px;
+}
+body::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(34,197,94,.1), transparent 70%);
+  bottom: -100px; right: -100px;
+  animation-delay: -3s;
 }
 
-.login-left{
-
-width:45%;
-background:linear-gradient(135deg,#1B5E20,#43A047);
-color:#fff;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:40px;
-text-align:center;
-
+@keyframes gradShift {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-20px); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50%     { opacity: .6; }
 }
 
-.login-left i{
-
-font-size:90px;
-margin-bottom:20px;
-
+/* ─── Card ─── */
+.login-container {
+  width: 100%;
+  max-width: 960px;
+  background: #fff;
+  display: flex;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp .7s ease both;
 }
 
-.login-left h1{
-
-font-size:38px;
-margin-bottom:15px;
-
+/* ─── Left Panel ─── */
+.login-left {
+  width: 44%;
+  background: linear-gradient(160deg, var(--green-900) 0%, #065f46 50%, var(--green-700) 100%);
+  padding: 52px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  animation: slideInLeft .7s ease both;
+}
+.login-left::before {
+  content: '';
+  position: absolute;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(74,222,128,.18), transparent 60%);
+  top: -80px; right: -80px;
+  border-radius: 50%;
+}
+.login-left::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(34,197,94,.15), transparent 60%);
+  bottom: -60px; left: -40px;
+  border-radius: 50%;
 }
 
-.login-left p{
-
-font-size:17px;
-line-height:30px;
-
+.brand {
+  position: relative;
+  z-index: 1;
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.brand-logo-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-400));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 6px 20px rgba(74,222,128,.3);
+}
+.brand-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
 }
 
-.features{
-
-margin-top:30px;
-text-align:left;
-
+.brand h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.brand p {
+  color: rgba(255,255,255,.7);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 32px;
 }
 
-.features p{
+.feature-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.15);
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: rgba(255,255,255,.9);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .3s ease;
+}
+.pill:hover {
+  background: rgba(255,255,255,.18);
+  transform: translateX(4px);
+}
+.pill i { color: var(--green-400); font-size: 14px; width: 16px; }
 
-margin:12px 0;
-font-size:15px;
-
+.left-footer {
+  position: relative;
+  z-index: 1;
+  color: rgba(255,255,255,.5);
+  font-size: 12px;
 }
 
-.login-right{
-
-width:55%;
-padding:45px;
-
+/* ─── Right Panel ─── */
+.login-right {
+  flex: 1;
+  padding: 52px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.login-logo{
+.form-header { margin-bottom: 32px; }
+.form-header h3 {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gray-900);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.form-header p {
+  font-size: 14px;
+  color: var(--gray-500);
+}
+.form-header p a {
+  color: var(--green-600);
+  font-weight: 600;
+  text-decoration: none;
+}
+.form-header p a:hover { text-decoration: underline; }
 
-text-align:center;
-margin-bottom:25px;
-
+/* Input groups */
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 7px;
+}
+.input-wrapper {
+  position: relative;
+}
+.input-wrapper i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+  font-size: 15px;
+  transition: color .3s;
+}
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--gray-900);
+  background: var(--gray-50);
+  transition: all .3s ease;
+  outline: none;
+}
+.input-wrapper input:focus {
+  border-color: var(--green-500);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+}
+.input-wrapper input:focus + i,
+.input-wrapper:focus-within i {
+  color: var(--green-600);
 }
 
-.login-logo h2{
+/* Toggle password visibility */
+.toggle-pass {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gray-400);
+  font-size: 14px;
+  padding: 0;
+  transition: color .3s;
+}
+.toggle-pass:hover { color: var(--green-600); }
 
-color:#2E7D32;
-font-size:36px;
+/* Forgot password */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+.form-row label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--gray-600);
+  cursor: pointer;
+  font-weight: 500;
+}
+.form-row input[type="checkbox"] {
+  width: 15px; height: 15px;
+  accent-color: var(--green-600);
+}
+.forgot-link {
+  color: var(--green-600);
+  font-weight: 600;
+  text-decoration: none;
+}
+.forgot-link:hover { text-decoration: underline; }
 
+/* Submit button */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--green-600), var(--green-500));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .3s ease;
+  box-shadow: 0 6px 20px rgba(22,163,74,.35);
+  position: relative;
+  overflow: hidden;
+}
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+  transition: left .5s ease;
+}
+.btn-submit:hover::before { left: 100%; }
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(22,163,74,.45);
+}
+.btn-submit:active { transform: translateY(0); }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  color: var(--gray-400);
+  font-size: 12px;
+  font-weight: 500;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200);
 }
 
-.login-logo p{
-
-color:#777;
-
+/* Role buttons */
+.roles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.role-btn {
+  padding: 10px;
+  border: 1.5px solid var(--gray-200);
+  background: var(--gray-50);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all .3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.role-btn:hover {
+  border-color: var(--green-400);
+  color: var(--green-700);
+  background: var(--green-50);
+  transform: translateY(-2px);
 }
 
-.tabs{
-
-display:flex;
-background:#edf2ed;
-border-radius:10px;
-overflow:hidden;
-margin-bottom:25px;
-
+/* Error message */
+.error-msg {
+  display: none;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 16px;
+  align-items: center;
+  gap: 8px;
 }
+.error-msg.show { display: flex; animation: fadeInUp .3s ease; }
 
-.tabs button{
-
-width:50%;
-padding:13px;
-border:none;
-cursor:pointer;
-font-size:16px;
-
+/* Loading spinner */
+.btn-loading {
+  display: none;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
 }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.active{
-
-background:#2E7D32;
-color:#fff;
-
+/* Responsive */
+@media (max-width: 720px) {
+  .login-left { display: none; }
+  .login-right { padding: 40px 28px; }
 }
-
-.input-box{
-
-position:relative;
-margin-bottom:18px;
-
-}
-
-.input-box input{
-
-width:100%;
-padding:14px 45px;
-border:1px solid #ddd;
-border-radius:10px;
-font-size:15px;
-outline:none;
-
-}
-
-.input-box i{
-
-position:absolute;
-left:15px;
-top:16px;
-color:#2E7D32;
-
-}
-
-.login-btn{
-
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-background:#28a745;
-color:#fff;
-font-size:18px;
-cursor:pointer;
-transition:.3s;
-
-}
-
-.login-btn:hover{
-
-background:#1f7d35;
-
-}
-
-.or{
-
-text-align:center;
-margin:20px 0;
-color:#777;
-font-weight:600;
-
-}
-
-.guest{
-
-width:100%;
-padding:14px;
-border:1px solid #ddd;
-border-radius:10px;
-background:#fff;
-cursor:pointer;
-font-size:16px;
-
-}
-
-.demo{
-
-text-align:center;
-margin:25px 0 15px;
-font-weight:600;
-color:#777;
-
-}
-
-.roles{
-
-display:flex;
-gap:15px;
-
-}
-
-.roles button{
-
-flex:1;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-font-size:15px;
-border:1px solid #ddd;
-
-}
-
-.vet{
-
-color:#1565C0;
-
-}
-
-.admin{
-
-color:#8E24AA;
-
-}
-
-.footer{
-
-margin-top:20px;
-font-size:13px;
-text-align:center;
-color:#888;
-
-}
-
-@media(max-width:900px){
-
-.login-container{
-
-flex-direction:column;
-width:95%;
-
-}
-
-.login-left,
-.login-right{
-
-width:100%;
-
-}
-
-.login-left{
-
-padding:30px;
-
-}
-
-}
-
 </style>
-
 </head>
-
 <body>
 
 <div class="login-container">
 
-<div class="login-left">
+  <!-- Left Panel -->
+  <div class="login-left">
+    <div class="brand">
+      <div class="brand-logo">
+        <div class="brand-logo-icon">🌱</div>
+        <span class="brand-name">AgriVerse</span>
+      </div>
+      <h2>Precision Agriculture<br>for Every Farmer</h2>
+      <p>Access AI-powered crop advisory, real-time weather data, market prices, and disease detection — all in one platform.</p>
 
-<i class="fas fa-seedling"></i>
+      <div class="feature-pills">
+        <div class="pill"><i class="fas fa-cloud-sun"></i> Real-time Weather Forecasting</div>
+        <div class="pill"><i class="fas fa-robot"></i> AI Crop Advisory 24×7</div>
+        <div class="pill"><i class="fas fa-camera"></i> Disease Detection via Photo</div>
+        <div class="pill"><i class="fas fa-chart-line"></i> Live Market Price Tracker</div>
+        <div class="pill"><i class="fas fa-microphone"></i> Voice Support in 3 Languages</div>
+      </div>
+    </div>
 
-<h1>AgriVerse</h1>
+    <div class="left-footer">
+      © 2026 AgriVerse · Precision Agriculture Platform
+    </div>
+  </div>
 
-<p>
-Smart Farming Platform
-</p>
+  <!-- Right Panel -->
+  <div class="login-right">
+    <div class="form-header">
+      <h3>Welcome Back 👋</h3>
+      <p>Don't have an account? <a href="signup.html">Create one free →</a></p>
+    </div>
 
-<div class="features">
+    <form id="loginForm">
 
-<p>🌾 AI Crop Disease Detection</p>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+      </div>
 
-<p>☁ Weather Forecast</p>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+          <button type="button" class="toggle-pass" id="togglePass" title="Show/hide password">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
 
-<p>💧 Smart Irrigation</p>
+      <div class="form-row">
+        <label><input type="checkbox" id="rememberMe"> Remember me</label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
 
-<p>📈 Market Prices</p>
+      <button type="submit" class="btn-submit" id="loginBtn">
+        <span id="btnText">Sign In →</span>
+        <div class="btn-loading" id="btnLoader"></div>
+      </button>
 
-<p>🚜 Government Schemes</p>
+      <div class="error-msg" id="errorMsg">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorText">Invalid email or password. Please try again.</span>
+      </div>
+    </form>
 
-<p>🤖 AI Farming Assistant</p>
+    <div class="divider">or continue as</div>
 
-</div>
-
-</div>
-
-<div class="login-right">
-
-<div class="login-logo">
-<h2>AgriVerse</h2>
-
-<p>Smart Farming Assistant</p>
-
-</div>
-
-<div class="tabs">
-
-<button class="active">Login</button>
-
-<button onclick="location.href='signup.html'">Sign Up</button>
-
-</div>
-
-<form id="loginForm">
-
-<div class="input-box">
-
-<i class="fa fa-envelope"></i>
-
-<input 
-type="email" 
-id="email"
-placeholder="farmer@example.com" 
-required>
-</div>
-
-<div class="input-box">
-
-<i class="fa fa-lock"></i>
-
-<input 
-type="password" 
-id="password"
-placeholder="Password" 
-required>
-
-</div>
-
-<button class="login-btn">Login</button>
-
-</form>
-
-<div class="or">OR CONTINUE AS</div>
-
-<button class="guest">
-
-<i class="fa fa-user"></i>
-
-Continue as Guest
-
-</button>
-
-<div class="demo">
-
-QUICK DEMO ACCESS
-
-</div>
-
-<div class="roles">
-
-<button class="vet">
-
-<i class="fa fa-stethoscope"></i>
-
-Login as Vet
-
-</button>
-
-<button class="admin">
-
-<i class="fa fa-user-shield"></i>
-
-Login as Admin
-
-</button>
-
-</div>
-
-<div class="footer">
-
-Accounts are created & stored in the database automatically.
-
-</div>
-
-</div>
+    <div class="roles">
+      <button class="role-btn admin"><i class="fas fa-user-shield"></i> Login as Admin</button>
+    </div>
+  </div>
 
 </div>
 
 <script>
-
-document.getElementById("loginForm").addEventListener("submit", async function(e){
-
-    e.preventDefault();
-
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-
-
-    let response = await fetch("http://localhost:8082/api/auth/login", {
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
-
-    });
-
-
-    if(response.ok){
-
-        let data = await response.json();
-
-        localStorage.setItem("token", data.token);
-
-        alert("Login Successful");
-
-        window.location="index.html";
-
-    }
-    else{
-
-        alert("Invalid Email or Password");
-
-    }
-
-
+// Toggle password visibility
+const togglePass = document.getElementById('togglePass');
+const passwordInput = document.getElementById('password');
+const eyeIcon = document.getElementById('eyeIcon');
+togglePass.addEventListener('click', () => {
+  const isPass = passwordInput.type === 'password';
+  passwordInput.type = isPass ? 'text' : 'password';
+  eyeIcon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
 });
 
+// Login form submission
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btnText = document.getElementById('btnText');
+  const btnLoader = document.getElementById('btnLoader');
+  const errorMsg = document.getElementById('errorMsg');
+  const errorText = document.getElementById('errorText');
+
+  // Show loading state
+  btnText.style.display = 'none';
+  btnLoader.style.display = 'block';
+  errorMsg.classList.remove('show');
+
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userEmail', email);
+      btnText.textContent = '✓ Success!';
+      btnText.style.display = 'block';
+      btnLoader.style.display = 'none';
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+    } else {
+      throw new Error('Invalid credentials');
+    }
+  } catch (err) {
+    btnText.style.display = 'block';
+    btnLoader.style.display = 'none';
+    errorText.textContent = 'Invalid email or password. Please try again.';
+    errorMsg.classList.add('show');
+  }
+});
 </script>
 </body>
 </html>
