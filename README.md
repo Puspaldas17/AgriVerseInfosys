@@ -186,147 +186,36 @@ India's agricultural sector accounts for **18% of GDP** and employs **44% of the
 ## 📁 Project Structure
 
 ```
-FarmVerse/
+FarmVerse-Precision-Agriculture-Management-Platform/
 │
-├── frontend/                            # React 18 Frontend (Vite + TypeScript)
-│   ├── src/
-│   │   ├── App.tsx                      # Root: routing, providers, global fetch guard
-│   │   ├── index.css                    # Design system (variables, animations, glassmorphism)
-│   │   ├── i18n.ts                      # EN / Hindi / Odia translations (~1200 keys)
+├── src/
+│   ├── main/
+│   │   ├── java/com/agriverse1/agriverse1/
+│   │   │   ├── config/              # Security and MongoDB configuration
+│   │   │   ├── controller/          # REST API Controllers
+│   │   │   ├── dto/                 # Data Transfer Objects
+│   │   │   ├── entity/              # MongoDB Data Models
+│   │   │   ├── exception/           # Global Exception Handlers
+│   │   │   ├── repository/          # Spring Data MongoDB Repositories
+│   │   │   ├── security/            # JWT Utils & Filters
+│   │   │   ├── service/             # Business Logic Layer
+│   │   │   └── Agriverse1Application.java # Spring Boot entry point
 │   │   │
-│   │   ├── api/                         # Axios API client layer
-│   │   │   ├── axiosClient.ts           # Base Axios instance with JWT interceptor
-│   │   │   ├── authApi.ts
-│   │   │   ├── farmerApi.ts
-│   │   │   └── ...                      # Per-feature API modules
-│   │   │
-│   │   ├── components/
-│   │   │   ├── features/                # Feature components
-│   │   │   │   ├── Gamification/        # MissionCard, BadgesGallery, LeaderboardWidget
-│   │   │   │   ├── Analytics.tsx        # 4-tab Recharts analytics dashboard
-│   │   │   │   ├── AppointmentBooking.tsx
-│   │   │   │   ├── Chatbot.tsx          # AI chatbot with voice input
-│   │   │   │   ├── DroneAnalysis.tsx    # Aerial image upload + CNN analysis
-│   │   │   │   ├── IoTSensors.tsx       # Live mock soil telemetry dashboard
-│   │   │   │   ├── NotificationCenter.tsx
-│   │   │   │   ├── PDFExport.tsx        # jsPDF + html2canvas farm report
-│   │   │   │   ├── PestAlertWidget.tsx  # 14-day predictive outbreak forecast
-│   │   │   │   ├── PestDetector.tsx     # Image upload → AI disease detection
-│   │   │   │   ├── ProduceBlockchain.tsx
-│   │   │   │   ├── SchemesFinder.tsx    # Govt scheme eligibility finder
-│   │   │   │   ├── MarketCard.tsx / MarketWidget.tsx
-│   │   │   │   ├── WeatherCard.tsx
-│   │   │   │   └── UpgradeModal.tsx
-│   │   │   ├── home/                    # Landing page sections (Hero, Stats, CTA…)
-│   │   │   └── ui/                      # shadcn/ui primitives (50+ components)
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── Index.tsx                # Public landing page
-│   │   │   ├── Login.tsx                # Register + login (JWT)
-│   │   │   ├── Dashboard.tsx            # Farmer dashboard (7 tabs)
-│   │   │   ├── VetDashboard.tsx         # Vet portal
-│   │   │   ├── AdminDashboard.tsx       # Admin panel
-│   │   │   ├── ToolsPage.tsx            # Tools & Insights (5 tabs)
-│   │   │   ├── AMUManager.tsx           # AMU blockchain ledger page
-│   │   │   ├── Leaderboard.tsx          # Community XP rankings
-│   │   │   ├── Marketplace.tsx          # F2C produce marketplace
-│   │   │   ├── CropCalendar.tsx         # Seasonal sowing & harvest calendar
-│   │   │   ├── Profile.tsx              # Farmer profile + XP + badges
-│   │   │   ├── Layout.tsx               # Shared layout + navigation
-│   │   │   └── NotFound.tsx             # 404 page
-│   │   │
-│   │   ├── store/
-│   │   │   └── gamificationStore.ts     # Zustand (XP, Level, Streak, Missions, Badges)
-│   │   │
-│   │   └── hooks/
-│   │       ├── useAuth.tsx              # Auth context — JWT storage
-│   │       ├── use-toast.ts
-│   │       └── useInView.ts
-│   │
-│   ├── public/                          # PWA icons, manifest.json
-│   ├── package.json
-│   └── vite.config.ts
-│
-├── backend/                             # Spring Boot 3.3.x / Java 21 REST API
-│   ├── src/main/java/com/farmverse/
-│   │   ├── FarmVerseApplication.java    # Spring Boot entry point (@SpringBootApplication)
-│   │   │
-│   │   ├── controller/                  # REST controllers
-│   │   │   ├── AuthController.java      # POST /api/auth/register, /login, /guest
-│   │   │   ├── FarmerController.java    # Farmer CRUD + consultations
-│   │   │   ├── AppointmentController.java
-│   │   │   ├── VetController.java       # Vet consultations & advisories
-│   │   │   ├── AdminController.java     # User mgmt, broadcast, seed, KPIs
-│   │   │   ├── AdvisoryController.java  # Crop advisory generation
-│   │   │   ├── AnalyticsController.java # Crop trends, soil, weather
-│   │   │   ├── AMUController.java       # Drug log + blockchain ledger
-│   │   │   ├── MarketController.java    # Mandi market prices
-│   │   │   ├── WeatherController.java   # Weather data
-│   │   │   ├── ChatController.java      # AI chatbot proxy
-│   │   │   ├── PredictController.java   # Image → AI pest/disease prediction
-│   │   │   ├── ListingsController.java  # Marketplace listings CRUD
-│   │   │   └── ProfileController.java   # Advisory history, subscription
-│   │   │
-│   │   ├── service/                     # Business logic layer
-│   │   │   ├── AuthService.java
-│   │   │   ├── FarmerService.java
-│   │   │   ├── AppointmentService.java
-│   │   │   ├── VetService.java
-│   │   │   ├── AMUService.java
-│   │   │   └── ...
-│   │   │
-│   │   ├── repository/                  # Spring Data MongoDB repositories
-│   │   │   ├── FarmerRepository.java    # extends MongoRepository<Farmer, String>
-│   │   │   ├── AdvisoryRepository.java
-│   │   │   ├── AppointmentRepository.java
-│   │   │   ├── ConsultationRepository.java
-│   │   │   ├── DrugLogRepository.java
-│   │   │   ├── BlockRepository.java
-│   │   │   └── ListingRepository.java
-│   │   │
-│   │   ├── model/                       # MongoDB @Document models (+ Lombok)
-│   │   │   ├── Farmer.java
-│   │   │   ├── Advisory.java
-│   │   │   ├── AdvisoryHistory.java
-│   │   │   ├── AnalyticsData.java
-│   │   │   ├── DrugLog.java
-│   │   │   ├── Block.java
-│   │   │   ├── Consultation.java
-│   │   │   ├── VetAdvisory.java
-│   │   │   ├── Appointment.java
-│   │   │   └── Listing.java
-│   │   │
-│   │   ├── dto/                         # Request / Response DTOs
-│   │   │   ├── request/
-│   │   │   └── response/
-│   │   │
-│   │   ├── security/                    # Spring Security + JWT
-│   │   │   ├── JwtUtil.java             # Token generation & validation (jjwt)
-│   │   │   ├── JwtAuthFilter.java       # OncePerRequestFilter
-│   │   │   └── SecurityConfig.java      # CORS, endpoint security rules
-│   │   │
-│   │   ├── config/
-│   │   │   ├── MongoConfig.java
-│   │   │   └── CacheConfig.java         # Caffeine TTL cache configuration
-│   │   │
-│   │   └── exception/
-│   │       └── GlobalExceptionHandler.java  # @RestControllerAdvice
-│   │
-│   ├── src/main/resources/
-│   │   └── application.properties       # MongoDB URI, JWT secret, port, AI service URL
-│   │
-│   └── pom.xml                          # Maven dependencies
-│
-├── ai_service/                          # Python FastAPI ML Microservice (unchanged)
-│   ├── main.py                          # Pest/disease detection endpoint
-│   └── requirements.txt
+│   │   └── resources/
+│   │       ├── application.properties # App configs and MongoDB URIs
+│   │       └── static/              # Frontend web assets
+│   │           ├── css/             # Stylesheets (style.css, dashboard.css)
+│   │           ├── js/              # JavaScript logic (script.js, dashboard.js)
+│   │           ├── images/          # Image assets
+│   │           ├── index.html       # Landing Page
+│   │           ├── login.html       # Login UI
+│   │           ├── signup.html      # Registration UI
+│   │           └── dashboard.html   # Main Dashboard UI
 │
 ├── scripts/
-│   └── migrate-to-atlas.js              # MongoDB Compass → Atlas migration script
+│   └── api-tests/                   # JSON payloads, PowerShell & Batch API tests
 │
-├── docker-compose.yml                   # Runs all 3 services together
-├── .env.example                         # Environment variable template
-└── README.md                            # This file
+└── pom.xml                          # Maven build configuration
 ```
 
 ---
@@ -340,26 +229,22 @@ git clone https://github.com/Puspaldas17/FarmVerse-Precision-Agriculture-Managem
 cd FarmVerse-Precision-Agriculture-Management-Platform
 ```
 
-### 2. Install Frontend Dependencies
+### 2. Set Secure Environment Variables
 
-```bash
-cd frontend
-npm install
+For security, the MongoDB password is not hardcoded. Set it in your environment:
+```powershell
+$env:MONGO_PASSWORD="your_atlas_password"
 ```
 
-### 3. Build the Spring Boot Backend
+### 3. Run the Application
+
+The project is built as a single cohesive Spring Boot application. All frontend and backend assets are served together.
 
 ```bash
-cd backend
-mvn clean install
+mvn clean spring-boot:run
 ```
 
-### 4. Install Python AI Service Dependencies
-
-```bash
-cd ai_service
-pip install -r requirements.txt
-```
+The application will now be running at `http://localhost:8082`.
 
 > **Windows Note:** If you encounter Pillow errors, run: `pip install --upgrade pillow`
 
