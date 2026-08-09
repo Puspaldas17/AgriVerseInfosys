@@ -1,7 +1,6 @@
 package com.agriverse1.agriverse1.entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ public class User {
 
     private String name;
 
-    @Indexed(unique = true)
     private String email;
 
     private String password;
