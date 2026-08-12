@@ -251,10 +251,11 @@
                                             <span class="xp-tag">+50 XP</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="mission-checkbox" data-xp="50">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                   <label class="checkbox-container">
+                                <input type="checkbox" class="mission-checkbox" data-xp="50">
+                                <span class="checkmark"></span>
+                                <span>Complete Mission</span>
+                                </label>
                                 </div>
 
                                 <!-- Mission 2 -->
@@ -267,10 +268,10 @@
                                             <span class="xp-tag">+20 XP</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="mission-checkbox" data-xp="20">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                   <div class="checkbox-container">
+                                 <label><input type="checkbox" class="mission-checkbox" data-xp="50">Complete Mission</label>
+                                <span class="checkmark"></span>
+                                </div>
                                 </div>
 
                                 <!-- Mission 3 -->
@@ -284,9 +285,10 @@
                                         </div>
                                     </div>
                                     <label class="checkbox-container">
-                                        <input type="checkbox" class="mission-checkbox" data-xp="30">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                <input type="checkbox" class="mission-checkbox" data-xp="30">
+                                <span class="checkmark"></span>
+                                <span>Complete Mission</span>
+                                </label>
                                 </div>
 
                                 <!-- Mission 4 -->
@@ -302,6 +304,7 @@
                                     <label class="checkbox-container">
                                         <input type="checkbox" class="mission-checkbox" data-xp="15">
                                         <span class="checkmark"></span>
+                                        <span>Complete Mission</span>   
                                     </label>
                                 </div>
 
@@ -315,9 +318,10 @@
                                             <span class="xp-tag">+25 XP</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
+                                    <label class="checkbox-container" aria-label="Complete Mission">
                                         <input type="checkbox" class="mission-checkbox" data-xp="25">
                                         <span class="checkmark"></span>
+                                        <span>Complete Mission</span>
                                     </label>
                                 </div>
 
@@ -331,10 +335,10 @@
                                             <span class="xp-tag">+40 XP</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="mission-checkbox" data-xp="40">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                   <label class="checkbox-container" aria-label="Complete Mission">
+                                  <input type="checkbox" class="mission-checkbox" data-xp="40">
+                                  <span class="checkmark"></span>
+                                 </label>
                                 </div>
 
                                 <!-- Mission 7 -->
@@ -347,10 +351,10 @@
                                             <span class="xp-tag">+35 XP</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="mission-checkbox" data-xp="35">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                   <label class="checkbox-container" aria-label="Complete Mission">
+                                  <input type="checkbox" class="mission-checkbox" data-xp="35">
+                                <span class="checkmark"></span>
+                                </label>
                                 </div>
 
                                 <!-- Bonus Mission -->
@@ -363,10 +367,10 @@
                                             <span class="xp-tag">+60 XP BONUS</span>
                                         </div>
                                     </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="bonus-mission-check" disabled>
-                                        <span class="checkmark"></span>
-                                    </label>
+                                    <label class="checkbox-container" aria-label="Bonus Mission">
+                                    <input type="checkbox" id="bonus-mission-check" disabled>
+                                    <span class="checkmark"></span>
+                                 </label>
                                 </div>
                             </div>
                         </div>
@@ -545,6 +549,7 @@
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <h4 data-i18n="detector_drop_text">Click or drag & drop leaf photo here to scan</h4>
                         <p class="text-muted" data-i18n="detector_file_hint">Supports JPG, PNG, WEBP up to 10MB</p>
+                        <label for="pest-file-input">Upload Pest Image</label>
                         <input type="file" id="pest-file-input" class="file-input-hidden" accept="image/*">
                     </div>
 

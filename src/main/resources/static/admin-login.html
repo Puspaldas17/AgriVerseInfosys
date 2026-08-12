@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgriVerse - Admin Sign In</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #052e16, #065f46, #16a34a);
+            padding: 20px;
+        }
+
+        .admin-container {
+            width: 400px;
+            max-width: 100%;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #15803d;
+            margin-bottom: 10px;
+        }
+
+        .admin-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-title h2 {
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .admin-title p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 2;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 45px 13px 42px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+        }
+
+        .show-password {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #64748b;
+            z-index: 3;
+            font-size: 16px;
+        }
+
+        .show-password:hover {
+            color: #16a34a;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #15803d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+
+        <!-- Logo -->
+        <div class="logo">
+            🌱 AgriVerse
+        </div>
+
+        <!-- Title -->
+        <div class="admin-title">
+            <h2>Admin Sign In</h2>
+            <p>Sign in to access the Admin Dashboard</p>
+        </div>
+
+        <!-- Admin Login Form -->
+        <form id="adminLoginForm" autocomplete="off">
+
+            <!-- Username / Email -->
+            <div class="form-group">
+
+                <label for="adminEmail">
+                    Admin Username / Email
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-user-shield"></i>
+
+                    <input
+                        type="email"
+                        id="adminEmail"
+                        placeholder="Enter admin username or email"
+                        autocomplete="off"
+                        required>
+
+                </div>
+
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+
+                <label for="adminPassword">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        placeholder="Enter admin password"
+                        autocomplete="new-password"
+                        required>
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        id="showPasswordBtn">
+
+                        <i
+                            class="fas fa-eye"
+                            id="eyeIcon">
+                        </i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Sign In Button -->
+            <button
+                type="submit"
+                class="login-btn">
+
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In as Admin
+
+            </button>
+
+            <!-- Error -->
+            <div
+                class="error"
+                id="errorMessage">
+
+                Invalid admin username or password.
+
+            </div>
+
+        </form>
+
+        <!-- Back -->
+        <a
+            href="login.html"
+            class="back-btn">
+
+            ← Back to Login
+
+        </a>
+
+    </div>
+
+
+    <script>
+
+        // ==========================================
+        // SHOW / HIDE PASSWORD
+        // ==========================================
+
+        const showPasswordBtn =
+            document.getElementById("showPasswordBtn");
+
+        const passwordInput =
+            document.getElementById("adminPassword");
+
+        const eyeIcon =
+            document.getElementById("eyeIcon");
+
+
+        showPasswordBtn.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                eyeIcon.className =
+                    "fas fa-eye-slash";
+
+            } else {
+
+                passwordInput.type = "password";
+
+                eyeIcon.className =
+                    "fas fa-eye";
+
+            }
+
+        });
+
+
+        // ==========================================
+        // ADMIN LOGIN
+        // ==========================================
+
+        const adminLoginForm =
+            document.getElementById("adminLoginForm");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+
+        adminLoginForm.addEventListener(
+            "submit",
+            function (event) {
+
+                // Stop page refresh
+                event.preventDefault();
+
+
+                // Get entered email
+                const username =
+                    document
+                        .getElementById("adminEmail")
+                        .value
+                        .trim();
+
+
+                // Get entered password
+                const password =
+                    document
+                        .getElementById("adminPassword")
+                        .value;
+
+
+                // ==========================================
+                // ADMIN CREDENTIALS
+                // ==========================================
+
+                const correctEmail =
+                    "admin@gmail.com";
+
+                const correctPassword =
+                    "admin123";
+
+
+                // ==========================================
+                // CHECK ADMIN LOGIN
+                // ==========================================
+
+                if (
+                    username === correctEmail &&
+                    password === correctPassword
+                ) {
+
+                    // Save login information
+                    localStorage.setItem(
+                        "userEmail",
+                        username
+                    );
+
+                    localStorage.setItem(
+                        "role",
+                        "ADMIN"
+                    );
+
+
+                    // Hide error
+                    errorMessage.classList.remove("show");
+
+
+                    // Open SAME dashboard as User
+                    window.location.href =
+                        "dashboard.html";
+
+                } else {
+
+                    // Show error
+                    errorMessage.classList.add("show");
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

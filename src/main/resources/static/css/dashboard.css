@@ -733,6 +733,7 @@ body.dark-mode .btn-link:hover {
 }
 
 .progress-bar-fill {
+    width: 40%;
     height: 100%;
     background: linear-gradient(90deg, #16a34a, #4caf50);
     border-radius: var(--radius-pill);
@@ -845,7 +846,7 @@ body.dark-mode .btn-link:hover {
     padding-bottom: 8px;
     margin-bottom: 18px;
     border-bottom: 1px solid var(--border-color);
-    scrollbar-width: none; /* Hide scrollbar for clean aesthetic */
+    -ms-overflow-style: none; /* Hide scrollbar in IE/Edge legacy */
 }
 
 .tab-navigation-bar::-webkit-scrollbar {
@@ -1011,6 +1012,7 @@ body.dark-mode .btn-link:hover {
     position: relative;
     padding-left: 24px;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
     margin-left: auto;
 }
@@ -1332,7 +1334,7 @@ body.dark-mode .btn-link:hover {
    11. PANELS & OTHER TABS (AI, PEST DETECTOR, ANALYTICS, TABLES)
    -------------------------------------------------------------------------- */
 .panel-card {
-    min-height: auto; /* Natural height without empty space */
+    min-height: 0; /* Natural height without empty space */
 }
 
 .panel-header {
@@ -1490,6 +1492,7 @@ body.dark-mode .btn-link:hover {
 }
 
 .detector-result-card {
+    display: block;
     margin-top: 18px;
     padding: 16px;
     background: var(--bg-subtle);
@@ -1497,11 +1500,15 @@ body.dark-mode .btn-link:hover {
     border: 1px solid var(--border-color);
 }
 
+.detector-result-card.hidden {
+    display: none;
+}
+
 /* Tables */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
-    scrollbar-width: thin;
+    -ms-overflow-style: auto;
 }
 
 .data-table {
@@ -1563,6 +1570,10 @@ body.dark-mode .btn-link:hover {
     border-radius: var(--radius-pill);
 }
 
+.scan-meter { width: 50%; }
+.query-meter { width: 70%; }
+.weather-meter { width: 100%; }
+
 .analytics-charts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1599,6 +1610,14 @@ body.dark-mode .btn-link:hover {
     position: relative;
     transition: var(--transition);
 }
+
+.bar-mon { height: 40%; }
+.bar-tue { height: 55%; }
+.bar-wed { height: 80%; }
+.bar-thu { height: 65%; }
+.bar-fri { height: 90%; }
+.bar-sat { height: 70%; }
+.bar-sun { height: 45%; }
 
 .bar-col:hover {
     filter: brightness(1.15);
@@ -1688,6 +1707,7 @@ body.dark-mode .btn-link:hover {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.65);
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
     display: none;
     align-items: center;
@@ -1914,6 +1934,7 @@ body.dark-mode .btn-link:hover {
     color: var(--text-muted);
     cursor: pointer;
     transition: var(--transition);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2032,6 +2053,15 @@ body.dark-mode .btn-link:hover {
     justify-content: center;
     margin: 0 auto 14px auto;
     animation: bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-icon-badge.info-badge {
+    background: rgba(2, 132, 199, 0.15);
+    color: var(--color-info);
+}
+
+.chart-line-icon {
+    font-size: 2rem;
 }
 
 .success-modal-box h2 {
