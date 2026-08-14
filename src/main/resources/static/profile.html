@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgriVerse - My Profile</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #052e16, #065f46, #16a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .profile-container {
+            width: 500px;
+            max-width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            text-align: center;
+            color: #15803d;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            text-align: center;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #15803d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            font-size: 14px;
+        }
+
+        .message.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-container">
+
+        <div class="logo">
+            🌱 AgriVerse
+        </div>
+
+        <h2 class="title">My Profile</h2>
+
+        <p class="subtitle">
+            View and update your profile details
+        </p>
+
+        <form id="profileForm">
+
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                    required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Enter phone number">
+            </div>
+
+            <!-- Land Size -->
+            <div class="form-group">
+                <label for="landSize">Land Size (acres)</label>
+
+                <input
+                    type="number"
+                    id="landSize"
+                    placeholder="Enter land size"
+                    min="0"
+                    step="0.01">
+            </div>
+
+            <!-- Soil Type -->
+            <div class="form-group">
+                <label for="soilType">Soil Type</label>
+
+                <select id="soilType">
+                    <option value="">Select soil type</option>
+                    <option value="Black Soil">Black Soil</option>
+                    <option value="Red Soil">Red Soil</option>
+                    <option value="Alluvial Soil">Alluvial Soil</option>
+                    <option value="Clay Soil">Clay Soil</option>
+                    <option value="Sandy Soil">Sandy Soil</option>
+                </select>
+            </div>
+
+            <!-- Language -->
+            <div class="form-group">
+                <label for="language">Language</label>
+
+                <select id="language">
+                    <option value="English">English</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Hindi">Hindi</option>
+                </select>
+            </div>
+
+            <!-- Save Button -->
+            <button
+                type="submit"
+                class="save-btn">
+                Save Profile
+            </button>
+
+            <!-- Success Message -->
+            <div
+                class="message"
+                id="profileMessage">
+                Profile saved successfully!
+            </div>
+
+        </form>
+
+        <!-- Back to Dashboard -->
+        <a
+            href="dashboard.html"
+            class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <script>
+
+        // =========================================================
+        // GET FORM ELEMENTS
+        // =========================================================
+
+        const profileForm =
+            document.getElementById("profileForm");
+
+        const profileMessage =
+            document.getElementById("profileMessage");
+
+
+        // =========================================================
+        // LOAD SAVED PROFILE
+        // =========================================================
+
+        let savedProfile = null;
+
+        try {
+
+            savedProfile = JSON.parse(
+                localStorage.getItem("userProfile") || "null"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error loading saved profile:",
+                error
+            );
+
+            savedProfile = null;
+        }
+
+
+        // =========================================================
+        // SHOW SAVED VALUES
+        // =========================================================
+
+        if (savedProfile) {
+
+            document.getElementById("name").value =
+                savedProfile.name || "";
+
+            document.getElementById("email").value =
+                savedProfile.email || "";
+
+            document.getElementById("phone").value =
+                savedProfile.phone || "";
+
+            document.getElementById("landSize").value =
+                savedProfile.landSize || "";
+
+            document.getElementById("soilType").value =
+                savedProfile.soilType || "";
+
+            document.getElementById("language").value =
+                savedProfile.language || "English";
+        }
+
+
+        // =========================================================
+        // SAVE PROFILE
+        // =========================================================
+
+        profileForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                // Get Name
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                // Get Email
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                // Get Phone
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+
+                // Get Land Size
+                const landSize =
+                    document
+                        .getElementById("landSize")
+                        .value
+                        .trim();
+
+
+                // Get Soil Type
+                const soilType =
+                    document
+                        .getElementById("soilType")
+                        .value;
+
+
+                // Get Language
+                const language =
+                    document
+                        .getElementById("language")
+                        .value;
+
+
+                // =================================================
+                // CREATE COMPLETE PROFILE
+                // =================================================
+
+                const profile = {
+
+                    name: name,
+
+                    email: email,
+
+                    phone: phone,
+
+                    landSize: landSize,
+
+                    soilType: soilType,
+
+                    language: language
+                };
+
+
+// =================================================
+// SAVE TO userProfile
+// =================================================
+
+localStorage.setItem(
+    "userProfile",
+    JSON.stringify(profile)
+);
+
+
+// =================================================
+// SAVE FARMER FOR LEADERBOARD
+// =================================================
+
+let farmers = [];
+
+try {
+    farmers = JSON.parse(
+        localStorage.getItem("agriverse_farmers") || "[]"
+    );
+
+    if (!Array.isArray(farmers)) {
+        farmers = [];
+    }
+
+} catch (error) {
+    console.error("Error loading farmers:", error);
+    farmers = [];
+}
+
+
+// Check if farmer already exists
+const existingIndex = farmers.findIndex(
+    farmer => farmer.email === profile.email
+);
+
+if (existingIndex !== -1) {
+
+    // Update existing farmer
+    farmers[existingIndex] = {
+        ...farmers[existingIndex],
+        ...profile
+    };
+
+} else {
+
+    // Add new farmer
+    farmers.push({
+        ...profile,
+        xp: 40,
+        sector: "Central Plot"
+    });
+}
+
+
+// Save all farmers
+localStorage.setItem(
+    "agriverse_farmers",
+    JSON.stringify(farmers)
+);
+
+                // =================================================
+                // GET EXISTING USER
+                // =================================================
+
+                let savedUser = null;
+
+                try {
+
+                    savedUser = JSON.parse(
+                        localStorage.getItem(
+                            "agriverse_user"
+                        ) || "null"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Error loading user:",
+                        error
+                    );
+
+                    savedUser = null;
+                }
+
+
+                // =================================================
+                // UPDATE ALL USER DETAILS
+                // =================================================
+
+                const updatedUser = {
+
+                    ...(savedUser || {}),
+
+                    name: name,
+
+                    email: email,
+
+                    phone: phone,
+
+                    landSize: landSize,
+
+                    soilType: soilType,
+
+                    language: language
+                };
+
+
+                // =================================================
+                // SAVE TO agriverse_user
+                // =================================================
+
+                localStorage.setItem(
+                    "agriverse_user",
+                    JSON.stringify(updatedUser)
+                );
+
+
+                // =================================================
+                // SHOW SUCCESS MESSAGE
+                // =================================================
+
+                profileMessage.classList.add("show");
+
+
+                setTimeout(
+                    function () {
+
+                        profileMessage.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    3000
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
