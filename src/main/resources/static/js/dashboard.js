@@ -498,24 +498,87 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     // DYNAMIC USER AUTH & DASHBOARD STATE
     // --------------------------------------------------------------------------
-    const savedUser = JSON.parse(localStorage.getItem('agriverse_user') || 'null');
-    
-    const state = {
-        user: {
-            name: (savedUser && savedUser.name) ? savedUser.name : "Farmer User",
-            phone: (savedUser && savedUser.phone) ? savedUser.phone : "Not Available",
-            email: (savedUser && savedUser.email) ? savedUser.email : "farmer@agriverse.com",
-            level: 1,
-            xp: 40,
-            xpToNextLevel: 100,
-            streak: 4,
-            plan: "Free", // "Free" or "Premium"
-            advisoriesUsed: 5,
-            memberSince: "2026"
-        },
-        selectedPaymentMethod: 'VISA',
-        currentLanguage: localStorage.getItem('agriverse_language') || 'en'
-    };
+    // --------------------------------------------------------------------------
+// DYNAMIC USER AUTH & DASHBOARD STATE
+// --------------------------------------------------------------------------
+let savedUser = null;
+let savedProfile = null;
+
+try {
+    savedUser = JSON.parse(
+        localStorage.getItem('agriverse_user') || 'null'
+    );
+} catch (error) {
+    console.error("Invalid agriverse_user data:", error);
+    localStorage.removeItem('agriverse_user');
+    savedUser = null;
+}
+
+try {
+    savedProfile = JSON.parse(
+        localStorage.getItem('userProfile') || 'null'
+    );
+} catch (error) {
+    console.error("Invalid userProfile data:", error);
+    localStorage.removeItem('userProfile');
+    savedProfile = null;
+}
+const state = {
+    user: {
+        name: (savedProfile && savedProfile.name)
+            ? savedProfile.name
+            : ((savedUser && savedUser.name)
+                ? savedUser.name
+                : "Farmer User"),
+
+        phone: (savedProfile && savedProfile.phone)
+            ? savedProfile.phone
+            : ((savedUser && savedUser.phone)
+                ? savedUser.phone
+                : "Not Available"),
+
+        email: (savedProfile && savedProfile.email)
+            ? savedProfile.email
+            : ((savedUser && savedUser.email)
+                ? savedUser.email
+                : "farmer@agriverse.com"),
+
+        landSize:(savedUser && savedUser.landSize)
+            ? savedUser.landSize
+            : ((savedProfile && savedProfile.landSize)
+                ? savedProfile.landSize
+                : ""),
+
+        soilType:(savedUser && savedUser.soilType)
+            ? savedUser.soilType
+            : ((savedProfile && savedProfile.soilType)
+                ? savedProfile.soilType
+                : ""),
+
+        language:(savedProfile && savedProfile.language)
+            ? savedProfile.language
+            : ((savedUser && savedUser.language)
+                ? savedUser.language
+                : "English"),
+
+        level: 1,
+        xp: 40,
+        xpToNextLevel: 100,
+        streak: 4,
+        plan: "Free",
+        advisoriesUsed: 5,
+        memberSince: "2026"
+    },
+
+    selectedPaymentMethod: 'VISA',
+
+currentLanguage:
+    savedProfile && savedProfile.language === "Telugu"
+        ? "te"
+        : savedProfile && savedProfile.language === "Hindi"
+            ? "hi"
+            : "en"
+};
 
     // --------------------------------------------------------------------------
     // 2. DYNAMIC TRANSLATION ENGINE FUNCTION
@@ -568,28 +631,224 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Render User Information Dynamically to DOM
-    function renderUserInfo() {
-        const displayName = document.getElementById('user-display-name');
-        const userPhone = document.getElementById('user-phone');
-        const headerName = document.getElementById('header-user-name');
-        const dropdownName = document.getElementById('dropdown-user-name');
-        const dropdownEmail = document.getElementById('dropdown-user-email');
-        const headerAvatar = document.getElementById('header-avatar');
-        const sidebarUserName = document.getElementById('sidebar-user-name');
-        const modalUserName = document.getElementById('modal-user-name');
+  function renderUserInfo() {
+    const displayName = document.getElementById('user-display-name');
+    const userPhone = document.getElementById('user-phone');
+    const userSoil = document.getElementById('user-soil');
+    const userLand = document.getElementById('user-land');
+    const userLanguage = document.getElementById('user-lang-display');
 
-        if (displayName) displayName.textContent = state.user.name;
-        if (userPhone) userPhone.textContent = state.user.phone;
-        if (headerName) headerName.textContent = state.user.name;
-        if (dropdownName) dropdownName.textContent = state.user.name;
-        if (dropdownEmail) dropdownEmail.textContent = state.user.email;
-        if (headerAvatar) headerAvatar.textContent = state.user.name.charAt(0).toUpperCase();
-        if (sidebarUserName) sidebarUserName.textContent = `You (${state.user.name})`;
-        if (modalUserName) modalUserName.textContent = `${state.user.name} (You)`;
+    const headerName = document.getElementById('header-user-name');
+    const dropdownName = document.getElementById('dropdown-user-name');
+    const dropdownEmail = document.getElementById('dropdown-user-email');
+    const headerAvatar = document.getElementById('header-avatar');
+    const sidebarUserName = document.getElementById('sidebar-user-name');
+    const modalUserName = document.getElementById('modal-user-name');
+
+    // Name
+    if (displayName) {
+        displayName.textContent = state.user.name;
     }
 
-    renderUserInfo();
-    applyLanguage(state.currentLanguage);
+    // Phone
+    if (userPhone) {
+        userPhone.textContent = state.user.phone || "Not Available";
+    }
+
+    // Soil Type
+    if (userSoil) {
+        userSoil.textContent = state.user.soilType || "Not specified";
+    }
+
+    // Land Size
+    if (userLand) {
+        userLand.textContent = state.user.landSize
+            ? `${state.user.landSize} acres`
+            : "— acres";
+    }
+
+    // Language
+    if (userLanguage) {
+        userLanguage.textContent = state.user.language || "English";
+    }
+
+    // Header
+    if (headerName) {
+        headerName.textContent = state.user.name;
+    }
+
+    if (dropdownName) {
+        dropdownName.textContent = state.user.name;
+    }
+
+    if (dropdownEmail) {
+        dropdownEmail.textContent = state.user.email;
+    }
+
+    if (headerAvatar) {
+        headerAvatar.textContent =
+            state.user.name.charAt(0).toUpperCase();
+    }
+
+    if (sidebarUserName) {
+        sidebarUserName.textContent =
+            `You (${state.user.name})`;
+    }
+
+    if (modalUserName) {
+        modalUserName.textContent =
+            `${state.user.name} (You)`;
+    }
+}
+function renderLeaderboard() {
+    let farmers = [];
+
+    try {
+        farmers = JSON.parse(
+            localStorage.getItem("agriverse_farmers") || "[]"
+        );
+
+        if (!Array.isArray(farmers)) {
+            farmers = [];
+        }
+    } catch (error) {
+        console.error("Leaderboard data error:", error);
+        farmers = [];
+    }
+
+    const currentEmail = state.user.email;
+
+    const currentIndex = farmers.findIndex(
+        farmer => farmer.email === currentEmail
+    );
+
+    const currentFarmer = {
+        name: state.user.name,
+        email: state.user.email,
+        phone: state.user.phone,
+        landSize: state.user.landSize,
+        soilType: state.user.soilType,
+        language: state.user.language,
+        xp: state.user.xp || 40,
+        sector: "Central Plot"
+    };
+
+    if (currentIndex === -1) {
+        farmers.push(currentFarmer);
+    } else {
+        farmers[currentIndex] = {
+            ...farmers[currentIndex],
+            ...currentFarmer
+        };
+    }
+
+    localStorage.setItem(
+        "agriverse_farmers",
+        JSON.stringify(farmers)
+    );
+
+    farmers.sort(
+        (a, b) => (b.xp || 0) - (a.xp || 0)
+    );
+
+    const leaderboardList =
+        document.querySelector(".leaderboard-list");
+
+    if (leaderboardList) {
+        leaderboardList.innerHTML = "";
+
+        farmers.forEach((farmer, index) => {
+            const item = document.createElement("div");
+
+            const isCurrentUser =
+                farmer.email === currentEmail;
+
+            item.className =
+                "leaderboard-item" +
+                (isCurrentUser ? " current-user-row" : "");
+
+            let rank;
+
+            if (index === 0) {
+                rank = "🥇";
+            } else if (index === 1) {
+                rank = "🥈";
+            } else if (index === 2) {
+                rank = "🥉";
+            } else {
+                rank = "#" + (index + 1);
+            }
+
+            item.innerHTML = `
+                <span class="rank-badge">${rank}</span>
+                <span class="farmer-name">
+                    ${farmer.name || "Farmer"}
+                    ${isCurrentUser ? " (You)" : ""}
+                </span>
+                <strong class="farmer-xp">
+                    ${farmer.xp || 0} XP
+                </strong>
+            `;
+
+            leaderboardList.appendChild(item);
+        });
+    }
+
+    const leaderboardModal =
+        document.getElementById("leaderboard-modal");
+
+    if (leaderboardModal) {
+        const tbody =
+            leaderboardModal.querySelector("tbody");
+
+        if (tbody) {
+            tbody.innerHTML = "";
+
+            farmers.forEach((farmer, index) => {
+                const row =
+                    document.createElement("tr");
+
+                const isCurrentUser =
+                    farmer.email === currentEmail;
+
+                if (isCurrentUser) {
+                    row.classList.add("highlight-row");
+                }
+
+                let rank;
+
+                if (index === 0) {
+                    rank = "🥇 1";
+                } else if (index === 1) {
+                    rank = "🥈 2";
+                } else if (index === 2) {
+                    rank = "🥉 3";
+                } else {
+                    rank = index + 1;
+                }
+
+                row.innerHTML = `
+                    <td>${rank}</td>
+                    <td>
+                        ${farmer.name || "Farmer"}
+                        ${isCurrentUser ? " (You)" : ""}
+                    </td>
+                    <td>
+                        ${farmer.sector || "Central Plot"}
+                    </td>
+                    <td>
+                        ${farmer.xp || 0} XP
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+    }
+}
+renderUserInfo();
+renderLeaderboard();
+applyLanguage(state.currentLanguage);
 
     /* ==========================================================================
        3. THEME TOGGLE & PERSISTENCE (DARK MODE)
@@ -769,32 +1028,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Profile Section & Dropdown Listeners
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    const dropdownProfileBtn = document.getElementById('dropdown-profile-btn');
-    const dropdownSettingsBtn = document.getElementById('dropdown-settings-btn');
 
-    if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', () => {
-            showComingSoon("Profile Management Coming Soon", "Personal details, land size, and soil type editing will be enabled upon backend profile API integration.", "fa-user-edit");
-        });
-    }
+const editProfileBtn =
+    document.getElementById('edit-profile-btn');
 
-    if (dropdownProfileBtn) {
-        dropdownProfileBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (profileDropdown) profileDropdown.classList.remove('active');
-            const profileEl = document.getElementById('profile-section');
-            if (profileEl) profileEl.scrollIntoView({ behavior: 'smooth' });
-        });
-    }
+const dropdownProfileBtn =
+    document.getElementById('dropdown-profile-btn');
 
-    if (dropdownSettingsBtn) {
-        dropdownSettingsBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (profileDropdown) profileDropdown.classList.remove('active');
-            showComingSoon("Account Settings Coming Soon", "Notification preferences, password management, and security controls are coming soon.", "fa-cog");
-        });
-    }
+const dropdownSettingsBtn =
+    document.getElementById('dropdown-settings-btn');
+
+
+if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        window.location.href = "profile.html";
+    });
+}
+
+
+if (dropdownProfileBtn) {
+    dropdownProfileBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (profileDropdown) {
+            profileDropdown.classList.remove('active');
+        }
+
+        window.location.href = "profile.html";
+    });
+}
+
+
+if (dropdownSettingsBtn) {
+    dropdownSettingsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (profileDropdown) {
+            profileDropdown.classList.remove('active');
+        }
+
+        showComingSoon(
+            "Account Settings Coming Soon",
+            "Notification preferences, password management, and security controls are coming soon.",
+            "fa-cog"
+        );
+    });
+}
 
     // Footer Links Listeners
     const footerReferences = document.getElementById('footer-references');
@@ -891,7 +1174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (xpProgressFill) xpProgressFill.style.width = `${percentage}%`;
         if (xpRatioLabel) xpRatioLabel.textContent = `${state.user.xp} / ${state.user.xpToNextLevel} XP`;
     }
-
     missionCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             const xpValue = parseInt(checkbox.getAttribute('data-xp') || '0', 10);

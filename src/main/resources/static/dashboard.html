@@ -106,7 +106,7 @@
                             <p class="dropdown-email" id="dropdown-user-email">farmer@agriverse.com</p>
                         </div>
                         <hr>
-                        <a href="#profile" class="dropdown-item" id="dropdown-profile-btn"><i class="fas fa-user-circle"></i> <span data-i18n="nav_dashboard">My Profile</span></a>
+                        <a href="profile.html" class="dropdown-item" id="dropdown-profile-btn"><i class="fas fa-user-circle"></i> <span data-i18n="nav_dashboard">My Profile</span></a>
                         <a href="#settings" class="dropdown-item" id="dropdown-settings-btn"><i class="fas fa-cog"></i> <span>Settings</span></a>
                         <button class="dropdown-item text-red" id="header-logout-btn"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout_btn">Logout</span></button>
                     </div>
@@ -153,11 +153,11 @@
                 </div>
                 <div class="detail-item">
                     <span class="detail-label" data-i18n="detail_soil">Soil Type</span>
-                    <strong class="detail-value" id="user-soil" data-i18n="soil_val">Not specified</strong>
+                    <strong class="detail-value" id="user-soil">Not specified</strong>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label" data-i18n="detail_land">Land Size</span>
-                    <strong class="detail-value" id="user-land" data-i18n="land_val">— acres</strong>
+                    <strong class="detail-value" id="user-land">— acres</strong>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label" data-i18n="detail_lang">Language</span>
@@ -167,7 +167,7 @@
 
             <!-- Action Button -->
             <div class="profile-actions">
-                <button class="btn btn-green" id="edit-profile-btn">
+                <button type="button" class="btn btn-green" id="edit-profile-btn" onclick="window.location.href='profile.html';">
                     <i class="fas fa-user-edit"></i> Profile
                 </button>
             </div>
