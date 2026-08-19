@@ -562,7 +562,7 @@ const state = {
                 : "English"),
 
         level: 1,
-        xp: 40,
+        xp: (savedUser && savedUser.xp !== undefined) ? savedUser.xp : 40,
         xpToNextLevel: 100,
         streak: 4,
         plan: "Free",
@@ -708,8 +708,16 @@ function renderLeaderboard() {
             localStorage.getItem("agriverse_farmers") || "[]"
         );
 
-        if (!Array.isArray(farmers)) {
-            farmers = [];
+        if (!Array.isArray(farmers) || farmers.length <= 1) {
+            // Seed random people for the competition
+            farmers = [
+                { name: "Rajesh Kumar", email: "rajesh@example.com", sector: "North Plot", xp: 1250 },
+                { name: "Lakshmi Narayana", email: "lakshmi@example.com", sector: "East Plot", xp: 980 },
+                { name: "Suresh Reddy", email: "suresh@example.com", sector: "West Plot", xp: 845 },
+                { name: "Anita Desai", email: "anita@example.com", sector: "South Plot", xp: 620 },
+                { name: "Vikram Singh", email: "vikram@example.com", sector: "North Plot", xp: 315 },
+                { name: "Priya Sharma", email: "priya@example.com", sector: "Central Plot", xp: 110 }
+            ];
         }
     } catch (error) {
         console.error("Leaderboard data error:", error);
@@ -855,21 +863,22 @@ applyLanguage(state.currentLanguage);
        ========================================================================== */
     const themeToggleBtn = document.getElementById('theme-toggle');
 
-    const savedTheme = localStorage.getItem('agriverse_theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.body.classList.add('dark-mode');
-        if (themeToggleBtn) themeToggleBtn.innerHTML = '☀';
-    } else {
-        document.body.classList.remove('dark-mode');
+    const savedTheme = localStorage.getItem('farmverse-theme');
+    // Dark is default, light is applied if explicitly saved
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
         if (themeToggleBtn) themeToggleBtn.innerHTML = '🌙';
+    } else {
+        document.body.classList.remove('light-mode');
+        if (themeToggleBtn) themeToggleBtn.innerHTML = '☀️';
     }
 
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeToggleBtn.innerHTML = isDark ? '☀' : '🌙';
-            localStorage.setItem('agriverse_theme', isDark ? 'dark' : 'light');
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            themeToggleBtn.innerHTML = isLight ? '🌙' : '☀️';
+            localStorage.setItem('farmverse-theme', isLight ? 'light' : 'dark');
         });
     }
 
@@ -1173,6 +1182,14 @@ if (dropdownSettingsBtn) {
         const percentage = Math.min(100, Math.round((state.user.xp / state.user.xpToNextLevel) * 100));
         if (xpProgressFill) xpProgressFill.style.width = `${percentage}%`;
         if (xpRatioLabel) xpRatioLabel.textContent = `${state.user.xp} / ${state.user.xpToNextLevel} XP`;
+        
+        // Save state persistently
+        localStorage.setItem('agriverse_user', JSON.stringify(state.user));
+        
+        // Re-render leaderboard to reflect XP changes dynamically
+        if (typeof renderLeaderboard === 'function') {
+            renderLeaderboard();
+        }
     }
     missionCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {

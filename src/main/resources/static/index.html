@@ -10,12 +10,19 @@
 </head>
 <body>
 
+<!-- ── Background Effects ── -->
+<div class="glass-cursor" id="glassCursor"></div>
+<div class="aurora-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
 <!-- ── Navbar ── -->
 <header>
   <nav class="navbar" id="navbar">
     <div class="logo">
       <div class="logo-icon">🌱</div>
-      AgriVerse
+      <span>AgriVerse</span>
     </div>
 
     <ul class="nav-links">
@@ -49,6 +56,7 @@
 
 <!-- ── Hero ── -->
 <section class="hero">
+  <div class="hero-grid"></div>
   <div class="left">
     <span class="badge">🚀 Smart farming, built for the future</span>
 
@@ -99,36 +107,36 @@
   <p class="subtitle">A complete precision agriculture suite built to help farmers make data-driven decisions at every stage of the crop cycle.</p>
 
   <div class="grid">
-    <div class="card reveal">
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">🌱</div>
       <h3>Smart Crop Advisory</h3>
       <p>Expert AI-powered guidance on fertilizers, irrigation scheduling, and seed selection tailored to your soil and weather.</p>
-    </div>
-    <div class="card reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">☁️</div>
       <h3>Precision Weather</h3>
       <p>Hyper-local real-time weather forecasts, rainfall predictions, and frost alerts powered by OpenWeather API.</p>
-    </div>
-    <div class="card reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">🤖</div>
       <h3>AI Farming Assistant</h3>
       <p>24×7 chatbot for farmers — ask questions in your native language and get instant personalized farming advice.</p>
-    </div>
-    <div class="card reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">🌍</div>
       <h3>Native Language Support</h3>
       <p>Fully supports Telugu, Hindi, and English with voice input and text-to-speech capabilities for every farmer.</p>
-    </div>
-    <div class="card reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">📷</div>
       <h3>Disease Detection</h3>
       <p>Upload a photo of your crop leaf — our CNN model identifies diseases with 92%+ accuracy and suggests treatments.</p>
-    </div>
-    <div class="card reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="card">
       <div class="card-icon">🔒</div>
       <h3>Secure & Private</h3>
       <p>End-to-end encrypted farmer data with JWT-secured APIs and MongoDB Atlas cloud storage for complete privacy.</p>
-    </div>
+    </div></div>
   </div>
 </section>
 
@@ -139,26 +147,26 @@
   <p class="subtitle">Four simple steps to transform your farming decisions with the power of AI and precision data.</p>
 
   <div class="steps">
-    <div class="step reveal">
+    <div class="card-wrapper reveal"><div class="step">
       <h3>1</h3>
       <h4>Create Your Profile</h4>
       <p>Register and enter your farm details — location, crop type, soil data, and language preference.</p>
-    </div>
-    <div class="step reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="step">
       <h3>2</h3>
       <h4>Collect Real Data</h4>
       <p>Platform aggregates live weather, soil moisture, and market price data specific to your farm location.</p>
-    </div>
-    <div class="step reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="step">
       <h3>3</h3>
       <h4>Get AI Advice</h4>
       <p>Receive personalized fertilizer, irrigation, and pest management recommendations from our AI engine.</p>
-    </div>
-    <div class="step reveal">
+    </div></div>
+    <div class="card-wrapper reveal"><div class="step">
       <h3>4</h3>
       <h4>Track & Improve</h4>
       <p>Monitor crop performance over seasons with visual analytics and continuously improve your yields.</p>
-    </div>
+    </div></div>
   </div>
 </section>
 
@@ -268,6 +276,42 @@
     });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
+
+  // Glass Cursor Logic
+  const cursor = document.getElementById('glassCursor');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  
+  // Enlarge cursor on interactive elements
+  const interactives = document.querySelectorAll('a, button, select, .card-wrapper');
+  interactives.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Mouse Tilt Logic for Cards
+  const cards = document.querySelectorAll('.card-wrapper');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left; 
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -6; // max rotation degrees
+      const rotateY = ((x - centerX) / centerX) * 6;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    });
+  });
 </script>
 </body>
 </html>
