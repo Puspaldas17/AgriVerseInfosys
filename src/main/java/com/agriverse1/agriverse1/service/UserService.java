@@ -62,4 +62,11 @@ public class UserService {
                         new UsernameNotFoundException("User not found with email: " + email)
                 );
     }
+
+    /**
+     * Save/Update a user entity.
+     */
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
 }

@@ -94,7 +94,7 @@ body.light-mode {
     --shadow-sm:  0 2px 8px rgba(0,0,0,0.05);
     --shadow-md:  0 8px 24px rgba(0,0,0,0.08);
     --shadow-lg:  0 16px 40px rgba(0,0,0,0.1);
-    --glass-bg:   rgba(255,255,255,0.7);
+    --glass-bg:   rgba(255,255,255,0.85);
     --neo-shadow-out: 5px 5px 14px rgba(0,0,0,0.08), -4px -4px 10px rgba(255,255,255,1);
     --neo-shadow-in:  inset 3px 3px 8px rgba(0,0,0,0.06), inset -3px -3px 8px rgba(255,255,255,1);
 }
@@ -1807,7 +1807,8 @@ body.dark-mode .btn-link:hover {
 .premium-plan-modal {
     max-width: 680px;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .premium-plan-modal .modal-close-btn {
