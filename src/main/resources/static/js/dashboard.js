@@ -16,6 +16,25 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // SECURITY: Validate JWT token exists
+    const token = localStorage.getItem('jwt_token');
+    if (!token) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Parse JWT for data isolation
+    let currentUserEmail = 'default';
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload && payload.sub) currentUserEmail = payload.sub;
+    } catch (e) {
+        console.error('Invalid JWT', e);
+    }
+    
+    const USER_STORAGE_KEY = `agriverse_user_${currentUserEmail}`;
+    const MISSIONS_STORAGE_KEY = `agriverse_missions_state_${currentUserEmail}`;
+
     // --------------------------------------------------------------------------
     // 1. TRANSLATIONS DICTIONARY (ENGLISH, TELUGU, HINDI)
     // --------------------------------------------------------------------------
@@ -506,11 +525,11 @@ let savedProfile = null;
 
 try {
     savedUser = JSON.parse(
-        localStorage.getItem('agriverse_user') || 'null'
+        localStorage.getItem(USER_STORAGE_KEY) || 'null'
     );
 } catch (error) {
-    console.error("Invalid agriverse_user data:", error);
-    localStorage.removeItem('agriverse_user');
+    console.error(`Invalid ${USER_STORAGE_KEY} data:`, error);
+    localStorage.removeItem(USER_STORAGE_KEY);
     savedUser = null;
 }
 
@@ -1174,6 +1193,26 @@ if (dropdownSettingsBtn) {
     const xpProgressFill = document.getElementById('xp-progress-fill');
     const xpRatioLabel = document.getElementById('xp-ratio-label');
 
+    function syncUserDataToBackend() {
+        const currentStates = Array.from(missionCheckboxes).map(cb => cb.checked);
+        fetch('/api/user/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+            },
+            body: JSON.stringify({
+                xp: state.user.xp,
+                level: state.user.level || 1,
+                missionsState: currentStates
+            })
+        }).catch(err => console.error('Error syncing user data:', err));
+        
+        // Keep local storage as a fallback/cache
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(state.user));
+        localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(currentStates));
+    }
+
     function updateXPDisplay() {
         if (userXpBadge) userXpBadge.textContent = `${state.user.xp} XP`;
         if (leaderboardUserXp) leaderboardUserXp.textContent = `${state.user.xp} XP`;
@@ -1184,14 +1223,22 @@ if (dropdownSettingsBtn) {
         if (xpRatioLabel) xpRatioLabel.textContent = `${state.user.xp} / ${state.user.xpToNextLevel} XP`;
         
         // Save state persistently
-        localStorage.setItem('agriverse_user', JSON.stringify(state.user));
+        syncUserDataToBackend();
         
         // Re-render leaderboard to reflect XP changes dynamically
         if (typeof renderLeaderboard === 'function') {
             renderLeaderboard();
         }
     }
-    missionCheckboxes.forEach(checkbox => {
+    // Load saved mission states
+    const savedMissions = JSON.parse(localStorage.getItem(MISSIONS_STORAGE_KEY) || '[]');
+    missionCheckboxes.forEach((checkbox, index) => {
+        if (savedMissions[index]) {
+            checkbox.checked = true;
+            const missionCard = checkbox.closest('.mission-card');
+            if (missionCard) missionCard.classList.add('completed');
+        }
+
         checkbox.addEventListener('change', () => {
             const xpValue = parseInt(checkbox.getAttribute('data-xp') || '0', 10);
             const missionCard = checkbox.closest('.mission-card');
@@ -1207,10 +1254,20 @@ if (dropdownSettingsBtn) {
 
             checkBonusMissionStatus();
             updateXPDisplay();
+            
+            // Save state after any change
+            syncUserDataToBackend();
         });
     });
 
-    function checkBonusMissionStatus() {
+    // Check bonus status on load in case all missions were saved as completed
+    setTimeout(() => {
+        if (typeof checkBonusMissionStatus === 'function') {
+            checkBonusMissionStatus(true); // true = silent load (no toast)
+        }
+    }, 100);
+
+    function checkBonusMissionStatus(silent = false) {
         const standardMissions = Array.from(missionCheckboxes).filter(cb => cb !== bonusCheck);
         const allCompleted = standardMissions.every(cb => cb.checked);
 
@@ -1218,10 +1275,25 @@ if (dropdownSettingsBtn) {
             if (allCompleted && !bonusCheck.checked) {
                 bonusCheck.disabled = false;
                 bonusCheck.checked = true;
-                state.user.xp += 60;
+                
+                if (!silent) {
+                    state.user.xp += 60;
+                    showToast("🎉 Bonus Mission Unlocked! +60 XP Claimed!");
+                    updateXPDisplay();
+                }
+                
                 const bonusCard = bonusCheck.closest('.mission-card');
                 if (bonusCard) bonusCard.classList.add('completed');
-                showToast("🎉 Bonus Mission Unlocked! +60 XP Claimed!");
+            } else if (!allCompleted && bonusCheck.checked) {
+                bonusCheck.disabled = true;
+                bonusCheck.checked = false;
+                const bonusCard = bonusCheck.closest('.mission-card');
+                if (bonusCard) bonusCard.classList.remove('completed');
+                
+                if (!silent) {
+                    state.user.xp = Math.max(0, state.user.xp - 60);
+                    updateXPDisplay();
+                }
             }
         }
     }
@@ -1346,10 +1418,47 @@ if (dropdownSettingsBtn) {
         appendMessage(msg, 'user');
         chatInputText.value = '';
 
-        setTimeout(() => {
-            const botResponse = generateAIResponse(msg);
-            appendMessage(botResponse, 'bot');
-        }, 700);
+        // Add a temporary loading bubble
+        const loadingId = 'loading-' + Date.now();
+        const loadingBubble = document.createElement('div');
+        loadingBubble.className = `chat-bubble bot-bubble`;
+        loadingBubble.id = loadingId;
+        loadingBubble.innerHTML = `
+            <div class="bubble-avatar">🤖</div>
+            <div class="bubble-text">...</div>
+        `;
+        chatMessages.appendChild(loadingBubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Fetch AI Response from backend
+        fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+            },
+            body: JSON.stringify({ message: msg })
+        })
+        .then(res => {
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) throw new Error("Unauthorized");
+                throw new Error("Server error");
+            }
+            return res.json();
+        })
+        .then(data => {
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
+            
+            appendMessage(data.response || 'Sorry, I am currently unavailable.', 'bot');
+        })
+        .catch(err => {
+            console.error('AI Error:', err);
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
+            
+            appendMessage('Error reaching AI backend. Please try again later.', 'bot');
+        });
     }
 
     function appendMessage(text, sender) {
@@ -1366,19 +1475,7 @@ if (dropdownSettingsBtn) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function generateAIResponse(input) {
-        const lower = input.toLowerCase();
-        if (lower.includes('fertilizer') || lower.includes('npk') || lower.includes('urea')) {
-            return "For optimal crop yield, apply NPK (10-26-26) @ 50 kg/acre during early tillering. Ensure adequate soil moisture before application.";
-        } else if (lower.includes('water') || lower.includes('irrigation') || lower.includes('drip')) {
-            return "Based on your field's soil moisture (38%), we recommend 45 minutes of drip irrigation tomorrow morning around 7:00 AM.";
-        } else if (lower.includes('pest') || lower.includes('insect') || lower.includes('bug')) {
-            return "For Armyworm or Aphid infestations, spray Neem oil 10,000 PPM @ 3ml/litre or Chlorantraniliprole 18.5% SC @ 0.4ml/litre during cool hours.";
-        } else {
-            return "Thank you for reaching out to AgriVerse AI Assistant! Our precision engine suggests monitoring weather changes and keeping soil moisture above 35%.";
-        }
-    }
-
+    // generateAIResponse has been moved to the Java backend!
     if (chatSendBtn) chatSendBtn.addEventListener('click', sendChatMessage);
     if (chatInputText) {
         chatInputText.addEventListener('keypress', (e) => {
@@ -1437,31 +1534,57 @@ if (dropdownSettingsBtn) {
             <div style="text-align:center; padding:12px;">
                 <i class="fas fa-spinner fa-spin text-green" style="font-size:1.8rem; margin-bottom:8px;"></i>
                 <p style="font-weight:600; font-size:0.9rem;">Analyzing image: ${file.name}...</p>
-                <p class="text-muted" style="font-size:0.78rem;">AgriVerse Computer Vision AI scanning for leaf spots & pest vectors...</p>
+                <p class="text-muted" style="font-size:0.78rem;">Uploading to AgriVerse Computer Vision AI...</p>
             </div>
         `;
 
-        setTimeout(() => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        fetch('/api/pest/detect', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            const isWarning = !data.isHealthy;
+            const iconColor = isWarning ? 'var(--color-warning)' : 'var(--primary-green)';
+            const bgColor = isWarning ? 'rgba(234,179,8,0.15)' : 'rgba(34,197,94,0.15)';
+            const icon = isWarning ? 'fa-bug' : 'fa-leaf';
+
             detectorResultCard.innerHTML = `
                 <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-                    <div style="width:40px; height:40px; border-radius:50%; background:rgba(234,179,8,0.15); color:var(--color-warning); display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
-                        <i class="fas fa-bug"></i>
+                    <div style="width:40px; height:40px; border-radius:50%; background:${bgColor}; color:${iconColor}; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+                        <i class="fas ${icon}"></i>
                     </div>
                     <div>
-                        <h4 style="font-size:0.95rem; font-weight:700;">Early Blight (Alternaria solani) Detected</h4>
-                        <span class="status-pill status-active">Confidence: 94.2%</span>
+                        <h4 style="font-size:0.95rem; font-weight:700;">${data.title}</h4>
+                        <span class="status-pill status-active">Confidence: ${data.confidence}</span>
                     </div>
                 </div>
                 <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:10px;">
-                    Concentric dark rings identified on lower leaf margins. Fungal spore germination accelerated by recent 82% humidity.
+                    ${data.description}
                 </p>
                 <div style="background:var(--bg-card); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-size:0.78rem;">
                     <strong style="color:var(--primary-green);">Recommended Action:</strong>
-                    <p style="margin-top:2px;">Apply Mancozeb 75% WP @ 2g/litre or Azoxystrobin 23% SC @ 1ml/litre. Ensure uniform leaf spray coverage.</p>
+                    <p style="margin-top:2px;">${data.recommendation}</p>
                 </div>
             `;
             showToast("🔍 Diagnostic Analysis Complete!");
-        }, 1800);
+        })
+        .catch(err => {
+            console.error('Pest Detection Error:', err);
+            detectorResultCard.innerHTML = `
+                <div style="text-align:center; padding:12px; color:var(--color-danger);">
+                    <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; margin-bottom:8px;"></i>
+                    <p style="font-weight:600; font-size:0.9rem;">Analysis Failed</p>
+                    <p style="font-size:0.78rem;">Could not reach the AI Server. Please try again later.</p>
+                </div>
+            `;
+        });
     }
 
     /* ==========================================================================
@@ -1512,4 +1635,38 @@ if (dropdownSettingsBtn) {
             setTimeout(() => toast.remove(), 300);
         }, 3200);
     }
+
+    // Initial Backend Data Fetch
+    fetch('/api/user/profile', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('jwt_token')}` }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Not logged in");
+        return res.json();
+    })
+    .then(data => {
+        if (data && data.xp !== undefined) {
+            state.user.xp = data.xp;
+            state.user.level = data.level || 1;
+            
+            if (data.missionsState && Array.isArray(data.missionsState)) {
+                localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(data.missionsState));
+                data.missionsState.forEach((val, idx) => {
+                    if (missionCheckboxes[idx]) {
+                        missionCheckboxes[idx].checked = val;
+                        const card = missionCheckboxes[idx].closest('.mission-card');
+                        if (val && card) card.classList.add('completed');
+                        else if (!val && card) card.classList.remove('completed');
+                    }
+                });
+            }
+            updateXPDisplay();
+            
+            // Check bonus mission silently after syncing state
+            if (typeof checkBonusMissionStatus === 'function') {
+                checkBonusMissionStatus(true);
+            }
+        }
+    })
+    .catch(err => console.log('Using local state, backend fetch failed:', err));
 });

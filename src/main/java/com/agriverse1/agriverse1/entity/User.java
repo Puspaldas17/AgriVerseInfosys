@@ -31,4 +31,14 @@ public class User {
 
     /** Allowed values: USER, VET, ADMIN */
     private String role;
+
+    // Gamification and progress fields
+    @Builder.Default
+    private int xp = 40;
+
+    @Builder.Default
+    private int level = 1;
+
+    // State of the 8 daily missions (true = completed, false = not completed)
+    private java.util.List<Boolean> missionsState;
 }
