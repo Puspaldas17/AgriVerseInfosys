@@ -63,9 +63,7 @@ public class UserService {
                 );
     }
 
-    /**
-     * Save/Update a user entity.
-     */
+    /** Save/Update a user entity. */
     public User saveUser(User user) {
         return userRepository.save(user);
     }

@@ -1439,13 +1439,7 @@ if (dropdownSettingsBtn) {
             },
             body: JSON.stringify({ message: msg })
         })
-        .then(res => {
-            if (!res.ok) {
-                if (res.status === 401 || res.status === 403) throw new Error("Unauthorized");
-                throw new Error("Server error");
-            }
-            return res.json();
-        })
+        .then(res => res.json())
         .then(data => {
             const loadingEl = document.getElementById(loadingId);
             if (loadingEl) loadingEl.remove();

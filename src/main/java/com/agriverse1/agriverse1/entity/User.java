@@ -1,6 +1,7 @@
 package com.agriverse1.agriverse1.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class User {
 
     private String name;
 
+    @Indexed(unique = true)
     private String email;
 
     private String password;
@@ -32,13 +34,11 @@ public class User {
     /** Allowed values: USER, VET, ADMIN */
     private String role;
 
-    // Gamification and progress fields
     @Builder.Default
     private int xp = 40;
 
     @Builder.Default
     private int level = 1;
 
-    // State of the 8 daily missions (true = completed, false = not completed)
     private java.util.List<Boolean> missionsState;
 }
