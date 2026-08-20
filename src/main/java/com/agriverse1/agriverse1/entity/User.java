@@ -33,4 +33,12 @@ public class User {
 
     /** Allowed values: USER, VET, ADMIN */
     private String role;
+
+    @Builder.Default
+    private int xp = 40;
+
+    @Builder.Default
+    private int level = 1;
+
+    private java.util.List<Boolean> missionsState;
 }
