@@ -34,6 +34,7 @@ public class User {
     /** Allowed values: USER, VET, ADMIN */
     private String role;
 
+    // ── Gamification ─────────────────────────────
     @Builder.Default
     private int xp = 40;
 
@@ -41,4 +42,17 @@ public class User {
     private int level = 1;
 
     private java.util.List<Boolean> missionsState;
-}
+
+    // ── Farmer Profile Details ────────────────────
+    private String phone;
+
+    /** e.g. "Black Soil", "Red Soil", "Alluvial Soil", "Clay Soil", "Sandy Soil" */
+    private String soilType;
+
+    /** Land size in acres */
+    private Double landSize;
+
+    /** Preferred UI language: "English", "Telugu", "Hindi" */
+    @Builder.Default
+    private String language = "English";
+}

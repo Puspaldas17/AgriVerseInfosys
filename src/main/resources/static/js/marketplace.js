@@ -1,4 +1,4 @@
-﻿// ============================================================
+// ============================================================
 // FarmVerse — Farmer Marketplace JavaScript
 // Handles: mock data, card rendering, search/filter, modals,
 //           auth-aware navbar (reads jwt_token from localStorage)

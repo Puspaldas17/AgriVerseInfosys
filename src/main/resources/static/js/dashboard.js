@@ -1044,7 +1044,7 @@ applyLanguage(state.currentLanguage);
     if (navMarketplace) {
         navMarketplace.addEventListener('click', (e) => {
             e.preventDefault();
-            showComingSoon("Marketplace Coming Soon", "The AgriVerse seeds, fertilizers, and farming tools marketplace is currently under development.", "fa-store");
+            window.location.href = 'marketplace.html';
         });
     }
 
@@ -1195,6 +1195,8 @@ if (dropdownSettingsBtn) {
 
     function syncUserDataToBackend() {
         const currentStates = Array.from(missionCheckboxes).map(cb => cb.checked);
+
+        // Save to MongoDB (primary)
         fetch('/api/user/sync', {
             method: 'POST',
             headers: {
@@ -1206,11 +1208,91 @@ if (dropdownSettingsBtn) {
                 level: state.user.level || 1,
                 missionsState: currentStates
             })
-        }).catch(err => console.error('Error syncing user data:', err));
-        
-        // Keep local storage as a fallback/cache
+        }).then(res => {
+            if (res.status === 401) {
+                console.warn('Session expired — redirecting to login.');
+                localStorage.removeItem('jwt_token');
+                window.location.href = 'login.html';
+            } else if (!res.ok) {
+                console.error('Sync failed with status:', res.status);
+            }
+        }).catch(err => console.error('Error syncing user data to MongoDB:', err));
+
+        // Mirror to localStorage as offline fallback/cache
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(state.user));
         localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(currentStates));
+    }
+
+    /**
+     * Load XP + mission state from MongoDB on page startup.
+     * MongoDB is the source of truth; localStorage is only a fallback.
+     */
+    async function loadStateFromMongoDB() {
+        const jwtToken = localStorage.getItem('jwt_token');
+        if (!jwtToken) return;
+
+        try {
+            const res = await fetch('/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${jwtToken}` }
+            });
+
+            if (res.status === 401) {
+                localStorage.removeItem('jwt_token');
+                window.location.href = 'login.html';
+                return;
+            }
+            if (!res.ok) {
+                console.warn('Could not load profile from MongoDB (status ' + res.status + '), using localStorage fallback.');
+                return;
+            }
+
+            const profile = await res.json();
+
+            // ── Restore XP & Level from DB ─────────────────────────
+            if (profile.xp !== undefined && profile.xp !== null) {
+                state.user.xp = profile.xp;
+            }
+            if (profile.level !== undefined && profile.level !== null) {
+                state.user.level = profile.level;
+            }
+
+            // ── Restore Mission State from DB ──────────────────────
+            const dbMissions = profile.missionsState;
+            if (Array.isArray(dbMissions) && dbMissions.length > 0) {
+                missionCheckboxes.forEach((checkbox, i) => {
+                    const shouldBeChecked = dbMissions[i] === true;
+                    if (checkbox.checked !== shouldBeChecked) {
+                        checkbox.checked = shouldBeChecked;
+                        const card = checkbox.closest('.mission-card');
+                        if (card) {
+                            if (shouldBeChecked) card.classList.add('completed');
+                            else card.classList.remove('completed');
+                        }
+                    }
+                });
+                // Mirror restored DB state back to localStorage cache
+                localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(dbMissions));
+            }
+
+            // ── Update sidebar profile fields if available ─────────
+            if (profile.name)     state.user.name     = profile.name;
+            if (profile.phone)    state.user.phone    = profile.phone;
+            if (profile.soilType) state.user.soilType = profile.soilType;
+            if (profile.landSize != null) state.user.landSize = profile.landSize;
+
+            // Refresh XP bar & badge to show DB values
+            updateXPDisplay();
+
+            // Re-check bonus mission in case all 7 are restored as completed
+            if (typeof checkBonusMissionStatus === 'function') {
+                checkBonusMissionStatus(true); // silent = no toast
+            }
+
+            console.info('[AgriVerse] ✅ State loaded from MongoDB — XP:', state.user.xp, '| Missions:', dbMissions);
+
+        } catch (err) {
+            console.warn('[AgriVerse] MongoDB load failed, using localStorage fallback:', err.message);
+        }
     }
 
     function updateXPDisplay() {
@@ -1260,12 +1342,9 @@ if (dropdownSettingsBtn) {
         });
     });
 
-    // Check bonus status on load in case all missions were saved as completed
-    setTimeout(() => {
-        if (typeof checkBonusMissionStatus === 'function') {
-            checkBonusMissionStatus(true); // true = silent load (no toast)
-        }
-    }, 100);
+    // ── PRIMARY: Load XP + mission state from MongoDB on startup ──
+    // Then check bonus status after DB state is applied.
+    loadStateFromMongoDB();
 
     function checkBonusMissionStatus(silent = false) {
         const standardMissions = Array.from(missionCheckboxes).filter(cb => cb !== bonusCheck);

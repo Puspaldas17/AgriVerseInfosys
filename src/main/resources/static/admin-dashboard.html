@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgriVerse - Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+
+            background: linear-gradient(
+                180deg,
+                #052e16,
+                #065f46
+            );
+
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .admin-label {
+            text-align: center;
+            font-size: 13px;
+            color: #bbf7d0;
+            margin-bottom: 25px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            padding: 14px 15px;
+            margin-bottom: 8px;
+
+            color: white;
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            transition: 0.3s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .logout button {
+            width: 100%;
+            padding: 12px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #dc2626;
+            color: white;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout button:hover {
+            background: #b91c1c;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .admin-user {
+            background: white;
+            padding: 10px 18px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-user i {
+            color: #16a34a;
+            margin-right: 7px;
+        }
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: #dcfce7;
+            color: #15803d;
+
+            font-size: 22px;
+
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr;
+
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        /* ================= TABLE ================= */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            color: #475569;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active-status {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pending-status {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* ================= ACTIVITY ================= */
+
+        .activity {
+            display: flex;
+            gap: 12px;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .activity-text {
+            font-size: 14px;
+        }
+
+        .activity-time {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🌱 AgriVerse
+        </div>
+
+        <div class="admin-label">
+            <i class="fas fa-user-shield"></i>
+            ADMIN PANEL
+        </div>
+
+        <nav class="menu">
+
+            <a href="#" class="active">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
+            </a>
+
+            <a href="#">
+                <i class="fas fa-users"></i>
+                Users
+            </a>
+
+            <a href="#">
+                <i class="fas fa-seedling"></i>
+                Crops
+            </a>
+
+            <a href="#">
+                <i class="fas fa-tractor"></i>
+                Farms
+            </a>
+
+            <a href="#">
+                <i class="fas fa-chart-bar"></i>
+                Reports
+            </a>
+
+            <a href="#">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+
+        </nav>
+
+        <div class="logout">
+
+            <button onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+
+                <p style="color:#64748b; margin-top:5px;">
+                    Welcome to AgriVerse Administration
+                </p>
+            </div>
+
+            <div class="admin-user">
+
+                <i class="fas fa-user-shield"></i>
+
+                <span id="adminName">
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= STAT CARDS ================= -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+
+                <h3>125</h3>
+
+                <p>Total Users</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+
+                <h3>48</h3>
+
+                <p>Active Crops</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fas fa-tractor"></i>
+                </div>
+
+                <h3>36</h3>
+
+                <p>Registered Farms</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+
+                <h3>92%</h3>
+
+                <p>System Activity</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content-grid">
+
+
+            <!-- USERS TABLE -->
+
+            <div class="panel">
+
+                <h2>
+                    <i class="fas fa-users"></i>
+                    Recent Users
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Ravi Kumar</td>
+                            <td>ravi@gmail.com</td>
+                            <td>User</td>
+                            <td>
+                                <span class="status active-status">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Priya Sharma</td>
+                            <td>priya@gmail.com</td>
+                            <td>User</td>
+                            <td>
+                                <span class="status active-status">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Anil Reddy</td>
+                            <td>anil@gmail.com</td>
+                            <td>User</td>
+                            <td>
+                                <span class="status pending-status">
+                                    Pending
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Sneha Rao</td>
+                            <td>sneha@gmail.com</td>
+                            <td>User</td>
+                            <td>
+                                <span class="status active-status">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ACTIVITY -->
+
+            <div class="panel">
+
+                <h2>
+                    <i class="fas fa-bell"></i>
+                    Recent Activity
+                </h2>
+
+
+                <div class="activity">
+
+                    <div class="activity-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+
+                    <div class="activity-text">
+
+                        New user registered
+
+                        <div class="activity-time">
+                            10 minutes ago
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="activity">
+
+                    <div class="activity-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+
+                    <div class="activity-text">
+
+                        New crop added
+
+                        <div class="activity-time">
+                            30 minutes ago
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="activity">
+
+                    <div class="activity-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+
+                    <div class="activity-text">
+
+                        Farm information updated
+
+                        <div class="activity-time">
+                            1 hour ago
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="activity">
+
+                    <div class="activity-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+
+                    <div class="activity-text">
+
+                        Monthly report generated
+
+                        <div class="activity-time">
+                            2 hours ago
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        // Display saved admin username
+        const savedEmail =
+            localStorage.getItem("userEmail");
+
+        if (savedEmail) {
+
+            document.getElementById("adminName")
+                .textContent = savedEmail;
+
+        }
+
+
+        // Logout
+        function logout() {
+
+            localStorage.removeItem("role");
+            localStorage.removeItem("userEmail");
+
+            window.location.href =
+                "login.html";
+
+        }
+
+    </script>
+
+</body>
+
+</html>
