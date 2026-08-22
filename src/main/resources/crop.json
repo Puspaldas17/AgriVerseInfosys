@@ -1,0 +1,11 @@
+{
+  "cropName": "Rice",
+  "season": "Kharif",
+  "sowingStartMonth": "June",
+  "sowingEndMonth": "July",
+  "harvestStartMonth": "October",
+  "harvestEndMonth": "November",
+  "waterRequirement": "High",
+  "soilType": "Clayey",
+  "description": "Rice is mainly cultivated during the Kharif season."
+}
