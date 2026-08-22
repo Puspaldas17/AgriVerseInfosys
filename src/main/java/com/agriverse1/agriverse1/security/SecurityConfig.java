@@ -61,12 +61,11 @@ public class SecurityConfig {
                             "/css/**",
                             "/js/**",
                             "/images/**",
-                          "/api/auth/**",
-                        "/api/crop-calendar/**"
-                    )
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                            "/api/auth/**",
+                            "/api/crop-calendar/**"
+                    ).permitAll()
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
             )
 
             .sessionManagement(session ->

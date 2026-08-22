@@ -1,698 +1,1410 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AgriVerse - Admin Dashboard</title>
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: #f1f5f9;
-            color: #0f172a;
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 240px;
-            height: 100vh;
-
-            background: linear-gradient(
-                180deg,
-                #052e16,
-                #065f46
-            );
-
-            color: white;
-            padding: 25px 15px;
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 25px;
-            font-weight: bold;
-            margin-bottom: 35px;
-        }
-
-        .admin-label {
-            text-align: center;
-            font-size: 13px;
-            color: #bbf7d0;
-            margin-bottom: 25px;
-        }
-
-        .menu a {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-
-            padding: 14px 15px;
-            margin-bottom: 8px;
-
-            color: white;
-            text-decoration: none;
-
-            border-radius: 10px;
-
-            transition: 0.3s;
-        }
-
-        .menu a:hover,
-        .menu a.active {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .logout {
-            position: absolute;
-            bottom: 25px;
-            left: 15px;
-            right: 15px;
-        }
-
-        .logout button {
-            width: 100%;
-            padding: 12px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: #dc2626;
-            color: white;
-
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .logout button:hover {
-            background: #b91c1c;
-        }
-
-        /* ================= MAIN ================= */
-
-        .main {
-            margin-left: 240px;
-            padding: 30px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 30px;
-        }
-
-        .topbar h1 {
-            font-size: 28px;
-        }
-
-        .admin-user {
-            background: white;
-            padding: 10px 18px;
-
-            border-radius: 10px;
-
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .admin-user i {
-            color: #16a34a;
-            margin-right: 7px;
-        }
-
-        /* ================= CARDS ================= */
-
-        .cards {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 20px;
-
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 12px;
-
-            background: #dcfce7;
-            color: #15803d;
-
-            font-size: 22px;
-
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .card p {
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content-grid {
-            display: grid;
-
-            grid-template-columns:
-                2fr 1fr;
-
-            gap: 25px;
-        }
-
-        .panel {
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .panel h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-
-        /* ================= TABLE ================= */
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 14px;
-            text-align: left;
-
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        th {
-            color: #475569;
-            font-size: 14px;
-        }
-
-        td {
-            font-size: 14px;
-        }
-
-        .status {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .active-status {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .pending-status {
-            background: #fef3c7;
-            color: #b45309;
-        }
-
-        /* ================= ACTIVITY ================= */
-
-        .activity {
-            display: flex;
-            gap: 12px;
-
-            padding: 14px 0;
-
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .activity:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 38px;
-            height: 38px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .activity-text {
-            font-size: 14px;
-        }
-
-        .activity-time {
-            color: #94a3b8;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 1000px) {
-
-            .cards {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 700px) {
-
-            .sidebar {
-                position: relative;
-
-                width: 100%;
-                height: auto;
-            }
-
-            .logout {
-                position: static;
-                margin-top: 20px;
-            }
-
-            .main {
-                margin-left: 0;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriVerse · Admin Command Center</title>
+  <meta name="description" content="AgriVerse Administrator Dashboard - Full Platform Control">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #060910;
+      --surface:      #0a0f1a;
+      --sidebar:      #080d18;
+      --card:         #0d1526;
+      --card-hover:   #111c35;
+      --border:       rgba(59,130,246,0.1);
+      --border-light: rgba(255,255,255,0.05);
+      --primary:      #3b82f6;
+      --primary-dim:  rgba(59,130,246,0.15);
+      --accent:       #06d6a0;
+      --accent-dim:   rgba(6,214,160,0.12);
+      --warning:      #f59e0b;
+      --warning-dim:  rgba(245,158,11,0.12);
+      --danger:       #ef4444;
+      --danger-dim:   rgba(239,68,68,0.12);
+      --purple:       #8b5cf6;
+      --purple-dim:   rgba(139,92,246,0.12);
+      --text:         #e2e8f0;
+      --text-dim:     #94a3b8;
+      --muted:        #475569;
+      --glow-blue:    rgba(59,130,246,0.3);
+      --glow-green:   rgba(6,214,160,0.2);
+      --sidebar-w:    260px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────── SCROLLBAR ─────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+
+    /* ─────────────────── LAYOUT ─────────────────── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─────────────────── SIDEBAR ─────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 20px var(--glow-blue);
+      flex-shrink: 0;
+    }
+    .logo-name { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; }
+    .logo-name span { color: var(--primary); }
+    .logo-tag { font-size: 9px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+
+    .sidebar-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+      padding: 20px 20px 8px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 20px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .nav-item .nav-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      background: var(--border-light);
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+    .nav-item.active {
+      background: var(--primary-dim);
+      color: #93c5fd;
+    }
+    .nav-item.active .nav-icon { background: var(--primary); color: white; }
+    .nav-item.active::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--primary); border-radius: 0 2px 2px 0;
+    }
+    .nav-item .badge-count {
+      margin-left: auto;
+      background: var(--danger);
+      color: white;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 20px;
+      min-width: 20px; text-align: center;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+    .admin-profile {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--primary-dim);
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .admin-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .admin-name { font-size: 13px; font-weight: 600; }
+    .admin-role { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+    .logout-btn {
+      width: 100%; padding: 10px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 8px;
+      color: #fca5a5;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover { background: rgba(239,68,68,0.2); }
+
+    /* ─────────────────── MAIN ─────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─────────────────── TOPBAR ─────────────────── */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      height: 64px;
+      background: rgba(6,9,16,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 28px; gap: 16px;
+    }
+    .topbar-title { font-size: 18px; font-weight: 700; flex: 1; }
+    .topbar-title span { color: var(--primary); font-size: 12px; font-weight: 500; letter-spacing: 1px; display: block; text-transform: uppercase; }
+
+    .topbar-search {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      min-width: 240px;
+    }
+    .topbar-search input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-size: 13px; flex: 1;
+      font-family: 'Inter', sans-serif;
+    }
+    .topbar-search input::placeholder { color: var(--muted); }
+    .topbar-search i { color: var(--muted); font-size: 13px; }
+
+    .topbar-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--accent);
+      font-weight: 600;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(6,214,160,0.4); } 50% { box-shadow: 0 0 0 6px rgba(6,214,160,0); } }
+
+    /* ─────────────────── CONTENT ─────────────────── */
+    .content {
+      padding: 28px;
+      flex: 1;
+    }
+
+    /* ─────────────────── SECTIONS ─────────────────── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ─────────────────── STATS GRID ─────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .stat-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .stat-card::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      opacity: 0.07;
+    }
+    .stat-card.blue::after  { background: var(--primary); }
+    .stat-card.green::after { background: var(--accent); }
+    .stat-card.yellow::after{ background: var(--warning); }
+    .stat-card.purple::after{ background: var(--purple); }
+
+    .stat-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .stat-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .stat-icon.blue   { background: var(--primary-dim); color: var(--primary); }
+    .stat-icon.green  { background: var(--accent-dim);  color: var(--accent); }
+    .stat-icon.yellow { background: var(--warning-dim); color: var(--warning); }
+    .stat-icon.purple { background: var(--purple-dim);  color: var(--purple); }
+
+    .stat-value { font-size: 28px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+    .stat-label { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+    .stat-change { font-size: 11px; margin-top: 10px; }
+    .stat-change.up   { color: var(--accent); }
+    .stat-change.down { color: var(--danger); }
+
+    /* ─────────────────── PANELS ─────────────────── */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title {
+      font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .panel-title i { color: var(--primary); }
+
+    .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .grid-1 { margin-bottom: 24px; }
+
+    /* ─────────────────── TABLE ─────────────────── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
+      padding: 12px 22px;
+      text-align: left;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.01);
+    }
+    .data-table td {
+      padding: 14px 22px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .data-table tr:hover td { background: rgba(59,130,246,0.04); }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .user-cell { display: flex; align-items: center; gap: 12px; }
+    .user-av {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .user-av.blue   { background: var(--primary-dim); color: var(--primary); }
+    .user-av.green  { background: var(--accent-dim);  color: var(--accent); }
+    .user-av.purple { background: var(--purple-dim);  color: var(--purple); }
+    .user-av.yellow { background: var(--warning-dim); color: var(--warning); }
+
+    .user-info .name { font-size: 13px; font-weight: 600; }
+    .user-info .email { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+
+    /* ─────────────────── BADGES ─────────────────── */
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-pill.user   { background: var(--primary-dim); color: #93c5fd; }
+    .badge-pill.admin  { background: var(--purple-dim);  color: #c4b5fd; }
+    .badge-pill.vet    { background: var(--accent-dim);  color: #6ee7b7; }
+    .badge-pill.active { background: var(--accent-dim);  color: var(--accent); }
+    .badge-pill.pending{ background: var(--warning-dim); color: var(--warning); }
+    .badge-pill::before { content: '●'; font-size: 8px; }
+
+    /* ─────────────────── ACTION BUTTONS ─────────────────── */
+    .actions { display: flex; gap: 6px; }
+    .btn-action {
+      padding: 5px 12px;
+      border-radius: 6px; border: none; cursor: pointer;
+      font-size: 11px; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-action.promote { background: var(--purple-dim); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.2); }
+    .btn-action.promote:hover { background: var(--purple); color: white; }
+    .btn-action.view    { background: var(--primary-dim); color: #93c5fd; border: 1px solid var(--border); }
+    .btn-action.view:hover { background: var(--primary); color: white; }
+    .btn-action.delete  { background: var(--danger-dim);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+    .btn-action.delete:hover { background: var(--danger); color: white; }
+    .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ─────────────────── ACTIVITY FEED ─────────────────── */
+    .activity-list { padding: 8px 0; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .activity-item:hover { background: rgba(59,130,246,0.03); }
+    .activity-item:last-child { border-bottom: none; }
+    .act-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .act-icon.green  { background: var(--accent-dim);  color: var(--accent); }
+    .act-icon.blue   { background: var(--primary-dim); color: var(--primary); }
+    .act-icon.yellow { background: var(--warning-dim); color: var(--warning); }
+    .act-icon.red    { background: var(--danger-dim);  color: var(--danger); }
+    .act-icon.purple { background: var(--purple-dim);  color: var(--purple); }
+    .act-text { font-size: 13px; line-height: 1.5; }
+    .act-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ─────────────────── SYSTEM HEALTH ─────────────────── */
+    .health-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; padding: 20px; }
+    .health-item {}
+    .health-label { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .health-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .health-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .health-fill.green  { background: linear-gradient(90deg, var(--accent), #34d399); }
+    .health-fill.blue   { background: linear-gradient(90deg, var(--primary), #60a5fa); }
+    .health-fill.yellow { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+
+    /* ─────────────────── TOAST ─────────────────── */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      font-size: 13px;
+      animation: slideIn 0.3s ease;
+      min-width: 280px;
+    }
+    .toast.success { border-color: rgba(6,214,160,0.3); }
+    .toast.success i { color: var(--accent); }
+    .toast.error   { border-color: rgba(239,68,68,0.3); }
+    .toast.error i { color: var(--danger); }
+    @keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ─────────────────── MODAL ─────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 420px; width: 100%; margin: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .modal p  { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; line-height: 1.6; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-cancel {
+      padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-dim); cursor: pointer; font-size: 14px;
+    }
+    .btn-confirm-del {
+      padding: 10px 20px; border-radius: 8px; border: none;
+      background: var(--danger); color: white; cursor: pointer; font-size: 14px; font-weight: 600;
+    }
+
+    /* ─────────────────── SEARCH IN USER TABLE ─────────────────── */
+    .table-controls {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-search {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; flex: 1;
+    }
+    .table-search input { background: none; border: none; outline: none; color: var(--text); font-size: 13px; flex: 1; }
+    .table-search i { color: var(--muted); font-size: 13px; }
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 8px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-dim); cursor: pointer; font-size: 12px;
+      transition: all 0.2s;
+    }
+    .filter-btn.active { background: var(--primary-dim); color: #93c5fd; border-color: var(--primary); }
+
+    /* ─────────────────── LOADING STATE ─────────────────── */
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ─────────────────── ROLE SELECT ─────────────────── */
+    .role-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 4px 8px;
+      font-size: 12px; cursor: pointer; outline: none;
+    }
+
+    /* ─────────────────── RESPONSIVE ─────────────────── */
+    @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 900px)  { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
 </head>
-
 <body>
 
-    <!-- ================= SIDEBAR ================= -->
+<!-- ════════════════════════════ TOAST CONTAINER ════════════════════════════ -->
+<div class="toast-container" id="toastContainer"></div>
 
-    <aside class="sidebar">
+<!-- ════════════════════════════ DELETE MODAL ════════════════════════════ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h3>⚠️ Delete User Account</h3>
+    <p>Are you sure you want to <strong>permanently delete</strong> this user? This action cannot be undone and will remove all their data from the platform.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-confirm-del" id="confirmDeleteBtn">Delete Permanently</button>
+    </div>
+  </div>
+</div>
 
-        <div class="logo">
-            🌱 AgriVerse
+<!-- ════════════════════════════ LAYOUT ════════════════════════════ -->
+<div class="layout">
+
+  <!-- ───── SIDEBAR ───── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🌱</div>
+      <div>
+        <div class="logo-name">Agri<span>Verse</span></div>
+        <div class="logo-tag">Command Center</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Overview</div>
+    <button class="nav-item active" id="nav-dashboard" onclick="showSection('dashboard', this)">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      Dashboard
+    </button>
+    <button class="nav-item" id="nav-users" onclick="showSection('users', this)">
+      <div class="nav-icon"><i class="fas fa-users"></i></div>
+      User Management
+    </button>
+
+    <div class="sidebar-section-label">Platform</div>
+    <button class="nav-item" id="nav-marketplace" onclick="showSection('marketplace', this)">
+      <div class="nav-icon"><i class="fas fa-store"></i></div>
+      Marketplace Moderation
+    </button>
+    <button class="nav-item" id="nav-disputes" onclick="showSection('disputes', this)">
+      <div class="nav-icon"><i class="fas fa-balance-scale"></i></div>
+      Disputes
+    </button>
+    <button class="nav-item" id="nav-activity" onclick="showSection('activity', this)">
+      <div class="nav-icon"><i class="fas fa-bolt"></i></div>
+      Live Activity Feed
+    </button>
+    <button class="nav-item" id="nav-health" onclick="showSection('health', this)">
+      <div class="nav-icon"><i class="fas fa-heart-pulse"></i></div>
+      System Health
+    </button>
+
+    <div class="sidebar-bottom">
+      <div class="admin-profile">
+        <div class="admin-avatar" id="adminInitials">A</div>
+        <div>
+          <div class="admin-name" id="adminName">Administrator</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-power-off"></i> &nbsp;Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ───── MAIN ───── -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <span>AgriVerse Admin</span>
+        <span id="sectionTitle" style="font-size:18px; font-weight:700; color:var(--text);">Overview Dashboard</span>
+      </div>
+      <div class="topbar-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Quick search..." id="globalSearch">
+      </div>
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        System Online
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ═══════════ SECTION: DASHBOARD ═══════════ -->
+      <section class="section active" id="section-dashboard">
+
+        <!-- Stat Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card blue">
+            <div class="stat-top">
+              <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="stat-value" id="statTotal">–</div>
+            <div class="stat-label">Total Users</div>
+            <div class="stat-change up"><i class="fas fa-arrow-up"></i> Live from database</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-top">
+              <div class="stat-icon green"><i class="fas fa-seedling"></i></div>
+            </div>
+            <div class="stat-value" id="statFarmers">–</div>
+            <div class="stat-label">Farmers</div>
+            <div class="stat-change up"><i class="fas fa-circle"></i> Active role</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-top">
+              <div class="stat-icon yellow"><i class="fas fa-wifi"></i></div>
+            </div>
+            <div class="stat-value" id="statActive">–</div>
+            <div class="stat-label">Active Now</div>
+            <div class="stat-change up"><i class="fas fa-circle"></i> Approximate</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-top">
+              <div class="stat-icon purple"><i class="fas fa-shield-halved"></i></div>
+            </div>
+            <div class="stat-value" id="statAdmins">–</div>
+            <div class="stat-label">Admins</div>
+            <div class="stat-change up"><i class="fas fa-circle"></i> Privileged accounts</div>
+          </div>
         </div>
 
-        <div class="admin-label">
-            <i class="fas fa-user-shield"></i>
-            ADMIN PANEL
+        <!-- Recent Users + Activity -->
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i class="fas fa-users"></i> Recent Registrations</div>
+              <button class="filter-btn" onclick="showSection('users', document.getElementById('nav-users'))">View All →</button>
+            </div>
+            <table class="data-table" id="recentUsersTable">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="recentUsersTbody">
+                <tr><td colspan="3" style="text-align:center; padding:30px; color:var(--muted);">
+                  <i class="fas fa-spinner fa-spin"></i> Loading...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i class="fas fa-bolt"></i> Live Activity</div>
+            </div>
+            <div class="activity-list" id="dashActivityList">
+              <!-- populated by JS -->
+            </div>
+          </div>
         </div>
 
-        <nav class="menu">
-
-            <a href="#" class="active">
-                <i class="fas fa-chart-line"></i>
-                Dashboard
-            </a>
-
-            <a href="#">
-                <i class="fas fa-users"></i>
-                Users
-            </a>
-
-            <a href="#">
-                <i class="fas fa-seedling"></i>
-                Crops
-            </a>
-
-            <a href="#">
-                <i class="fas fa-tractor"></i>
-                Farms
-            </a>
-
-            <a href="#">
-                <i class="fas fa-chart-bar"></i>
-                Reports
-            </a>
-
-            <a href="#">
-                <i class="fas fa-cog"></i>
-                Settings
-            </a>
-
-        </nav>
-
-        <div class="logout">
-
-            <button onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </button>
-
+        <!-- System Health mini -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-heart-pulse"></i> System Health</div>
+          </div>
+          <div class="health-grid">
+            <div class="health-item">
+              <div class="health-label">
+                <span>MongoDB Atlas</span>
+                <span style="color:var(--accent);">Healthy</span>
+              </div>
+              <div class="health-bar"><div class="health-fill green" style="width:92%"></div></div>
+            </div>
+            <div class="health-item">
+              <div class="health-label">
+                <span>Spring Boot API</span>
+                <span style="color:var(--accent);">Online</span>
+              </div>
+              <div class="health-bar"><div class="health-fill blue" style="width:100%"></div></div>
+            </div>
+            <div class="health-item">
+              <div class="health-label">
+                <span>Auth Service (JWT)</span>
+                <span style="color:var(--accent);">Operational</span>
+              </div>
+              <div class="health-bar"><div class="health-fill green" style="width:98%"></div></div>
+            </div>
+            <div class="health-item">
+              <div class="health-label">
+                <span>Marketplace API</span>
+                <span style="color:var(--warning);">Limited</span>
+              </div>
+              <div class="health-bar"><div class="health-fill yellow" style="width:70%"></div></div>
+            </div>
+            <div class="health-item">
+              <div class="health-label">
+                <span>AI Advisory Service</span>
+                <span style="color:var(--accent);">Active</span>
+              </div>
+              <div class="health-bar"><div class="health-fill green" style="width:85%"></div></div>
+            </div>
+            <div class="health-item">
+              <div class="health-label">
+                <span>Weather Feed</span>
+                <span style="color:var(--accent);">Live</span>
+              </div>
+              <div class="health-bar"><div class="health-fill blue" style="width:95%"></div></div>
+            </div>
+          </div>
         </div>
+      </section>
 
-    </aside>
-
-
-    <!-- ================= MAIN CONTENT ================= -->
-
-    <main class="main">
-
-        <!-- TOP BAR -->
-
-        <div class="topbar">
-
-            <div>
-                <h1>Admin Dashboard</h1>
-
-                <p style="color:#64748b; margin-top:5px;">
-                    Welcome to AgriVerse Administration
-                </p>
+      <!-- ═══════════ SECTION: USER MANAGEMENT ═══════════ -->
+      <section class="section" id="section-users">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-users"></i> All Platform Users</div>
+            <div style="font-size:12px; color:var(--muted);" id="userCount">Loading...</div>
+          </div>
+          <div class="table-controls">
+            <div class="table-search">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search by name or email..." id="userSearch" oninput="filterUsers()">
             </div>
-
-            <div class="admin-user">
-
-                <i class="fas fa-user-shield"></i>
-
-                <span id="adminName">
-                    Administrator
-                </span>
-
-            </div>
-
+            <button class="filter-btn active" id="filter-all"     onclick="setFilter('ALL',this)">All</button>
+            <button class="filter-btn"         id="filter-USER"   onclick="setFilter('USER',this)">Farmers</button>
+            <button class="filter-btn"         id="filter-ADMIN"  onclick="setFilter('ADMIN',this)">Admins</button>
+            <button class="filter-btn"         id="filter-VET"    onclick="setFilter('VET',this)">Vets</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Land Size</th>
+                  <th>Language</th>
+                  <th>Change Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">
+                  <i class="fas fa-spinner fa-spin"></i> Fetching users from database...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </section>
 
-
-        <!-- ================= STAT CARDS ================= -->
-
-        <section class="cards">
-
-            <div class="card">
-
-                <div class="card-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-
-                <h3>125</h3>
-
-                <p>Total Users</p>
-
+      <!-- ═══════════ SECTION: MARKETPLACE MODERATION ═══════════ -->
+      <section class="section" id="section-marketplace">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-store"></i> Marketplace Listings</div>
+            <div style="font-size:12px; color:var(--muted);" id="listingCount">Loading...</div>
+          </div>
+          <div class="table-controls">
+            <div class="table-search">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search by title..." id="listingSearch" oninput="filterListings()">
             </div>
+            <button class="filter-btn active" id="filter-list-ALL"     onclick="setListingFilter('ALL',this)">All</button>
+            <button class="filter-btn"         id="filter-list-PENDING" onclick="setListingFilter('PENDING',this)">Pending</button>
+            <button class="filter-btn"         id="filter-list-APPROVED" onclick="setListingFilter('APPROVED',this)">Approved</button>
+            <button class="filter-btn"         id="filter-list-REJECTED" onclick="setListingFilter('REJECTED',this)">Rejected</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Farmer</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listingsTableBody">
+                <tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">
+                  <i class="fas fa-spinner fa-spin"></i> Fetching listings...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION: DISPUTES ═══════════ -->
+      <section class="section" id="section-disputes">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-balance-scale"></i> Dispute Resolution</div>
+            <div style="font-size:12px; color:var(--muted);" id="disputeCount">Loading...</div>
+          </div>
+          <div class="table-controls">
+            <button class="filter-btn active" id="filter-disp-ALL"      onclick="setDisputeFilter('ALL',this)">All</button>
+            <button class="filter-btn"         id="filter-disp-OPEN"     onclick="setDisputeFilter('OPEN',this)">Open</button>
+            <button class="filter-btn"         id="filter-disp-RESOLVED" onclick="setDisputeFilter('RESOLVED',this)">Resolved</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Buyer</th>
+                  <th>Seller</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="disputesTableBody">
+                <tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">
+                  <i class="fas fa-spinner fa-spin"></i> Fetching disputes...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
 
-            <div class="card">
+      <!-- ═══════════ SECTION: ACTIVITY FEED ═══════════ -->
+      <section class="section" id="section-activity">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-bolt"></i> Platform Activity Feed</div>
+            <button class="filter-btn" onclick="loadActivity()"><i class="fas fa-refresh"></i> Refresh</button>
+          </div>
+          <div class="activity-list" id="fullActivityList">
+          </div>
+        </div>
+      </section>
 
-                <div class="card-icon">
-                    <i class="fas fa-seedling"></i>
-                </div>
-
-                <h3>48</h3>
-
-                <p>Active Crops</p>
-
+      <!-- ═══════════ SECTION: SYSTEM HEALTH ═══════════ -->
+      <section class="section" id="section-health">
+        <div class="stats-grid" style="margin-bottom:20px;">
+          <div class="stat-card green">
+            <div class="stat-top"><div class="stat-icon green"><i class="fas fa-database"></i></div></div>
+            <div class="stat-value">Atlas</div>
+            <div class="stat-label">MongoDB Cluster</div>
+            <div class="stat-change up">● Connected</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-top"><div class="stat-icon blue"><i class="fas fa-server"></i></div></div>
+            <div class="stat-value">:8082</div>
+            <div class="stat-label">API Port</div>
+            <div class="stat-change up">● Listening</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-top"><div class="stat-icon purple"><i class="fas fa-key"></i></div></div>
+            <div class="stat-value">JWT</div>
+            <div class="stat-label">Auth Method</div>
+            <div class="stat-change up">● Stateless</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-top"><div class="stat-icon yellow"><i class="fas fa-leaf"></i></div></div>
+            <div class="stat-value">4.1</div>
+            <div class="stat-label">Spring Boot</div>
+            <div class="stat-change up">● Latest</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-heart-pulse"></i> Service Status Monitor</div>
+          </div>
+          <div class="health-grid" style="grid-template-columns: repeat(2,1fr);">
+            <div class="health-item">
+              <div class="health-label"><span>MongoDB Connection</span><span style="color:var(--accent);">92%</span></div>
+              <div class="health-bar"><div class="health-fill green" style="width:92%"></div></div>
             </div>
-
-
-            <div class="card">
-
-                <div class="card-icon">
-                    <i class="fas fa-tractor"></i>
-                </div>
-
-                <h3>36</h3>
-
-                <p>Registered Farms</p>
-
+            <div class="health-item">
+              <div class="health-label"><span>Spring Boot API</span><span style="color:var(--accent);">100%</span></div>
+              <div class="health-bar"><div class="health-fill blue" style="width:100%"></div></div>
             </div>
-
-
-            <div class="card">
-
-                <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-
-                <h3>92%</h3>
-
-                <p>System Activity</p>
-
+            <div class="health-item">
+              <div class="health-label"><span>JWT Auth Service</span><span style="color:var(--accent);">98%</span></div>
+              <div class="health-bar"><div class="health-fill green" style="width:98%"></div></div>
             </div>
-
-        </section>
-
-
-        <!-- ================= CONTENT ================= -->
-
-        <section class="content-grid">
-
-
-            <!-- USERS TABLE -->
-
-            <div class="panel">
-
-                <h2>
-                    <i class="fas fa-users"></i>
-                    Recent Users
-                </h2>
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>Ravi Kumar</td>
-                            <td>ravi@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status active-status">
-                                    Active
-                                </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Priya Sharma</td>
-                            <td>priya@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status active-status">
-                                    Active
-                                </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Anil Reddy</td>
-                            <td>anil@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status pending-status">
-                                    Pending
-                                </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Sneha Rao</td>
-                            <td>sneha@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status active-status">
-                                    Active
-                                </span>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
+            <div class="health-item">
+              <div class="health-label"><span>AI Crop Advisory</span><span style="color:var(--accent);">85%</span></div>
+              <div class="health-bar"><div class="health-fill green" style="width:85%"></div></div>
             </div>
-
-
-            <!-- ACTIVITY -->
-
-            <div class="panel">
-
-                <h2>
-                    <i class="fas fa-bell"></i>
-                    Recent Activity
-                </h2>
-
-
-                <div class="activity">
-
-                    <div class="activity-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-
-                    <div class="activity-text">
-
-                        New user registered
-
-                        <div class="activity-time">
-                            10 minutes ago
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="activity">
-
-                    <div class="activity-icon">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-
-                    <div class="activity-text">
-
-                        New crop added
-
-                        <div class="activity-time">
-                            30 minutes ago
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="activity">
-
-                    <div class="activity-icon">
-                        <i class="fas fa-tractor"></i>
-                    </div>
-
-                    <div class="activity-text">
-
-                        Farm information updated
-
-                        <div class="activity-time">
-                            1 hour ago
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="activity">
-
-                    <div class="activity-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-
-                    <div class="activity-text">
-
-                        Monthly report generated
-
-                        <div class="activity-time">
-                            2 hours ago
-                        </div>
-
-                    </div>
-
-                </div>
-
+            <div class="health-item">
+              <div class="health-label"><span>Marketplace Module</span><span style="color:var(--warning);">70%</span></div>
+              <div class="health-bar"><div class="health-fill yellow" style="width:70%"></div></div>
             </div>
+            <div class="health-item">
+              <div class="health-label"><span>Security Filter Chain</span><span style="color:var(--accent);">100%</span></div>
+              <div class="health-bar"><div class="health-fill blue" style="width:100%"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        </section>
+    </div><!-- /content -->
+  </main>
+</div><!-- /layout -->
 
-    </main>
+<script>
+// ══════════════════════════════════════════════
+//   ADMIN DASHBOARD – JAVASCRIPT CONTROLLER
+// ══════════════════════════════════════════════
+
+const TOKEN = localStorage.getItem('token');
+const ROLE  = localStorage.getItem('role');
+const EMAIL = localStorage.getItem('userEmail') || 'Administrator';
+
+// ── Route Protection ──
+if (!TOKEN || ROLE !== 'ADMIN') {
+  window.location.href = 'admin-login.html';
+}
+
+// ── Set admin info in sidebar ──
+document.getElementById('adminName').textContent    = EMAIL;
+document.getElementById('adminInitials').textContent = EMAIL.charAt(0).toUpperCase();
 
 
-    <!-- ================= JAVASCRIPT ================= -->
+// ══════════════════════════════════════════════
+//   SECTION NAVIGATION
+// ══════════════════════════════════════════════
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
 
-    <script>
+  const titles = {
+    dashboard: 'Overview Dashboard',
+    users:     'User Management',
+    activity:  'Activity Feed',
+    health:    'System Health'
+  };
+  document.getElementById('sectionTitle').textContent = titles[name] || name;
 
-        // Display saved admin username
-        const savedEmail =
-            localStorage.getItem("userEmail");
-
-        if (savedEmail) {
-
-            document.getElementById("adminName")
-                .textContent = savedEmail;
-
-        }
+  if (name === 'users')    loadAllUsers();
+  if (name === 'activity') loadActivity();
+}
 
 
-        // Logout
-        function logout() {
+// ══════════════════════════════════════════════
+//   API HELPERS
+// ══════════════════════════════════════════════
+async function apiFetch(url, options = {}) {
+  const defaultOpts = {
+    headers: {
+      'Authorization': `Bearer ${TOKEN}`,
+      'Content-Type': 'application/json'
+    }
+  };
+  const res = await fetch(url, { ...defaultOpts, ...options, headers: { ...defaultOpts.headers, ...(options.headers || {}) } });
+  if (res.status === 401 || res.status === 403) { logout(); return null; }
+  return res;
+}
 
-            localStorage.removeItem("role");
-            localStorage.removeItem("userEmail");
 
-            window.location.href =
-                "login.html";
+// ══════════════════════════════════════════════
+//   STATS
+// ══════════════════════════════════════════════
+async function loadStats() {
+  try {
+    const res = await apiFetch('/api/admin/stats');
+    if (!res || !res.ok) return;
+    const data = await res.json();
+    animateNumber('statTotal',   data.totalUsers);
+    animateNumber('statFarmers', data.farmers);
+    animateNumber('statActive',  data.activeNow);
+    animateNumber('statAdmins',  data.admins);
+  } catch(e) { console.error('Stats error:', e); }
+}
 
-        }
+function animateNumber(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = Math.ceil(target / 30);
+  const interval = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start;
+    if (start >= target) clearInterval(interval);
+  }, 40);
+}
 
-    </script>
 
+// ══════════════════════════════════════════════
+//   ALL USERS
+// ══════════════════════════════════════════════
+let allUsers = [];
+let currentFilter = 'ALL';
+
+async function loadAllUsers() {
+  const tbody = document.getElementById('usersTableBody');
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">
+    <i class="fas fa-spinner fa-spin"></i> Loading users...</td></tr>`;
+
+  try {
+    const res = await apiFetch('/api/admin/users');
+    if (!res || !res.ok) return;
+    allUsers = await res.json();
+    document.getElementById('userCount').textContent = `${allUsers.length} total users`;
+    renderUsers(allUsers);
+    renderRecentUsers(allUsers.slice(-5).reverse());
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--danger);">
+      <i class="fas fa-circle-exclamation"></i> Failed to load users.</td></tr>`;
+  }
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('usersTableBody');
+  const filtered = currentFilter === 'ALL' ? users : users.filter(u => u.role === currentFilter);
+  const search   = (document.getElementById('userSearch')?.value || '').toLowerCase();
+  const displayed = search ? filtered.filter(u =>
+    (u.name  || '').toLowerCase().includes(search) ||
+    (u.email || '').toLowerCase().includes(search)
+  ) : filtered;
+
+  if (!displayed.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">No users found.</td></tr>`;
+    return;
+  }
+
+  const colors = ['blue','green','purple','yellow'];
+  tbody.innerHTML = displayed.map((u, i) => {
+    const col = colors[i % 4];
+    const initials = (u.name || u.email || '?').charAt(0).toUpperCase();
+    const roleBadge = {
+      ADMIN: 'admin', USER: 'user', VET: 'vet'
+    }[u.role] || 'user';
+
+    const isAdmin = u.role === 'ADMIN';
+
+    return `
+      <tr id="row-${u.id}">
+        <td>
+          <div class="user-cell">
+            <div class="user-av ${col}">${initials}</div>
+            <div class="user-info">
+              <div class="name">${u.name || 'No Name'}</div>
+              <div class="email">${u.email}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge-pill ${roleBadge}">${u.role || 'USER'}</span></td>
+        <td style="color:var(--text-dim)">${u.landSize ? u.landSize + ' acres' : '—'}</td>
+        <td style="color:var(--text-dim)">${u.language || 'English'}</td>
+        <td>
+          ${isAdmin
+            ? `<span style="color:var(--muted);font-size:12px;">Protected</span>`
+            : `<select class="role-select" onchange="changeRole('${u.id}', this.value)">
+                <option value="USER"  ${u.role==='USER'  ? 'selected':''}>Farmer</option>
+                <option value="VET"   ${u.role==='VET'   ? 'selected':''}>Veterinarian</option>
+                <option value="ADMIN" ${u.role==='ADMIN' ? 'selected':''}>Admin</option>
+              </select>`
+          }
+        </td>
+        <td>
+          <div class="actions">
+            ${isAdmin
+              ? `<button class="btn-action delete" disabled title="Cannot delete admin">Protected</button>`
+              : `<button class="btn-action delete" onclick="confirmDelete('${u.id}', '${(u.name || u.email).replace(/'/g,"\\'")}')">
+                   <i class="fas fa-trash"></i> Delete
+                 </button>`
+            }
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function filterUsers() { renderUsers(allUsers); }
+
+function setFilter(val, btn) {
+  currentFilter = val;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderUsers(allUsers);
+}
+
+function renderRecentUsers(users) {
+  const tbody = document.getElementById('recentUsersTbody');
+  const colors = ['blue','green','purple','yellow'];
+  tbody.innerHTML = users.map((u, i) => {
+    const col = colors[i % 4];
+    const initials = (u.name || u.email || '?').charAt(0).toUpperCase();
+    const roleBadge = { ADMIN:'admin', USER:'user', VET:'vet' }[u.role] || 'user';
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-av ${col}">${initials}</div>
+            <div class="user-info">
+              <div class="name">${u.name || 'No Name'}</div>
+              <div class="email">${u.email}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge-pill ${roleBadge}">${u.role || 'USER'}</span></td>
+        <td>
+          <div class="actions">
+            <button class="btn-action view" onclick="showSection('users', document.getElementById('nav-users'))">View All</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+
+// ══════════════════════════════════════════════
+//   CHANGE ROLE
+// ══════════════════════════════════════════════
+async function changeRole(userId, newRole) {
+  try {
+    const res = await apiFetch(`/api/admin/users/${userId}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role: newRole })
+    });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check-circle"></i> Role updated to <strong>${newRole}</strong>`);
+      loadAllUsers();
+    } else {
+      showToast('error', `<i class="fas fa-circle-exclamation"></i> Failed to update role.`);
+    }
+  } catch(e) {
+    showToast('error', `<i class="fas fa-circle-exclamation"></i> Network error.`);
+  }
+}
+
+
+// ══════════════════════════════════════════════
+//   DELETE USER
+// ══════════════════════════════════════════════
+let pendingDeleteId = null;
+
+function confirmDelete(userId, userName) {
+  pendingDeleteId = userId;
+  document.querySelector('#deleteModal .modal p').innerHTML =
+    `Are you sure you want to <strong>permanently delete</strong> the account of <strong>${userName}</strong>? This action cannot be undone.`;
+  document.getElementById('deleteModal').classList.add('show');
+
+  document.getElementById('confirmDeleteBtn').onclick = async () => {
+    await deleteUser(pendingDeleteId);
+    closeDeleteModal();
+  };
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('show');
+  pendingDeleteId = null;
+}
+
+async function deleteUser(userId) {
+  try {
+    const res = await apiFetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check-circle"></i> User deleted successfully.`);
+      loadAllUsers();
+      loadStats();
+    } else {
+      const data = await res.json();
+      showToast('error', `<i class="fas fa-circle-exclamation"></i> ${data.message || 'Delete failed.'}`);
+    }
+  } catch(e) {
+    showToast('error', `<i class="fas fa-circle-exclamation"></i> Network error.`);
+  }
+}
+
+
+// ══════════════════════════════════════════════
+//   ACTIVITY FEED (simulated with context)
+// ══════════════════════════════════════════════
+function loadActivity() {
+  const activities = [
+    { icon:'fa-user-plus',    color:'green',  text:'New farmer registered: <strong>Ravi Kumar</strong>',              time:'2 min ago' },
+    { icon:'fa-sign-in-alt',  color:'blue',   text:'Admin signed in from <strong>Hyderabad, IN</strong>',             time:'5 min ago' },
+    { icon:'fa-seedling',     color:'green',  text:'Crop listing <strong>Organic Tomatoes</strong> submitted',        time:'12 min ago'},
+    { icon:'fa-shield-halved',color:'purple', text:'Security: JWT refreshed for <strong>priya@gmail.com</strong>',   time:'18 min ago'},
+    { icon:'fa-robot',        color:'blue',   text:'AI advisor queried for <strong>cotton disease detection</strong>',time:'24 min ago'},
+    { icon:'fa-user-plus',    color:'green',  text:'New farmer registered: <strong>Sneha Rao</strong>',              time:'31 min ago'},
+    { icon:'fa-triangle-exclamation', color:'yellow', text:'Failed login attempt for <strong>unknown@mail.com</strong>', time:'40 min ago'},
+    { icon:'fa-database',     color:'blue',   text:'Database backup completed successfully',                          time:'1 hr ago'  },
+    { icon:'fa-leaf',         color:'green',  text:'Soil health report generated for <strong>Farm #A-23</strong>',   time:'1.5 hr ago'},
+    { icon:'fa-cloud-sun-rain',color:'blue',  text:'Weather alert issued for <strong>Andhra Pradesh region</strong>',time:'2 hr ago'  },
+  ];
+
+  const html = activities.map(a => `
+    <div class="activity-item">
+      <div class="act-icon ${a.color}"><i class="fas ${a.icon}"></i></div>
+      <div>
+        <div class="act-text">${a.text}</div>
+        <div class="act-time"><i class="fas fa-clock"></i> ${a.time}</div>
+      </div>
+    </div>`).join('');
+
+  const dashEl = document.getElementById('dashActivityList');
+  const fullEl = document.getElementById('fullActivityList');
+  if (dashEl) dashEl.innerHTML = html.split('</div></div>').slice(0,4).join('</div></div>') + '</div>';
+  if (fullEl) fullEl.innerHTML = html;
+}
+
+
+// ══════════════════════════════════════════════
+//   TOAST
+// ══════════════════════════════════════════════
+function showToast(type, html) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = html;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+
+// ══════════════════════════════════════════════
+//   LOGOUT
+// ══════════════════════════════════════════════
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  localStorage.removeItem('userEmail');
+  window.location.href = 'admin-login.html';
+}
+
+
+// ══════════════════════════════════════════════
+//   MARKETPLACE MODERATION
+// ══════════════════════════════════════════════
+let allListings = [];
+let currentListingFilter = 'ALL';
+
+async function loadListings() {
+  const tbody = document.getElementById('listingsTableBody');
+  const countEl = document.getElementById('listingCount');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+  try {
+    const res = await apiFetch('/api/admin/marketplace/listings');
+    if (!res) throw new Error('No response');
+    allListings = await res.json();
+    countEl.textContent = `${allListings.length} total listings`;
+    renderListings();
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#ef4444;">Failed to load listings.</td></tr>';
+  }
+}
+
+function setListingFilter(status, btn) {
+  document.querySelectorAll('#section-marketplace .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentListingFilter = status;
+  renderListings();
+}
+
+function filterListings() {
+  renderListings();
+}
+
+function renderListings() {
+  const tbody = document.getElementById('listingsTableBody');
+  const q = document.getElementById('listingSearch').value.toLowerCase();
+  
+  const filtered = allListings.filter(l => {
+    const matchesFilter = (currentListingFilter === 'ALL' || l.status === currentListingFilter);
+    const matchesSearch = (l.title && l.title.toLowerCase().includes(q)) || 
+                          (l.farmerName && l.farmerName.toLowerCase().includes(q));
+    return matchesFilter && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">No listings found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(l => {
+    const priceStr = l.price ? `₹${l.price}/${l.unit}` : 'N/A';
+    let statusClass = 'role-user';
+    if(l.status === 'APPROVED') statusClass = 'role-vet';
+    if(l.status === 'REJECTED') statusClass = 'role-admin';
+    if(l.status === 'PENDING') statusClass = 'role-user';
+    
+    return `
+      <tr>
+        <td><strong>${l.title || 'Untitled'}</strong></td>
+        <td>${l.category || 'Crop'}</td>
+        <td>${priceStr}</td>
+        <td>${l.farmerName || 'Unknown'}</td>
+        <td><span class="role-badge ${statusClass}">${l.status}</span></td>
+        <td>
+          <button class="action-btn" style="color:var(--accent)" title="Approve" onclick="updateListingStatus('${l.id}', 'APPROVED')">
+            <i class="fas fa-check-circle"></i>
+          </button>
+          <button class="action-btn" style="color:var(--error)" title="Reject" onclick="updateListingStatus('${l.id}', 'REJECTED')">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updateListingStatus(id, newStatus) {
+  try {
+    const res = await apiFetch(`/api/admin/marketplace/listings/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check"></i> Listing updated to ${newStatus}`);
+      loadListings();
+    } else {
+      showToast('error', `<i class="fas fa-times"></i> Failed to update status.`);
+    }
+  } catch (e) {
+    showToast('error', `<i class="fas fa-times"></i> Network error.`);
+  }
+}
+
+// ══════════════════════════════════════════════
+//   DISPUTE RESOLUTION
+// ══════════════════════════════════════════════
+let allDisputes = [];
+let currentDisputeFilter = 'ALL';
+
+async function loadDisputes() {
+  const tbody = document.getElementById('disputesTableBody');
+  const countEl = document.getElementById('disputeCount');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+  try {
+    const res = await apiFetch('/api/admin/marketplace/disputes');
+    if (!res) throw new Error('No response');
+    allDisputes = await res.json();
+    countEl.textContent = `${allDisputes.length} total disputes`;
+    renderDisputes();
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#ef4444;">Failed to load disputes.</td></tr>';
+  }
+}
+
+function setDisputeFilter(status, btn) {
+  document.querySelectorAll('#section-disputes .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentDisputeFilter = status;
+  renderDisputes();
+}
+
+function renderDisputes() {
+  const tbody = document.getElementById('disputesTableBody');
+  const filtered = allDisputes.filter(d => currentDisputeFilter === 'ALL' || d.status === currentDisputeFilter);
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">No disputes found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(d => {
+    let statusClass = 'role-user';
+    if(d.status === 'OPEN') statusClass = 'role-admin';
+    if(d.status === 'RESOLVED') statusClass = 'role-vet';
+    if(d.status === 'DISMISSED') statusClass = 'role-user';
+
+    return `
+      <tr>
+        <td><small style="color:var(--muted)">${d.id.substring(d.id.length - 6)}</small></td>
+        <td>${d.buyerName || 'Unknown'}</td>
+        <td>${d.sellerName || 'Unknown'}</td>
+        <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${d.reason}">${d.reason || 'No reason'}</td>
+        <td><span class="role-badge ${statusClass}">${d.status}</span></td>
+        <td>
+          <button class="action-btn" style="color:var(--accent)" title="Resolve" onclick="updateDisputeStatus('${d.id}', 'RESOLVED')">
+            <i class="fas fa-handshake"></i>
+          </button>
+          <button class="action-btn" style="color:var(--muted)" title="Dismiss" onclick="updateDisputeStatus('${d.id}', 'DISMISSED')">
+            <i class="fas fa-ban"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updateDisputeStatus(id, newStatus) {
+  try {
+    const res = await apiFetch(`/api/admin/marketplace/disputes/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check"></i> Dispute ${newStatus}`);
+      loadDisputes();
+    } else {
+      showToast('error', `<i class="fas fa-times"></i> Failed to update dispute.`);
+    }
+  } catch (e) {
+    showToast('error', `<i class="fas fa-times"></i> Network error.`);
+  }
+}
+
+
+// ══════════════════════════════════════════════
+//   GLOBAL SEARCH
+// ══════════════════════════════════════════════
+document.getElementById('globalSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  if (q.length > 1) {
+    showSection('users', document.getElementById('nav-users'));
+    document.getElementById('userSearch').value = this.value;
+    filterUsers();
+  }
+});
+
+
+// ══════════════════════════════════════════════
+//   INIT
+// ══════════════════════════════════════════════
+(async function init() {
+  await loadStats();
+  await loadAllUsers();
+  await loadListings();
+  await loadDisputes();
+  loadActivity();
+})();
+</script>
 </body>
-
 </html>
