@@ -1,64 +1,125 @@
-# 🌱 AgriVerse (FarmVerse) - Precision Agriculture Management Platform
+<div align="center">
+  <img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Java_21-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java" />
+  <img src="https://img.shields.io/badge/JWT_Security-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT Security" />
+</div>
 
-AgriVerse is a comprehensive, AI-powered platform designed to empower farmers with modern technology, precision agriculture insights, and a seamless marketplace. The platform bridges the gap between traditional farming and modern e-commerce, offering real-time data, crop advisories, and robust administrative oversight.
+<br />
 
-## 🚀 Key Features
+<div align="center">
+  <h1>🌱 AgriVerse (FarmVerse)</h1>
+  <p><strong>Precision Agriculture Management & E-Commerce Ecosystem</strong></p>
+</div>
 
-### 👨‍🌾 For Farmers (User Portal)
-- **AI Crop Advisory 24x7:** Get instant, AI-driven advice on crop health, soil management, and best farming practices.
-- **Disease Detection via Photo:** Upload a photo of a sick plant and let the system diagnose the disease and suggest treatments.
-- **Real-time Weather Forecasting:** Hyper-local weather data to help plan irrigation and harvesting.
-- **Live Market Price Tracker:** Stay updated on real-time market rates for various crops to maximize profits.
-- **Voice Support in 3 Languages:** Accessible voice interfaces for farmers who prefer speaking over typing, supporting multiple local languages.
-- **Crop Calendar:** Plan out planting, fertilizing, and harvesting schedules.
-- **Marketplace Access:** Buy and sell crops, farming equipment, and fertilizers directly with other users.
+---
 
-### 🛡️ For Administrators (Command Center)
-- **High-Tech Dashboard:** A futuristic, dark-themed command center to oversee the entire platform ecosystem.
-- **User Management & Role Control:** View all registered users, assign specialized roles (e.g., `ADMIN`, `VET`, `USER`), or ban problematic accounts.
-- **Marketplace Moderation:** Review newly submitted marketplace listings and approve or reject them to prevent fraud.
-- **Dispute Resolution:** Step in and mediate conflicts between buyers and sellers on the marketplace (Resolve / Dismiss).
-- **Platform Telemetry & Analytics:** Monitor live metrics, total user counts, active sessions, and system health.
-- **Live Activity Feed:** A real-time stream of platform events (new registrations, security alerts, AI queries).
+**AgriVerse** is an advanced, AI-powered agricultural platform designed to bridge the gap between traditional farming and modern precision agriculture. By offering real-time telemetry, AI crop advisories, and a fully integrated peer-to-peer marketplace, AgriVerse equips farmers with the digital infrastructure needed to maximize crop yield, reduce waste, and connect directly with markets.
 
-## 🛠️ Technology Stack
+## 📑 Table of Contents
+- [Core Features](#-core-features)
+  - [Farmer Ecosystem (Client Facing)](#farmer-ecosystem-client-facing)
+  - [Command Center (Admin Facing)](#command-center-admin-facing)
+- [System Architecture](#%EF%B8%8F-system-architecture)
+- [Tech Stack](#%EF%B8%8F-tech-stack)
+- [Getting Started](#-getting-started)
+- [Security & Authentication](#-security--authentication)
 
-**Backend**
-- **Java 21 & Spring Boot 3:** Robust, scalable, and high-performance backend framework.
-- **Spring Security & JWT:** Stateless, token-based authentication and role-based access control (RBAC).
-- **MongoDB:** NoSQL database for flexible, fast document storage (hosted on MongoDB Atlas).
-- **Maven:** Dependency and build management.
+---
 
-**Frontend**
-- **Vanilla HTML5, CSS3, JavaScript:** Lightweight, lightning-fast frontend with zero heavy frameworks.
-- **Neumorphism & Glassmorphism UI:** Modern, highly aesthetic design systems tailored for both the light-mode user app and the dark-mode admin portal.
-- **FontAwesome:** Scalable vector icons.
+## 🚀 Core Features
 
-## ⚙️ How to Run Locally
+### 👨‍🌾 Farmer Ecosystem (Client Facing)
+The core application is built to be accessible, fast, and feature-rich for end-users (farmers).
+* 🤖 **AI Crop Advisory 24/7:** Instant, intelligent recommendations on soil health, pest control, and watering schedules.
+* 📸 **Disease Detection:** Upload crop photos to receive immediate AI diagnostics and treatment recommendations.
+* 🌦️ **Real-Time Weather Integration:** Hyper-local weather forecasting for optimal planting and harvesting operations.
+* 📈 **Live Market Prices:** Track real-time commodity rates across different markets to ensure fair pricing.
+* 🗣️ **Multilingual Voice Support:** Native language accessibility allowing voice-driven commands (currently supporting 3 major languages).
+* 🛒 **P2P Marketplace:** A dedicated marketplace for farmers to buy, sell, or lease crops, fertilizers, and heavy equipment.
 
-### Prerequisites
-- Java Development Kit (JDK) 21+
-- Maven
-- A MongoDB cluster URI and Password
+### 🛡️ Command Center (Admin Facing)
+A highly restricted, aesthetically distinct (dark-mode) portal for platform administrators and moderators.
+* 👥 **User & Role Management:** Complete CRUD capabilities over the user base. Seamlessly promote users to `VET` (agricultural experts) or `ADMIN` roles.
+* 🏪 **Marketplace Moderation:** Review newly created marketplace listings. Ensure platform integrity by approving legitimate listings or rejecting fraudulent ones.
+* ⚖️ **Dispute Resolution Engine:** Act as a mediator for failed e-commerce transactions, overseeing and resolving buyer/seller conflicts.
+* 📊 **Platform Telemetry:** Live dashboards displaying active sessions, total registered users, and marketplace health.
+* ⚡ **Live Activity Stream:** Real-time log of critical platform events (auth failures, new registrations, database backups).
 
-### Setup Instructions
-1. Clone the repository.
-2. Open a terminal in the project root.
-3. Set your MongoDB password as an environment variable and run the Spring Boot application:
-   ```powershell
-   $env:MONGO_PASSWORD="your_mongo_password"; mvn spring-boot:run
-   ```
-4. **Access the application:**
-   - **Farmer Portal:** `http://localhost:8082` (or `http://localhost:8082/login.html`)
-   - **Admin Portal:** `http://localhost:8082/admin-login.html`
+---
 
-### Default Admin Credentials
-When the application starts for the first time, it automatically seeds a default admin account if one does not exist:
-- **Email:** `admin@agriverse.in`
-- **Password:** `admin123`
+## 🏗️ System Architecture
 
-## 🔒 Security Architecture
-- All sensitive API endpoints are protected under `/api/...` and require a valid `Authorization: Bearer <token>` header.
-- The Admin dashboard and its backend endpoints (`/api/admin/**`) strictly require the `ADMIN` role.
-- Passwords are encrypted using `BCryptPasswordEncoder` before being stored in MongoDB.
-- Cross-Origin Resource Sharing (CORS) is configured to allow safe communication between local development clients and the backend.
+AgriVerse employs a **stateless RESTful API** architecture, utilizing Spring Boot on the backend and native web technologies on the frontend. Data is persisted in a NoSQL MongoDB cluster, allowing for highly flexible schemas (ideal for diverse marketplace listings and user profiles).
+
+* **Authentication Layer:** Spring Security intercepts incoming requests. Public assets (`/css`, `/js`) and auth routes (`/api/auth`) are permitted. Protected resources (`/api/admin`) require a valid JWT token validated by the `JwtAuthenticationFilter`.
+* **Data Access Layer:** Utilizes `MongoRepository` interfaces for robust, boilerplate-free database operations.
+
+---
+
+## 🛠️ Tech Stack
+
+| Domain | Technologies |
+| :--- | :--- |
+| **Backend Framework** | Java 21, Spring Boot 3, Spring Web |
+| **Security** | Spring Security, JWT (JSON Web Tokens), BCrypt |
+| **Database** | MongoDB Atlas, Spring Data MongoDB |
+| **Frontend** | HTML5, CSS3 (Neumorphism / Glassmorphism), Vanilla ES6 JS |
+| **Build Tool** | Apache Maven |
+
+---
+
+## 🏁 Getting Started
+
+Follow these instructions to run the AgriVerse ecosystem locally on your machine.
+
+### 1. Prerequisites
+- **Java 21** or higher installed.
+- **Maven** installed and added to your system `PATH`.
+- A valid **MongoDB** Cluster URI (or local instance).
+
+### 2. Installation
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/Puspaldas17/AgriVerseInfosys.git
+cd AgriVerseInfosys
+```
+
+### 3. Environment Variables
+The application relies on an environment variable for database authentication. Set `MONGO_PASSWORD` in your terminal session before starting the application.
+
+### 4. Running the Application
+Use Maven to start the Spring Boot server:
+
+**For Windows (PowerShell):**
+```powershell
+$env:MONGO_PASSWORD="your_actual_password_here"
+mvn spring-boot:run
+```
+
+**For Mac/Linux:**
+```bash
+export MONGO_PASSWORD="your_actual_password_here"
+mvn spring-boot:run
+```
+
+### 5. Accessing the Portals
+Once the server reports `Started Agriverse1Application in X seconds`, open your browser:
+* **Farmer Portal:** `http://localhost:8082`
+* **Admin Portal:** `http://localhost:8082/admin-login.html`
+
+> **Note:** The database seeder will automatically generate a default administrator account (`admin@agriverse.in` / `admin123`) and inject mock marketplace data upon the first boot.
+
+---
+
+## 🔒 Security & Authentication
+AgriVerse takes platform security seriously:
+- **Stateless Sessions:** The application does not rely on Tomcat HTTP sessions, completely mitigating CSRF attacks.
+- **JWT Lifecycles:** Tokens contain embedded roles (`ROLE_USER`, `ROLE_ADMIN`) and are verified on every secure request.
+- **Password Hashing:** All user credentials are irreversibly hashed using `BCryptPasswordEncoder` with an appropriate work factor before persistence.
+- **CORS Policies:** Cross-Origin Resource Sharing is strictly defined to prevent unauthorized frontend clients from polling the API.
+
+---
+<div align="center">
+  <i>Developed with ❤️ for the future of farming.</i>
+</div>
