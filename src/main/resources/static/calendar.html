@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crop Calendar</title>
+
+    <link rel="stylesheet" href="calendar.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="logo">
+            🌱 FarmVerse
+        </div>
+
+        <nav>
+            <a href="dashboard.html">Home</a>
+            <a href="#">Dashboard</a>
+            <a href="calendar.html" class="active">
+                Crop Calendar
+            </a>
+            <a href="#">Weather</a>
+        </nav>
+
+        <div class="nav-icons">
+            🔔 👤
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="back-button">
+            ← Back
+        </div>
+
+        <h1>🌾 Crop Calendar</h1>
+
+        <p class="subtitle">
+            View and manage crop sowing and harvesting information.
+        </p>
+
+
+        <!-- ADD CROP -->
+
+        <div class="add-section">
+
+            <h2>Add Crop</h2>
+
+            <form id="cropForm">
+
+                <div class="form-grid">
+
+                    <input
+                        type="text"
+                        id="cropName"
+                        placeholder="Crop Name"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="season"
+                        placeholder="Season"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="sowingStartMonth"
+                        placeholder="Sowing Start Month"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="sowingEndMonth"
+                        placeholder="Sowing End Month"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="harvestStartMonth"
+                        placeholder="Harvest Start Month"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="harvestEndMonth"
+                        placeholder="Harvest End Month"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="waterRequirement"
+                        placeholder="Water Requirement"
+                        required
+                    >
+
+                    <input
+                        type="text"
+                        id="soilType"
+                        placeholder="Soil Type"
+                        required
+                    >
+
+                </div>
+
+
+                <textarea
+                    id="description"
+                    placeholder="Description"
+                    required
+                ></textarea>
+
+
+                <button type="submit">
+                    + Add Crop
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div id="resultMessage" class="result-message">
+            Loading crops...
+        </div>
+
+
+        <!-- CROP LIST -->
+
+        <section>
+
+            <h2 class="section-title">
+                Available Crops
+            </h2>
+
+            <div
+                id="cropList"
+                class="crop-grid">
+            </div>
+
+        </section>
+
+
+        <div class="legend">
+
+            <span>
+                🟢 Sowing Period
+            </span>
+
+            <span>
+                🟠 Harvest Period
+            </span>
+
+        </div>
+
+    </main>
+
+
+    <script src="calendar.js"></script>
+
+</body>
+
+</html>
+```

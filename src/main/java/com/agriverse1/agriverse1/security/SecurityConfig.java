@@ -61,7 +61,8 @@ public class SecurityConfig {
                             "/css/**",
                             "/js/**",
                             "/images/**",
-                            "/api/auth/**"
+                          "/api/auth/**",
+                        "/api/crop-calendar/**"
                     )
                     .permitAll()
                     .anyRequest()
