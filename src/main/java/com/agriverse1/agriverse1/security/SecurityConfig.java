@@ -62,10 +62,9 @@ public class SecurityConfig {
                             "/js/**",
                             "/images/**",
                             "/api/auth/**"
-                    )
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                    ).permitAll()
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
             )
 
             .sessionManagement(session ->

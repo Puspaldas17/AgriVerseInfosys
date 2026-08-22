@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -451,7 +451,7 @@
                     try { cached = JSON.parse(localStorage.getItem(lsKey) || '{}'); } catch (_) {}
                     localStorage.setItem(lsKey, JSON.stringify({ ...cached, name, phone, soilType, landSize, language }));
                     // Also update legacy key for dashboard.js sidebar
-                    localStorage.setItem('userProfile', JSON.stringify({ name, email: emailEl.value, phone, soilType, landSize, language }));
+                    localStorage.setItem('agriverse_userProfile_' + emailEl.value, JSON.stringify({ name, email: emailEl.value, phone, soilType, landSize, language }));
                     showSuccess('✅ Profile saved to MongoDB successfully!');
                 } else {
                     showError(data.message || 'Failed to save. Try again.');

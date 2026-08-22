@@ -535,11 +535,11 @@ try {
 
 try {
     savedProfile = JSON.parse(
-        localStorage.getItem('userProfile') || 'null'
+        localStorage.getItem(`agriverse_userProfile_${currentUserEmail}`) || 'null'
     );
 } catch (error) {
     console.error("Invalid userProfile data:", error);
-    localStorage.removeItem('userProfile');
+    localStorage.removeItem(`agriverse_userProfile_${currentUserEmail}`);
     savedProfile = null;
 }
 const state = {
@@ -650,75 +650,69 @@ currentLanguage:
     }
 
     // Render User Information Dynamically to DOM
-  function renderUserInfo() {
-    const displayName = document.getElementById('user-display-name');
-    const userPhone = document.getElementById('user-phone');
-    const userSoil = document.getElementById('user-soil');
-    const userLand = document.getElementById('user-land');
-    const userLanguage = document.getElementById('user-lang-display');
-
-    const headerName = document.getElementById('header-user-name');
-    const dropdownName = document.getElementById('dropdown-user-name');
-    const dropdownEmail = document.getElementById('dropdown-user-email');
-    const headerAvatar = document.getElementById('header-avatar');
-    const sidebarUserName = document.getElementById('sidebar-user-name');
-    const modalUserName = document.getElementById('modal-user-name');
-
-    // Name
-    if (displayName) {
-        displayName.textContent = state.user.name;
+    function renderUserInfo(user = state.user) {
+        const displayName = document.getElementById('user-display-name');
+        const userPhone = document.getElementById('user-phone');
+        const userSoil = document.getElementById('user-soil');
+        const userLand = document.getElementById('user-land');
+        const userLanguage = document.getElementById('user-lang-display');
+    
+        const headerName = document.getElementById('header-user-name');
+        const dropdownName = document.getElementById('dropdown-user-name');
+        const dropdownEmail = document.getElementById('dropdown-user-email');
+        const headerAvatar = document.getElementById('header-avatar');
+        const sidebarUserName = document.getElementById('sidebar-user-name');
+        const modalUserName = document.getElementById('modal-user-name');
+    
+        // Name
+        if (displayName) displayName.textContent = user.name;
+        if (headerName) headerName.textContent = user.name;
+        if (dropdownName) dropdownName.textContent = user.name;
+        if (dropdownEmail) dropdownEmail.textContent = user.email;
+        if (headerAvatar && user.name) headerAvatar.textContent = user.name.charAt(0).toUpperCase();
+        if (sidebarUserName) sidebarUserName.textContent = `You (${user.name})`;
+        if (modalUserName) modalUserName.textContent = `${user.name} (You)`;
+    
+        // Phone
+        if (userPhone) userPhone.textContent = user.phone || "Not Available";
+        // Soil Type
+        if (userSoil) userSoil.textContent = user.soilType || "Not specified";
+        // Land Size
+        if (userLand) userLand.textContent = user.landSize ? `${user.landSize} acres` : "— acres";
+        // Language
+        if (userLanguage) userLanguage.textContent = user.language || "English";
     }
 
-    // Phone
-    if (userPhone) {
-        userPhone.textContent = state.user.phone || "Not Available";
+    // Fetch accurate data from backend to prevent local storage caching issues
+    async function fetchAccurateUserProfile() {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const res = await fetch('/api/user/profile', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+                const dbUser = await res.json();
+                
+                // Merge DB user into state
+                state.user.name = dbUser.name || state.user.name;
+                state.user.email = dbUser.email || state.user.email;
+                state.user.phone = dbUser.phone;
+                state.user.soilType = dbUser.soilType;
+                state.user.landSize = dbUser.landSize;
+                state.user.language = dbUser.language || state.user.language;
+                
+                // Update UI immediately with correct data
+                renderUserInfo(state.user);
+            }
+        } catch(err) {
+            console.error("Could not fetch profile from backend", err);
+        }
     }
 
-    // Soil Type
-    if (userSoil) {
-        userSoil.textContent = state.user.soilType || "Not specified";
-    }
+    // Run this on load
+    fetchAccurateUserProfile();
 
-    // Land Size
-    if (userLand) {
-        userLand.textContent = state.user.landSize
-            ? `${state.user.landSize} acres`
-            : "— acres";
-    }
 
-    // Language
-    if (userLanguage) {
-        userLanguage.textContent = state.user.language || "English";
-    }
-
-    // Header
-    if (headerName) {
-        headerName.textContent = state.user.name;
-    }
-
-    if (dropdownName) {
-        dropdownName.textContent = state.user.name;
-    }
-
-    if (dropdownEmail) {
-        dropdownEmail.textContent = state.user.email;
-    }
-
-    if (headerAvatar) {
-        headerAvatar.textContent =
-            state.user.name.charAt(0).toUpperCase();
-    }
-
-    if (sidebarUserName) {
-        sidebarUserName.textContent =
-            `You (${state.user.name})`;
-    }
-
-    if (modalUserName) {
-        modalUserName.textContent =
-            `${state.user.name} (You)`;
-    }
-}
 function renderLeaderboard() {
     let farmers = [];
 

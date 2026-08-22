@@ -564,8 +564,8 @@
 
             <div class="divider">or</div>
 
-            <button class="admin-btn" id="adminAccessBtn">
-                <i class="fas fa-shield-alt"></i> Continue as Admin (Demo)
+            <button type="button" class="admin-btn" id="adminAccessBtn">
+                <i class="fas fa-shield-alt"></i> Login into Admin
             </button>
 
         </div>
@@ -623,11 +623,9 @@
             }
         });
 
-        // Admin demo
+        // Admin portal access
         document.getElementById('adminAccessBtn').addEventListener('click', function () {
-            document.getElementById('email').value = 'admin@agriverse.in';
-            document.getElementById('password').value = 'admin123';
-            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            window.location.href = 'admin-login.html';
         });
 
         // Forgot password
