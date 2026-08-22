@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Marketplace | AgriVerse</title>
+    <meta name="description" content="All-India direct farm-to-consumer produce listings on FarmVerse Marketplace.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --green:        #16a34a;
+            --green-hover:  #15803d;
+            --green-light:  #dcfce7;
+            --green-border: #bbf7d0;
+            --bg:           #f0fdf4;
+            --card:         #ffffff;
+            --border:       #e2e8f0;
+            --text:         #0f172a;
+            --muted:        #64748b;
+            --r-md:         12px;
+            --r-lg:         18px;
+            --shadow:       0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -1px rgba(0,0,0,.04);
+            --shadow-lg:    0 10px 25px -5px rgba(0,0,0,.1), 0 4px 10px -3px rgba(0,0,0,.05);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(140deg,#f0fdf4 0%,#ffffff 55%,#f8fafc 100%); color: var(--text); min-height: 100vh; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: .9rem 2rem; background: #fff; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100; gap: 1rem;
+        }
+        .nav-brand { font-size: 1.2rem; font-weight: 800; color: var(--green); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .nav-right  { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .nav-link   { text-decoration: none; color: var(--text); font-weight: 500; font-size: .9rem; }
+        .nav-link:hover { color: var(--green); }
+        .lang-select { padding: 4px 8px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: .85rem; cursor: pointer; }
+        .btn-icon   { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--text); }
+
+        /* auth buttons */
+        .btn-outline { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px; font-weight: 600; font-size: .9rem; cursor: pointer; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn-primary { background: var(--green); border: none; border-radius: 8px; padding: 7px 16px; font-weight: 600; font-size: .9rem; cursor: pointer; color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .15s; }
+        .btn-primary:hover { background: var(--green-hover); }
+
+        /* avatar */
+        .user-menu { position: relative; }
+        .avatar-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: #fff; font-weight: 700; font-size: .9rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .user-dropdown { display: none; position: absolute; right: 0; top: 46px; background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-lg); min-width: 180px; z-index: 200; overflow: hidden; }
+        .user-dropdown.open { display: block; }
+        .user-dropdown a, .user-dropdown button { display: flex; align-items: center; gap: 10px; padding: .7rem 1rem; width: 100%; background: none; border: none; font-family: inherit; font-size: .9rem; color: var(--text); cursor: pointer; text-decoration: none; }
+        .user-dropdown a:hover, .user-dropdown button:hover { background: #f8fafc; }
+        .user-dropdown .sep { height: 1px; background: var(--border); }
+
+        /* ── PAGE HEADER ── */
+        .page-header { max-width: 1200px; margin: 2rem auto 1.5rem; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+        .page-header h1 { font-size: 1.9rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .page-header p  { color: var(--muted); margin-top: 4px; font-size: .9rem; }
+        .header-btns    { display: flex; gap: 10px; }
+
+        /* ── FILTERS BOX ── */
+        .filters { max-width: 1200px; margin: 0 auto 1.5rem; padding: 0 1.5rem; }
+        .filters-inner { background: #fff; border-radius: var(--r-lg); border: 1px solid var(--border); padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow); }
+        .search-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .search-wrap { flex: 1; min-width: 220px; position: relative; }
+        .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+        .search-wrap input { width: 100%; padding: .7rem 1rem .7rem 2.6rem; border: 1px solid var(--border); border-radius: var(--r-md); font-family: inherit; font-size: .95rem; outline: none; }
+        .search-wrap input:focus { border-color: var(--green); }
+        .state-select { padding: .7rem 1rem; border: 1px solid var(--border); border-radius: var(--r-md); font-family: inherit; font-size: .95rem; outline: none; background: #fff; min-width: 180px; }
+        .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+        .pill { padding: .4rem 1.1rem; border-radius: 999px; border: 1.5px solid transparent; background: #f1f5f9; color: var(--muted); font-weight: 500; font-size: .85rem; cursor: pointer; transition: all .15s; }
+        .pill:hover { background: #e2e8f0; }
+        .pill.active { background: var(--green-light); color: var(--green); border-color: var(--green-border); font-weight: 600; }
+
+        /* ── RESULTS META ── */
+        .meta { max-width: 1200px; margin: 0 auto .75rem; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .875rem; color: var(--muted); }
+        .meta-organic { color: var(--green); font-weight: 600; }
+
+        /* ── GRID ── */
+        .grid { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; }
+
+        /* ── CARD ── */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.4rem; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .crop-icon { width: 46px; height: 46px; background: var(--green-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--green); flex-shrink: 0; }
+        .organic-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--green-light); color: var(--green); font-size: .75rem; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
+        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+        .card-price { font-size: 1.1rem; font-weight: 800; color: var(--green); margin-bottom: 1rem; }
+        .card-details { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.25rem; font-size: .875rem; color: var(--muted); }
+        .detail { display: flex; align-items: center; gap: 8px; }
+        .detail i { width: 15px; text-align: center; flex-shrink: 0; }
+        .btn-full { width: 100%; justify-content: center; }
+
+        /* ── MODAL ── */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.open { display: flex; }
+        .modal-box { background: #fff; border-radius: var(--r-lg); padding: 2rem; width: 100%; max-width: 480px; position: relative; box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto; }
+        .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; font-size: 1.1rem; color: var(--muted); cursor: pointer; }
+        .modal-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; }
+        .seller-info { background: #f8fafc; border-radius: 10px; padding: .9rem 1rem; margin-bottom: 1.25rem; }
+        .seller-info h3 { font-size: 1rem; margin-bottom: 2px; }
+        .seller-info p  { font-size: .85rem; color: var(--muted); }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 500; font-size: .875rem; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: .65rem .9rem; border: 1px solid var(--border); border-radius: var(--r-md); font-family: inherit; font-size: .95rem; outline: none; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--green); }
+        .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; font-size: .9rem; }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+    <a href="dashboard.html" class="nav-brand"><i class="fas fa-leaf"></i> AgriVerse</a>
+    <div class="nav-right">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="#" class="nav-link">About</a>
+        <select class="lang-select"><option>English</option><option>Hindi</option><option>Telugu</option></select>
+        <button class="btn-icon"><i class="fas fa-bell"></i></button>
+
+        <!-- Guest (not logged in) -->
+        <span id="nav-guest" style="display:flex;gap:8px;align-items:center;">
+            <a href="login.html" class="btn-outline">Farmer Login</a>
+            <a href="dashboard.html" class="btn-primary">Get Started</a>
+        </span>
+
+        <!-- Logged-in user -->
+        <span id="nav-user" style="display:none;" class="user-menu">
+            <button class="avatar-btn" id="avatarBtn" onclick="toggleUserMenu()">ME</button>
+            <div class="user-dropdown" id="userDropdown">
+                <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+                <div class="sep"></div>
+                <button onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </span>
+    </div>
+</nav>
+
+<!-- ═══════════════ PAGE HEADER ═══════════════ -->
+<div class="page-header">
+    <div>
+        <h1>
+            <a href="dashboard.html" style="color:inherit;text-decoration:none;"><i class="fas fa-arrow-left" style="font-size:1.4rem;"></i></a>
+            <i class="fas fa-store" style="color:var(--green)"></i>
+            Farmer Marketplace
+        </h1>
+        <p>All-India direct farm-to-consumer produce listings</p>
+    </div>
+    <div class="header-btns">
+        <button class="btn-outline" onclick="renderListings()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        <button class="btn-primary" onclick="openPostModal()"><i class="fas fa-plus"></i> Post Listing</button>
+    </div>
+</div>
+
+<!-- ═══════════════ FILTERS ═══════════════ -->
+<div class="filters">
+    <div class="filters-inner">
+        <div class="search-row">
+            <div class="search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search crop, city or seller...">
+            </div>
+            <select id="stateSelect" class="state-select">
+                <option value="All">All States</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+            </select>
+        </div>
+        <div class="pills" id="pills">
+            <div class="pill active" data-cat="All">All</div>
+            <div class="pill" data-cat="Grain">🌾 Grain</div>
+            <div class="pill" data-cat="Vegetable">🥦 Vegetable</div>
+            <div class="pill" data-cat="Fruit">🍎 Fruit</div>
+            <div class="pill" data-cat="Spice">🌶 Spice</div>
+            <div class="pill" data-cat="Pulse">🫘 Pulse</div>
+            <div class="pill" data-cat="Other">📦 Other</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ RESULTS META ═══════════════ -->
+<div class="meta">
+    <span id="resultCount">Loading...</span>
+    <span class="meta-organic" id="organicCount"></span>
+</div>
+
+<!-- ═══════════════ LISTINGS GRID ═══════════════ -->
+<div class="grid" id="listingsGrid"></div>
+
+<!-- ═══════════════ CONTACT SELLER MODAL ═══════════════ -->
+<div class="modal-overlay" id="contactModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title">Contact Seller</h2>
+        <div class="seller-info">
+            <h3 id="modalSeller">Seller Name</h3>
+            <p id="modalCrop">Crop info</p>
+        </div>
+        <div class="form-group">
+            <label>Your Message</label>
+            <textarea rows="4" placeholder="Hi, I am interested in buying your product..."></textarea>
+        </div>
+        <button class="btn-primary btn-full" onclick="sendContactMessage()"><i class="fas fa-paper-plane"></i> Send Message</button>
+    </div>
+</div>
+
+<!-- ═══════════════ POST LISTING MODAL ═══════════════ -->
+<div class="modal-overlay" id="postModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closePostModal()"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title">Create New Listing</h2>
+        <div class="form-group"><label>Crop Name</label><input type="text" id="postCrop" placeholder="e.g. Tomatoes"></div>
+        <div class="form-group">
+            <label>Category</label>
+            <select id="postCategory">
+                <option value="Vegetable">Vegetable</option><option value="Fruit">Fruit</option>
+                <option value="Grain">Grain</option><option value="Spice">Spice</option>
+                <option value="Pulse">Pulse</option><option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Price (with unit)</label><input type="text" id="postPrice" placeholder="e.g. ₹2000 per quintal"></div>
+        <div class="form-group"><label>Location (City, State)</label><input type="text" id="postLocation" placeholder="e.g. Nashik, Maharashtra"></div>
+        <div class="form-group"><label>Quantity Available</label><input type="text" id="postQuantity" placeholder="e.g. 500 kg"></div>
+        <div class="check-row"><input type="checkbox" id="postOrganic"><label for="postOrganic">Certified Organic Product</label></div>
+        <button class="btn-primary btn-full" onclick="submitListing()"><i class="fas fa-check"></i> Post Listing</button>
+    </div>
+</div>
+
+<script src="js/marketplace.js?v=5"></script>
+</body>
+</html>
