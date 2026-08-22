@@ -5,14 +5,19 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(120deg, #f5fff8, #ecfff4, #fffef2);
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(
+        120deg,
+        #f5fff8,
+        #ecfff4,
+        #fffef2
+    );
     color: #26352d;
     min-height: 100vh;
 }
 
 
-/* Navbar */
+/* ================= NAVBAR ================= */
 
 .navbar {
     height: 68px;
@@ -55,7 +60,7 @@ nav a.active {
 }
 
 
-/* Main */
+/* ================= MAIN ================= */
 
 .container {
     width: 90%;
@@ -67,6 +72,7 @@ nav a.active {
     color: #159447;
     margin-bottom: 20px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 h1 {
@@ -81,14 +87,14 @@ h1 {
 }
 
 
-/* Add Crop */
+/* ================= ADD SECTION ================= */
 
 .add-section {
     background: white;
     padding: 22px;
     border-radius: 14px;
     border: 1px solid #edf1ee;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
     margin-bottom: 25px;
 }
 
@@ -97,13 +103,33 @@ h1 {
     margin-bottom: 18px;
 }
 
+
+/* ================= FORM ================= */
+
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #405047;
+    margin-bottom: 6px;
+}
+
+.full-width {
+    margin-top: 15px;
 }
 
 input,
+select,
 textarea {
     width: 100%;
     padding: 11px;
@@ -111,22 +137,23 @@ textarea {
     border-radius: 8px;
     font-size: 13px;
     outline: none;
+    background: white;
 }
 
 input:focus,
+select:focus,
 textarea:focus {
     border-color: #159447;
 }
 
 textarea {
-    margin-top: 12px;
     min-height: 90px;
     resize: vertical;
 }
 
-form button {
-    margin-top: 14px;
-    padding: 11px 20px;
+.add-btn {
+    margin-top: 16px;
+    padding: 11px 22px;
     border: none;
     border-radius: 8px;
     background: #168b43;
@@ -135,24 +162,101 @@ form button {
     cursor: pointer;
 }
 
-form button:hover {
+.add-btn:hover {
     background: #117538;
 }
 
 
-/* Message */
+/* ================= FILTER ================= */
 
-.result-message {
-    margin-bottom: 18px;
-    padding: 12px 15px;
-    border-radius: 8px;
-    background: #e8faef;
-    border: 1px solid #d6f1df;
-    color: #25894c;
+.filter-section {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #edf1ee;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.filter-section h2 {
+    color: #176b3c;
+    font-size: 17px;
+    margin-bottom: 15px;
 }
 
 
-/* Crop Section */
+/* ================= MONTH BUTTONS ================= */
+
+.month-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.month-buttons button {
+    padding: 9px 15px;
+    border: 1px solid #cfe2d5;
+    background: #f7fff9;
+    color: #176b3c;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.month-buttons button:hover {
+    background: #e4f7ea;
+}
+
+.month-buttons button.selected {
+    background: #168b43;
+    color: white;
+    border-color: #168b43;
+}
+
+
+/* ================= WATER BUTTONS ================= */
+
+.weather-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.weather-buttons button {
+    padding: 9px 18px;
+    border: 1px solid #dce7df;
+    border-radius: 8px;
+    background: #f8faf9;
+    color: #444;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.weather-buttons button:hover {
+    background: #e9f7ed;
+}
+
+.weather-buttons button.selected {
+    background: #168b43;
+    color: white;
+    border-color: #168b43;
+}
+
+
+/* ================= RESULT MESSAGE ================= */
+
+.result-message {
+    margin: 20px 0;
+    padding: 13px 16px;
+    border-radius: 9px;
+    background: #e8faef;
+    border: 1px solid #d6f1df;
+    color: #25894c;
+    font-size: 14px;
+}
+
+
+/* ================= CROP SECTION ================= */
 
 .section-title {
     color: #176b3c;
@@ -167,14 +271,14 @@ form button:hover {
 }
 
 
-/* Crop Card */
+/* ================= CROP CARD ================= */
 
 .crop-card {
     background: white;
     border-radius: 14px;
-    padding: 18px;
+    padding: 20px;
     border: 1px solid #edf1ee;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
 }
 
 .crop-header {
@@ -185,7 +289,7 @@ form button:hover {
 }
 
 .crop-name {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #29382f;
 }
@@ -218,7 +322,25 @@ form button:hover {
 }
 
 
-/* Delete */
+/* ================= WATER BADGE ================= */
+
+.water-low {
+    background: #e7f7eb;
+    color: #25894c;
+}
+
+.water-medium {
+    background: #fff4d9;
+    color: #c88713;
+}
+
+.water-high {
+    background: #ffe8e8;
+    color: #d33;
+}
+
+
+/* ================= DELETE ================= */
 
 .delete-btn {
     margin-top: 14px;
@@ -235,7 +357,7 @@ form button:hover {
 }
 
 
-/* No Crops */
+/* ================= NO CROPS ================= */
 
 .no-crops {
     grid-column: 1 / -1;
@@ -244,10 +366,11 @@ form button:hover {
     padding: 35px;
     border-radius: 12px;
     color: #777;
+    border: 1px solid #edf1ee;
 }
 
 
-/* Legend */
+/* ================= LEGEND ================= */
 
 .legend {
     margin-top: 20px;
@@ -259,7 +382,7 @@ form button:hover {
 }
 
 
-/* Mobile */
+/* ================= MOBILE ================= */
 
 @media (max-width: 800px) {
 
@@ -282,5 +405,8 @@ form button:hover {
     .form-grid {
         grid-template-columns: 1fr;
     }
+
+    .month-buttons button {
+        flex: 1 1 70px;
+    }
 }
-```

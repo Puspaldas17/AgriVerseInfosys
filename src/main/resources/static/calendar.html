@@ -1,168 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Crop Calendar</title>
+    <title>AgriVerse - Crop Sowing Calendar</title>
 
-    <link rel="stylesheet" href="calendar.css">
+    <link rel="stylesheet" href="css/calendar.css">
 </head>
 
 <body>
 
+    <!-- NAVBAR -->
     <header class="navbar">
 
         <div class="logo">
-            🌱 FarmVerse
-        </div>
-
-        <nav>
-            <a href="dashboard.html">Home</a>
-            <a href="#">Dashboard</a>
-            <a href="calendar.html" class="active">
-                Crop Calendar
-            </a>
-            <a href="#">Weather</a>
-        </nav>
-
-        <div class="nav-icons">
-            🔔 👤
+            🌱 <span>AgriVerse</span>
         </div>
 
     </header>
 
 
+    <!-- MAIN CONTENT -->
     <main class="container">
 
-        <div class="back-button">
-            ← Back
-        </div>
 
-        <h1>🌾 Crop Calendar</h1>
+        <h1> Crop Sowing Calendar</h1>
 
         <p class="subtitle">
-            View and manage crop sowing and harvesting information.
+            Best sowing & harvest windows for your crops
         </p>
 
 
-        <!-- ADD CROP -->
+        <!-- MONTH FILTER -->
+        <section class="filter-section">
 
-        <div class="add-section">
+            <h3>Select Month</h3>
 
-            <h2>Add Crop</h2>
+            <div class="month-buttons" id="monthButtons">
 
-            <form id="cropForm">
+                <button data-month="Jan">Jan</button>
+                <button data-month="Feb">Feb</button>
+                <button data-month="Mar">Mar</button>
+                <button data-month="Apr">Apr</button>
+                <button data-month="May">May</button>
+                <button data-month="Jun">Jun</button>
+                <button data-month="Jul">Jul</button>
+                <button data-month="Aug">Aug</button>
+                <button data-month="Sep">Sep</button>
+                <button data-month="Oct">Oct</button>
+                <button data-month="Nov">Nov</button>
+                <button data-month="Dec">Dec</button>
 
-                <div class="form-grid">
-
-                    <input
-                        type="text"
-                        id="cropName"
-                        placeholder="Crop Name"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="season"
-                        placeholder="Season"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="sowingStartMonth"
-                        placeholder="Sowing Start Month"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="sowingEndMonth"
-                        placeholder="Sowing End Month"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="harvestStartMonth"
-                        placeholder="Harvest Start Month"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="harvestEndMonth"
-                        placeholder="Harvest End Month"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="waterRequirement"
-                        placeholder="Water Requirement"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="soilType"
-                        placeholder="Soil Type"
-                        required
-                    >
-
-                </div>
-
-
-                <textarea
-                    id="description"
-                    placeholder="Description"
-                    required
-                ></textarea>
-
-
-                <button type="submit">
-                    + Add Crop
-                </button>
-
-            </form>
-
-        </div>
-
-
-        <!-- MESSAGE -->
-
-        <div id="resultMessage" class="result-message">
-            Loading crops...
-        </div>
-
-
-        <!-- CROP LIST -->
-
-        <section>
-
-            <h2 class="section-title">
-                Available Crops
-            </h2>
-
-            <div
-                id="cropList"
-                class="crop-grid">
             </div>
 
         </section>
 
 
+        <!-- WEATHER FILTER -->
+        <section class="filter-section">
+
+            <h3>Weather need</h3>
+
+            <div class="weather-buttons" id="weatherButtons">
+
+                <button data-weather="All" class="selected">
+                    All
+                </button>
+
+                <button data-weather="Low">
+                    Low
+                </button>
+
+                <button data-weather="Medium">
+                    Medium
+                </button>
+
+                <button data-weather="High">
+                    High
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESULT MESSAGE -->
+        <div class="result-message">
+
+            Showing crops for
+            <strong id="selectedMonth">Jan</strong>
+
+        </div>
+
+
+        <!-- CROP CARDS -->
+        <section>
+
+            <div class="crop-grid" id="cropContainer">
+
+            </div>
+
+        </section>
+
+
+        <!-- LEGEND -->
         <div class="legend">
 
             <span>
-                🟢 Sowing Period
+                🟢 Green bar = sowing window
             </span>
 
             <span>
-                🟠 Harvest Period
+                🟠 Orange bar = harvest window
             </span>
 
         </div>
@@ -170,9 +120,7 @@
     </main>
 
 
-    <script src="calendar.js"></script>
+    <script src="js/calendar.js"></script>
 
 </body>
-
 </html>
-```

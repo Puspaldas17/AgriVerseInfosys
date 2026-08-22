@@ -1,109 +1,254 @@
 const API_URL = "http://localhost:8082/api/crop-calendar";
 
-const cropForm = document.getElementById("cropForm");
-const cropList = document.getElementById("cropList");
+let crops = [];
+let selectedMonth = "Jan";
+let selectedWeather = "All";
+
+const monthMap = {
+    Jan: "January",
+    Feb: "February",
+    Mar: "March",
+    Apr: "April",
+    May: "May",
+    Jun: "June",
+    Jul: "July",
+    Aug: "August",
+    Sep: "September",
+    Oct: "October",
+    Nov: "November",
+    Dec: "December"
+};
 
 
-// Get all crops
+// ===============================
+// FETCH CROPS FROM BACKEND
+// ===============================
+
 async function loadCrops() {
+
     try {
+
         const response = await fetch(API_URL);
-        const crops = await response.json();
 
-        cropList.innerHTML = "";
+        if (!response.ok) {
+            throw new Error("Failed to fetch crop data");
+        }
 
-        crops.forEach(crop => {
-            const card = document.createElement("div");
-            card.className = "crop-card";
+        crops = await response.json();
 
-            card.innerHTML = `
-                <h3>${crop.cropName}</h3>
-                <p><strong>Season:</strong> ${crop.season}</p>
-                <p><strong>Sowing:</strong> ${crop.sowingStartMonth} - ${crop.sowingEndMonth}</p>
-                <p><strong>Harvest:</strong> ${crop.harvestStartMonth} - ${crop.harvestEndMonth}</p>
-                <p><strong>Water:</strong> ${crop.waterRequirement}</p>
-                <p><strong>Soil:</strong> ${crop.soilType}</p>
-                <p><strong>Description:</strong> ${crop.description}</p>
-
-                <button class="delete-btn"
-                    onclick="deleteCrop('${crop.id}')">
-                    Delete
-                </button>
-            `;
-
-            cropList.appendChild(card);
-        });
+        displayCrops();
 
     } catch (error) {
-        console.error("Error loading crops:", error);
+
+        console.error("Error:", error);
+
+        document.getElementById("cropContainer").innerHTML =
+            `<p>Unable to load crop data. Please start the backend.</p>`;
     }
 }
 
 
-// Add crop
-cropForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+// ===============================
+// CHECK MONTH
+// ===============================
 
-    const crop = {
-        cropName: document.getElementById("cropName").value,
-        season: document.getElementById("season").value,
-        sowingStartMonth: document.getElementById("sowingStartMonth").value,
-        sowingEndMonth: document.getElementById("sowingEndMonth").value,
-        harvestStartMonth: document.getElementById("harvestStartMonth").value,
-        harvestEndMonth: document.getElementById("harvestEndMonth").value,
-        waterRequirement: document.getElementById("waterRequirement").value,
-        soilType: document.getElementById("soilType").value,
-        description: document.getElementById("description").value
-    };
+function isMonthInRange(month, startMonth, endMonth) {
 
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(crop)
-        });
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
 
-        if (response.ok) {
-            alert("Crop added successfully!");
-            cropForm.reset();
-            loadCrops();
-        } else {
-            alert("Failed to add crop.");
-        }
+    const current = months.indexOf(month);
+    const start = months.indexOf(startMonth);
+    const end = months.indexOf(endMonth);
 
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Server error.");
+    if (current === -1 || start === -1 || end === -1) {
+        return false;
     }
-});
+
+    // Normal range
+    if (start <= end) {
+        return current >= start && current <= end;
+    }
+
+    // Range crossing December
+    return current >= start || current <= end;
+}
 
 
-// Delete crop
-async function deleteCrop(id) {
+// ===============================
+// DISPLAY CROPS
+// ===============================
 
-    if (!confirm("Are you sure you want to delete this crop?")) {
+function displayCrops() {
+
+    const container = document.getElementById("cropContainer");
+
+    container.innerHTML = "";
+
+    const month = monthMap[selectedMonth];
+
+    const filteredCrops = crops.filter(crop => {
+
+        const monthMatch =
+            isMonthInRange(
+                month,
+                crop.sowingStartMonth,
+                crop.sowingEndMonth
+            ) ||
+            isMonthInRange(
+                month,
+                crop.harvestStartMonth,
+                crop.harvestEndMonth
+            );
+
+        const weatherMatch =
+            selectedWeather === "All" ||
+            crop.waterRequirement === selectedWeather;
+
+        return monthMatch && weatherMatch;
+    });
+
+
+    document.getElementById("selectedMonth").textContent =
+        selectedMonth;
+
+
+    if (filteredCrops.length === 0) {
+
+        container.innerHTML =
+            `<p>No crops available for ${month}.</p>`;
+
         return;
     }
 
-    try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
-        });
 
-        if (response.ok || response.status === 204) {
-            alert("Crop deleted successfully!");
-            loadCrops();
-        } else {
-            alert("Failed to delete crop.");
-        }
+    filteredCrops.forEach(crop => {
 
-    } catch (error) {
-        console.error("Error:", error);
-    }
+        const card = document.createElement("div");
+
+        card.className = "crop-card";
+
+        card.innerHTML = `
+
+            <h2>🌱 ${crop.cropName}</h2>
+
+            <p>
+                <strong>Season:</strong>
+                ${crop.season}
+            </p>
+
+            <p>
+                <strong>Sowing:</strong>
+                ${crop.sowingStartMonth}
+                -
+                ${crop.sowingEndMonth}
+            </p>
+
+            <div class="timeline">
+
+                <div class="sowing-bar">
+                    🟢 Sowing
+                </div>
+
+            </div>
+
+            <p>
+                <strong>Harvest:</strong>
+                ${crop.harvestStartMonth}
+                -
+                ${crop.harvestEndMonth}
+            </p>
+
+            <div class="timeline">
+
+                <div class="harvest-bar">
+                    🟠 Harvest
+                </div>
+
+            </div>
+
+            <p>
+                <strong>Water:</strong>
+                ${crop.waterRequirement}
+            </p>
+
+            <p>
+                <strong>Soil:</strong>
+                ${crop.soilType}
+            </p>
+
+            <p class="description">
+                ${crop.description}
+            </p>
+        `;
+
+        container.appendChild(card);
+    });
 }
 
 
-// Load crops when page opens
+// ===============================
+// MONTH BUTTONS
+// ===============================
+
+document.querySelectorAll("#monthButtons button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll("#monthButtons button")
+                .forEach(btn =>
+                    btn.classList.remove("selected")
+                );
+
+            button.classList.add("selected");
+
+            selectedMonth = button.dataset.month;
+
+            displayCrops();
+        });
+    });
+
+
+// ===============================
+// WEATHER BUTTONS
+// ===============================
+
+document.querySelectorAll("#weatherButtons button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll("#weatherButtons button")
+                .forEach(btn =>
+                    btn.classList.remove("selected")
+                );
+
+            button.classList.add("selected");
+
+            selectedWeather = button.dataset.weather;
+
+            displayCrops();
+        });
+    });
+
+
+// ===============================
+// LOAD DATA
+// ===============================
+
 loadCrops();
