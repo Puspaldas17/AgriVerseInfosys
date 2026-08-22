@@ -1044,7 +1044,7 @@ applyLanguage(state.currentLanguage);
     if (navMarketplace) {
         navMarketplace.addEventListener('click', (e) => {
             e.preventDefault();
-            showComingSoon("Marketplace Coming Soon", "The AgriVerse seeds, fertilizers, and farming tools marketplace is currently under development.", "fa-store");
+            window.location.href = 'marketplace.html';
         });
     }
 
