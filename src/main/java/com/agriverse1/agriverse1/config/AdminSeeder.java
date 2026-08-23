@@ -15,7 +15,8 @@ public class AdminSeeder {
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             com.agriverse1.agriverse1.repository.MarketplaceListingRepository listingRepository,
-            com.agriverse1.agriverse1.repository.DisputeRepository disputeRepository) {
+            com.agriverse1.agriverse1.repository.DisputeRepository disputeRepository,
+            com.agriverse1.agriverse1.repository.CropCalendarRepository cropCalendarRepository) {
         return args -> {
             String adminEmail = "admin@agriverse.in";
             if (userRepository.findByEmail(adminEmail).isEmpty()) {
@@ -92,6 +93,59 @@ public class AdminSeeder {
                         .build());
 
                 System.out.println("[AgriVerse] Seeded mock disputes.");
+            }
+
+            // Seed Mock Crop Calendar if empty
+            if (cropCalendarRepository.count() == 0) {
+                cropCalendarRepository.save(com.agriverse1.agriverse1.entity.CropCalendar.builder()
+                        .cropName("Paddy (Rice)")
+                        .season("Kharif")
+                        .sowingStartMonth("June")
+                        .sowingEndMonth("July")
+                        .harvestStartMonth("November")
+                        .harvestEndMonth("December")
+                        .waterRequirement("High")
+                        .soilType("Clay / Loam")
+                        .description("Paddy requires standing water for most of its growing period.")
+                        .build());
+
+                cropCalendarRepository.save(com.agriverse1.agriverse1.entity.CropCalendar.builder()
+                        .cropName("Wheat")
+                        .season("Rabi")
+                        .sowingStartMonth("October")
+                        .sowingEndMonth("November")
+                        .harvestStartMonth("March")
+                        .harvestEndMonth("April")
+                        .waterRequirement("Medium")
+                        .soilType("Loam / Clay Loam")
+                        .description("Wheat is a staple winter crop needing cool weather during early growth.")
+                        .build());
+
+                cropCalendarRepository.save(com.agriverse1.agriverse1.entity.CropCalendar.builder()
+                        .cropName("Tomato")
+                        .season("Zaid / All-Season")
+                        .sowingStartMonth("January")
+                        .sowingEndMonth("February")
+                        .harvestStartMonth("April")
+                        .harvestEndMonth("June")
+                        .waterRequirement("Medium")
+                        .soilType("Sandy Loam")
+                        .description("Tomatoes need well-drained soil and regular irrigation without waterlogging.")
+                        .build());
+
+                cropCalendarRepository.save(com.agriverse1.agriverse1.entity.CropCalendar.builder()
+                        .cropName("Pearl Millet (Bajra)")
+                        .season("Kharif")
+                        .sowingStartMonth("June")
+                        .sowingEndMonth("July")
+                        .harvestStartMonth("September")
+                        .harvestEndMonth("October")
+                        .waterRequirement("Low")
+                        .soilType("Sandy")
+                        .description("Bajra is a hardy crop that tolerates drought and poor soil conditions well.")
+                        .build());
+
+                System.out.println("[AgriVerse] Seeded mock crop calendar.");
             }
         };
     }

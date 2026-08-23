@@ -100,6 +100,7 @@ function displayCrops() {
     const month = monthMap[selectedMonth];
 
     const filteredCrops = crops.filter(crop => {
+        const isApproved = !crop.status || crop.status === 'APPROVED';
 
         const monthMatch =
             isMonthInRange(
@@ -117,7 +118,7 @@ function displayCrops() {
             selectedWeather === "All" ||
             crop.waterRequirement === selectedWeather;
 
-        return monthMatch && weatherMatch;
+        return isApproved && monthMatch && weatherMatch;
     });
 
 
@@ -140,58 +141,57 @@ function displayCrops() {
 
         card.className = "crop-card";
 
+        // Helper for timeline styling
+        const allMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const getIdx = (m) => Math.max(0, allMonths.indexOf(m));
+        
+        function getStyle(start, end) {
+            const s = getIdx(start);
+            const e = getIdx(end);
+            let width = e >= s ? ((e - s + 1) / 12) * 100 : ((12 - s + e + 1) / 12) * 100;
+            return `left: ${(s / 12) * 100}%; width: ${Math.min(100, width)}%;`;
+        }
+
+        const sowingStyle = getStyle(crop.sowingStartMonth, crop.sowingEndMonth);
+        const harvestStyle = getStyle(crop.harvestStartMonth, crop.harvestEndMonth);
+
         card.innerHTML = `
+            <h2 class="card-title">${crop.cropName}</h2>
+            <div class="season-badge"><i class="fas fa-sun"></i> ${crop.season} Season</div>
 
-            <h2>🌱 ${crop.cropName}</h2>
-
-            <p>
-                <strong>Season:</strong>
-                ${crop.season}
-            </p>
-
-            <p>
-                <strong>Sowing:</strong>
-                ${crop.sowingStartMonth}
-                -
-                ${crop.sowingEndMonth}
-            </p>
-
-            <div class="timeline">
-
-                <div class="sowing-bar">
-                    🟢 Sowing
+            <div class="timeline-box">
+                <div class="timeline-row">
+                    <div class="timeline-label">SOW</div>
+                    <div class="timeline-bar-container">
+                        <div class="timeline-bar bar-sowing" style="${sowingStyle}"></div>
+                    </div>
+                    <div class="timeline-months">${crop.sowingStartMonth.substring(0,3)} - ${crop.sowingEndMonth.substring(0,3)}</div>
                 </div>
-
+                <div class="timeline-row">
+                    <div class="timeline-label">HRVST</div>
+                    <div class="timeline-bar-container">
+                        <div class="timeline-bar bar-harvest" style="${harvestStyle}"></div>
+                    </div>
+                    <div class="timeline-months">${crop.harvestStartMonth.substring(0,3)} - ${crop.harvestEndMonth.substring(0,3)}</div>
+                </div>
             </div>
 
-            <p>
-                <strong>Harvest:</strong>
-                ${crop.harvestStartMonth}
-                -
-                ${crop.harvestEndMonth}
-            </p>
-
-            <div class="timeline">
-
-                <div class="harvest-bar">
-                    🟠 Harvest
+            <div class="requirements-box">
+                <div class="req-badge water-${crop.waterRequirement.toLowerCase()}">
+                    <i class="fas fa-tint"></i>
+                    <div class="label">Water</div>
+                    <div class="value">${crop.waterRequirement}</div>
                 </div>
-
+                <div class="req-badge soil-icon">
+                    <i class="fas fa-layer-group"></i>
+                    <div class="label">Soil</div>
+                    <div class="value">${crop.soilType.split(' ')[0]}</div>
+                </div>
             </div>
 
-            <p>
-                <strong>Water:</strong>
-                ${crop.waterRequirement}
-            </p>
-
-            <p>
-                <strong>Soil:</strong>
-                ${crop.soilType}
-            </p>
-
-            <p class="description">
+            <div class="crop-description">
                 ${crop.description}
-            </p>
+            </div>
         `;
 
         container.appendChild(card);
@@ -252,3 +252,55 @@ document.querySelectorAll("#weatherButtons button")
 // ===============================
 
 loadCrops();
+
+// ===============================
+// SUGGEST CROP MODAL
+// ===============================
+
+function openSuggestModal() {
+    document.getElementById('suggestForm').reset();
+    document.getElementById('suggestModal').style.display = 'flex';
+}
+
+function closeSuggestModal() {
+    document.getElementById('suggestModal').style.display = 'none';
+}
+
+async function submitCropSuggestion() {
+    const payload = {
+        cropName: document.getElementById('suggCropName').value,
+        season: document.getElementById('suggCropSeason').value,
+        sowingStartMonth: document.getElementById('suggSowingStart').value,
+        sowingEndMonth: document.getElementById('suggSowingEnd').value,
+        harvestStartMonth: document.getElementById('suggHarvestStart').value,
+        harvestEndMonth: document.getElementById('suggHarvestEnd').value,
+        waterRequirement: document.getElementById('suggCropWater').value,
+        soilType: document.getElementById('suggCropSoil').value,
+        description: document.getElementById('suggCropDesc').value,
+        status: "PENDING"
+    };
+
+    // basic validation
+    if (!payload.cropName || !payload.season || !payload.sowingStartMonth || !payload.harvestStartMonth) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert("Your crop suggestion has been submitted successfully and is pending admin approval!");
+            closeSuggestModal();
+        } else {
+            alert("Failed to submit suggestion. Please try again.");
+        }
+    } catch (e) {
+        alert("Network error occurred.");
+        console.error(e);
+    }
+}

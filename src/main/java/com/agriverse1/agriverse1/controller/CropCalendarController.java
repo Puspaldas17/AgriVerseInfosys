@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/crop-calendar")
@@ -47,6 +48,19 @@ public class CropCalendarController {
             return ResponseEntity.notFound().build();
         }
 
+        return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<CropCalendar> updateStatus(
+            @PathVariable String id,
+            @RequestBody Map<String, String> body) {
+        String newStatus = body.get("status");
+        if (newStatus == null) return ResponseEntity.badRequest().build();
+        
+        CropCalendar updated = service.updateCropStatus(id, newStatus);
+        if (updated == null) return ResponseEntity.notFound().build();
+        
         return ResponseEntity.ok(updated);
     }
 

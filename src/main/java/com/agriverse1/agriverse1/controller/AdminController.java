@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 /**
  * Admin-only REST controller.
  * All endpoints are protected by hasRole("ADMIN") in SecurityConfig.
@@ -19,9 +21,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AdminController(UserRepository userRepository) {
+    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /** GET all users (passwords stripped) */
@@ -91,6 +95,57 @@ public class AdminController {
         userRepository.save(user);
 
         response.put("message", "Role updated to " + newRole);
+        return ResponseEntity.ok(response);
+    }
+
+    /** PATCH — toggle user suspension */
+    @PatchMapping("/users/{id}/suspend")
+    public ResponseEntity<Map<String, String>> toggleUserSuspend(@PathVariable String id) {
+        Map<String, String> response = new HashMap<>();
+        Optional<User> optUser = userRepository.findById(id);
+
+        if (optUser.isEmpty()) {
+            response.put("message", "User not found");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        User user = optUser.get();
+        if ("ADMIN".equals(user.getRole())) {
+            response.put("message", "Cannot suspend an admin account");
+            return ResponseEntity.status(403).body(response);
+        }
+
+        user.setSuspended(!user.isSuspended());
+        userRepository.save(user);
+
+        response.put("message", user.isSuspended() ? "User suspended" : "User unsuspended");
+        response.put("suspended", String.valueOf(user.isSuspended()));
+        return ResponseEntity.ok(response);
+    }
+
+    /** POST — reset user password to default */
+    @PostMapping("/users/{id}/reset-password")
+    public ResponseEntity<Map<String, String>> resetUserPassword(@PathVariable String id) {
+        Map<String, String> response = new HashMap<>();
+        Optional<User> optUser = userRepository.findById(id);
+
+        if (optUser.isEmpty()) {
+            response.put("message", "User not found");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        User user = optUser.get();
+        if ("ADMIN".equals(user.getRole())) {
+            response.put("message", "Cannot reset an admin account password here");
+            return ResponseEntity.status(403).body(response);
+        }
+
+        String tempPassword = "password123";
+        user.setPassword(passwordEncoder.encode(tempPassword));
+        userRepository.save(user);
+
+        response.put("message", "Password reset successful");
+        response.put("tempPassword", tempPassword);
         return ResponseEntity.ok(response);
     }
 }
