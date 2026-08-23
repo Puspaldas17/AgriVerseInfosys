@@ -43,6 +43,10 @@ public class User {
 
     private java.util.List<Boolean> missionsState;
 
+    // ── Admin Control ────────────────────────────
+    @Builder.Default
+    private boolean suspended = false;
+
     // ── Farmer Profile Details ────────────────────
     private String phone;
 

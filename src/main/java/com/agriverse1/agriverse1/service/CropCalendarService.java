@@ -39,6 +39,16 @@ public class CropCalendarService {
         return null;
     }
 
+    public CropCalendar updateCropStatus(String id, String status) {
+        Optional<CropCalendar> existingCrop = repository.findById(id);
+        if (existingCrop.isPresent()) {
+            CropCalendar crop = existingCrop.get();
+            crop.setStatus(status);
+            return repository.save(crop);
+        }
+        return null;
+    }
+
     public void deleteCrop(String id) {
         repository.deleteById(id);
     }

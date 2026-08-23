@@ -1,109 +1,306 @@
 const API_URL = "http://localhost:8082/api/crop-calendar";
 
-const cropForm = document.getElementById("cropForm");
-const cropList = document.getElementById("cropList");
+let crops = [];
+let selectedMonth = "Jan";
+let selectedWeather = "All";
+
+const monthMap = {
+    Jan: "January",
+    Feb: "February",
+    Mar: "March",
+    Apr: "April",
+    May: "May",
+    Jun: "June",
+    Jul: "July",
+    Aug: "August",
+    Sep: "September",
+    Oct: "October",
+    Nov: "November",
+    Dec: "December"
+};
 
 
-// Get all crops
+// ===============================
+// FETCH CROPS FROM BACKEND
+// ===============================
+
 async function loadCrops() {
+
     try {
+
         const response = await fetch(API_URL);
-        const crops = await response.json();
 
-        cropList.innerHTML = "";
+        if (!response.ok) {
+            throw new Error("Failed to fetch crop data");
+        }
 
-        crops.forEach(crop => {
-            const card = document.createElement("div");
-            card.className = "crop-card";
+        crops = await response.json();
 
-            card.innerHTML = `
-                <h3>${crop.cropName}</h3>
-                <p><strong>Season:</strong> ${crop.season}</p>
-                <p><strong>Sowing:</strong> ${crop.sowingStartMonth} - ${crop.sowingEndMonth}</p>
-                <p><strong>Harvest:</strong> ${crop.harvestStartMonth} - ${crop.harvestEndMonth}</p>
-                <p><strong>Water:</strong> ${crop.waterRequirement}</p>
-                <p><strong>Soil:</strong> ${crop.soilType}</p>
-                <p><strong>Description:</strong> ${crop.description}</p>
-
-                <button class="delete-btn"
-                    onclick="deleteCrop('${crop.id}')">
-                    Delete
-                </button>
-            `;
-
-            cropList.appendChild(card);
-        });
+        displayCrops();
 
     } catch (error) {
-        console.error("Error loading crops:", error);
+
+        console.error("Error:", error);
+
+        document.getElementById("cropContainer").innerHTML =
+            `<p>Unable to load crop data. Please start the backend.</p>`;
     }
 }
 
 
-// Add crop
-cropForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+// ===============================
+// CHECK MONTH
+// ===============================
 
-    const crop = {
-        cropName: document.getElementById("cropName").value,
-        season: document.getElementById("season").value,
-        sowingStartMonth: document.getElementById("sowingStartMonth").value,
-        sowingEndMonth: document.getElementById("sowingEndMonth").value,
-        harvestStartMonth: document.getElementById("harvestStartMonth").value,
-        harvestEndMonth: document.getElementById("harvestEndMonth").value,
-        waterRequirement: document.getElementById("waterRequirement").value,
-        soilType: document.getElementById("soilType").value,
-        description: document.getElementById("description").value
-    };
+function isMonthInRange(month, startMonth, endMonth) {
 
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(crop)
-        });
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
 
-        if (response.ok) {
-            alert("Crop added successfully!");
-            cropForm.reset();
-            loadCrops();
-        } else {
-            alert("Failed to add crop.");
+    const current = months.indexOf(month);
+    const start = months.indexOf(startMonth);
+    const end = months.indexOf(endMonth);
+
+    if (current === -1 || start === -1 || end === -1) {
+        return false;
+    }
+
+    // Normal range
+    if (start <= end) {
+        return current >= start && current <= end;
+    }
+
+    // Range crossing December
+    return current >= start || current <= end;
+}
+
+
+// ===============================
+// DISPLAY CROPS
+// ===============================
+
+function displayCrops() {
+
+    const container = document.getElementById("cropContainer");
+
+    container.innerHTML = "";
+
+    const month = monthMap[selectedMonth];
+
+    const filteredCrops = crops.filter(crop => {
+        const isApproved = !crop.status || crop.status === 'APPROVED';
+
+        const monthMatch =
+            isMonthInRange(
+                month,
+                crop.sowingStartMonth,
+                crop.sowingEndMonth
+            ) ||
+            isMonthInRange(
+                month,
+                crop.harvestStartMonth,
+                crop.harvestEndMonth
+            );
+
+        const weatherMatch =
+            selectedWeather === "All" ||
+            crop.waterRequirement === selectedWeather;
+
+        return isApproved && monthMatch && weatherMatch;
+    });
+
+
+    document.getElementById("selectedMonth").textContent =
+        selectedMonth;
+
+
+    if (filteredCrops.length === 0) {
+
+        container.innerHTML =
+            `<p>No crops available for ${month}.</p>`;
+
+        return;
+    }
+
+
+    filteredCrops.forEach(crop => {
+
+        const card = document.createElement("div");
+
+        card.className = "crop-card";
+
+        // Helper for timeline styling
+        const allMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const getIdx = (m) => Math.max(0, allMonths.indexOf(m));
+        
+        function getStyle(start, end) {
+            const s = getIdx(start);
+            const e = getIdx(end);
+            let width = e >= s ? ((e - s + 1) / 12) * 100 : ((12 - s + e + 1) / 12) * 100;
+            return `left: ${(s / 12) * 100}%; width: ${Math.min(100, width)}%;`;
         }
 
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Server error.");
-    }
-});
+        const sowingStyle = getStyle(crop.sowingStartMonth, crop.sowingEndMonth);
+        const harvestStyle = getStyle(crop.harvestStartMonth, crop.harvestEndMonth);
+
+        card.innerHTML = `
+            <h2 class="card-title">${crop.cropName}</h2>
+            <div class="season-badge"><i class="fas fa-sun"></i> ${crop.season} Season</div>
+
+            <div class="timeline-box">
+                <div class="timeline-row">
+                    <div class="timeline-label">SOW</div>
+                    <div class="timeline-bar-container">
+                        <div class="timeline-bar bar-sowing" style="${sowingStyle}"></div>
+                    </div>
+                    <div class="timeline-months">${crop.sowingStartMonth.substring(0,3)} - ${crop.sowingEndMonth.substring(0,3)}</div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-label">HRVST</div>
+                    <div class="timeline-bar-container">
+                        <div class="timeline-bar bar-harvest" style="${harvestStyle}"></div>
+                    </div>
+                    <div class="timeline-months">${crop.harvestStartMonth.substring(0,3)} - ${crop.harvestEndMonth.substring(0,3)}</div>
+                </div>
+            </div>
+
+            <div class="requirements-box">
+                <div class="req-badge water-${crop.waterRequirement.toLowerCase()}">
+                    <i class="fas fa-tint"></i>
+                    <div class="label">Water</div>
+                    <div class="value">${crop.waterRequirement}</div>
+                </div>
+                <div class="req-badge soil-icon">
+                    <i class="fas fa-layer-group"></i>
+                    <div class="label">Soil</div>
+                    <div class="value">${crop.soilType.split(' ')[0]}</div>
+                </div>
+            </div>
+
+            <div class="crop-description">
+                ${crop.description}
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
 
 
-// Delete crop
-async function deleteCrop(id) {
+// ===============================
+// MONTH BUTTONS
+// ===============================
 
-    if (!confirm("Are you sure you want to delete this crop?")) {
+document.querySelectorAll("#monthButtons button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll("#monthButtons button")
+                .forEach(btn =>
+                    btn.classList.remove("selected")
+                );
+
+            button.classList.add("selected");
+
+            selectedMonth = button.dataset.month;
+
+            displayCrops();
+        });
+    });
+
+
+// ===============================
+// WEATHER BUTTONS
+// ===============================
+
+document.querySelectorAll("#weatherButtons button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll("#weatherButtons button")
+                .forEach(btn =>
+                    btn.classList.remove("selected")
+                );
+
+            button.classList.add("selected");
+
+            selectedWeather = button.dataset.weather;
+
+            displayCrops();
+        });
+    });
+
+
+// ===============================
+// LOAD DATA
+// ===============================
+
+loadCrops();
+
+// ===============================
+// SUGGEST CROP MODAL
+// ===============================
+
+function openSuggestModal() {
+    document.getElementById('suggestForm').reset();
+    document.getElementById('suggestModal').style.display = 'flex';
+}
+
+function closeSuggestModal() {
+    document.getElementById('suggestModal').style.display = 'none';
+}
+
+async function submitCropSuggestion() {
+    const payload = {
+        cropName: document.getElementById('suggCropName').value,
+        season: document.getElementById('suggCropSeason').value,
+        sowingStartMonth: document.getElementById('suggSowingStart').value,
+        sowingEndMonth: document.getElementById('suggSowingEnd').value,
+        harvestStartMonth: document.getElementById('suggHarvestStart').value,
+        harvestEndMonth: document.getElementById('suggHarvestEnd').value,
+        waterRequirement: document.getElementById('suggCropWater').value,
+        soilType: document.getElementById('suggCropSoil').value,
+        description: document.getElementById('suggCropDesc').value,
+        status: "PENDING"
+    };
+
+    // basic validation
+    if (!payload.cropName || !payload.season || !payload.sowingStartMonth || !payload.harvestStartMonth) {
+        alert("Please fill in all required fields.");
         return;
     }
 
     try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        if (response.ok || response.status === 204) {
-            alert("Crop deleted successfully!");
-            loadCrops();
+        if (response.ok) {
+            alert("Your crop suggestion has been submitted successfully and is pending admin approval!");
+            closeSuggestModal();
         } else {
-            alert("Failed to delete crop.");
+            alert("Failed to submit suggestion. Please try again.");
         }
-
-    } catch (error) {
-        console.error("Error:", error);
+    } catch (e) {
+        alert("Network error occurred.");
+        console.error(e);
     }
 }
-
-
-// Load crops when page opens
-loadCrops();

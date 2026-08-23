@@ -524,6 +524,10 @@
       <div class="nav-icon"><i class="fas fa-balance-scale"></i></div>
       Disputes
     </button>
+    <button class="nav-item" id="nav-calendar" onclick="showSection('calendar', this)">
+      <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+      Crop Calendar
+    </button>
     <button class="nav-item" id="nav-activity" onclick="showSection('activity', this)">
       <div class="nav-icon"><i class="fas fa-bolt"></i></div>
       Live Activity Feed
@@ -806,6 +810,37 @@
       </section>
 
 
+      <!-- ═══════════ SECTION: CROP CALENDAR ═══════════ -->
+      <section class="section" id="section-calendar">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-calendar-alt"></i> Crop Sowing Calendar</div>
+            <button class="btn-action view" style="padding: 8px 16px;" onclick="openCropModal()">
+              <i class="fas fa-plus"></i> Add New Crop
+            </button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Crop Name</th>
+                  <th>Season</th>
+                  <th>Sowing Window</th>
+                  <th>Harvest Window</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminCropsTableBody">
+                <tr><td colspan="5" style="text-align:center; padding:40px; color:var(--muted);">
+                  <i class="fas fa-spinner fa-spin"></i> Fetching crops...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- ═══════════ SECTION: ACTIVITY FEED ═══════════ -->
       <section class="section" id="section-activity">
         <div class="panel">
@@ -879,6 +914,88 @@
         </div>
       </section>
 
+      <!-- Delete Modal -->
+      <div id="deleteModal" class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3><i class="fas fa-triangle-exclamation"></i> Confirm Delete</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to permanently delete this account?</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn-confirm" id="confirmDeleteBtn">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reset Password Modal -->
+      <div id="resetModal" class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3><i class="fas fa-key"></i> Confirm Reset Password</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to reset this user's password? A temporary password will be generated.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeResetModal()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmResetPassword()" style="background-color: var(--accent);">Reset Password</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crop Calendar Form Modal -->
+      <div id="cropModal" class="modal-overlay">
+        <div class="modal" style="max-width: 500px;">
+          <div class="modal-header">
+            <h3 id="cropModalTitle"><i class="fas fa-seedling"></i> Add New Crop</h3>
+          </div>
+          <div class="modal-body">
+            <form id="cropForm" style="display: flex; flex-direction: column; gap: 15px;">
+              <input type="hidden" id="cropId">
+              <div style="display: flex; gap: 10px;">
+                <input type="text" id="cropName" placeholder="Crop Name (e.g. Wheat)" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                <input type="text" id="cropSeason" placeholder="Season (e.g. Rabi)" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <select id="sowingStart" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                  <option value="" disabled selected>Sowing Start Month</option>
+                  <option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                </select>
+                <select id="sowingEnd" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                  <option value="" disabled selected>Sowing End Month</option>
+                  <option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                </select>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <select id="harvestStart" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                  <option value="" disabled selected>Harvest Start Month</option>
+                  <option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                </select>
+                <select id="harvestEnd" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                  <option value="" disabled selected>Harvest End Month</option>
+                  <option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                </select>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <select id="cropWater" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+                  <option value="" disabled selected>Water Need</option>
+                  <option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option>
+                </select>
+                <input type="text" id="cropSoil" placeholder="Soil Type (e.g. Loamy)" style="flex:1; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px;" required>
+              </div>
+              <textarea id="cropDesc" placeholder="Description & Tips..." style="width:100%; height:80px; padding:10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; font-family:inherit; resize:vertical;"></textarea>
+            </form>
+          </div>
+          <div class="modal-footer" style="margin-top:20px;">
+            <button class="btn-cancel" onclick="closeCropModal()" type="button">Cancel</button>
+            <button class="btn-confirm" onclick="saveCrop()" type="button" style="background-color: var(--primary);">Save Crop</button>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /content -->
   </main>
 </div><!-- /layout -->
@@ -915,12 +1032,14 @@ function showSection(name, btn) {
     dashboard: 'Overview Dashboard',
     users:     'User Management',
     activity:  'Activity Feed',
-    health:    'System Health'
+    health:    'System Health',
+    calendar:  'Crop Calendar Management'
   };
   document.getElementById('sectionTitle').textContent = titles[name] || name;
 
   if (name === 'users')    loadAllUsers();
   if (name === 'activity') loadActivity();
+  if (name === 'calendar') loadAdminCrops();
 }
 
 
@@ -1022,7 +1141,10 @@ function renderUsers(users) {
           <div class="user-cell">
             <div class="user-av ${col}">${initials}</div>
             <div class="user-info">
-              <div class="name">${u.name || 'No Name'}</div>
+              <div class="name">
+                ${u.name || 'No Name'} 
+                ${u.suspended ? '<span style="color:var(--danger); font-size:10px; margin-left:5px;"><i class="fas fa-ban"></i> Suspended</span>' : ''}
+              </div>
               <div class="email">${u.email}</div>
             </div>
           </div>
@@ -1043,15 +1165,69 @@ function renderUsers(users) {
         <td>
           <div class="actions">
             ${isAdmin
-              ? `<button class="btn-action delete" disabled title="Cannot delete admin">Protected</button>`
-              : `<button class="btn-action delete" onclick="confirmDelete('${u.id}', '${(u.name || u.email).replace(/'/g,"\\'")}')">
-                   <i class="fas fa-trash"></i> Delete
+              ? `<button class="btn-action delete" disabled title="Cannot modify admin">Protected</button>`
+              : `
+                 <button class="btn-action view" onclick="promptResetPassword('${u.id}')" title="Reset Password" style="padding:5px 8px;">
+                   <i class="fas fa-key"></i>
+                 </button>
+                 <button class="btn-action ${u.suspended ? 'promote' : 'delete'}" onclick="toggleSuspend('${u.id}')" title="${u.suspended ? 'Unsuspend' : 'Suspend'}" style="padding:5px 8px; margin-right:4px;">
+                   <i class="fas ${u.suspended ? 'fa-check' : 'fa-ban'}"></i>
+                 </button>
+                 <button class="btn-action delete" onclick="confirmDelete('${u.id}', '${(u.name || u.email).replace(/'/g,"\\'")}')" title="Delete" style="padding:5px 8px;">
+                   <i class="fas fa-trash"></i>
                  </button>`
             }
           </div>
         </td>
       </tr>`;
   }).join('');
+}
+
+async function toggleSuspend(userId) {
+  try {
+    const res = await apiFetch(`/api/admin/users/${userId}/suspend`, { method: 'PATCH' });
+    if (res && res.ok) {
+      const data = await res.json();
+      showToast('success', `<i class="fas fa-check-circle"></i> ${data.message}`);
+      loadAllUsers();
+    } else {
+      const data = await res.json();
+      showToast('error', `<i class="fas fa-circle-exclamation"></i> ${data.message || 'Suspend failed.'}`);
+    }
+  } catch(e) {
+    showToast('error', `<i class="fas fa-circle-exclamation"></i> Network error.`);
+  }
+}
+
+let pendingResetId = null;
+
+function promptResetPassword(userId) {
+  pendingResetId = userId;
+  document.getElementById('resetModal').classList.add('show');
+}
+
+function closeResetModal() {
+  document.getElementById('resetModal').classList.remove('show');
+  pendingResetId = null;
+}
+
+async function confirmResetPassword() {
+  const userId = pendingResetId;
+  closeResetModal();
+  if (!userId) return;
+
+  try {
+    const res = await apiFetch(`/api/admin/users/${userId}/reset-password`, { method: 'POST' });
+    if (res && res.ok) {
+      const data = await res.json();
+      showToast('success', `<i class="fas fa-key"></i> Password reset to: <strong>${data.tempPassword}</strong>`);
+    } else {
+      const data = await res.json();
+      showToast('error', `<i class="fas fa-circle-exclamation"></i> ${data.message || 'Reset failed.'}`);
+    }
+  } catch(e) {
+    showToast('error', `<i class="fas fa-circle-exclamation"></i> Network error.`);
+  }
 }
 
 function filterUsers() { renderUsers(allUsers); }
@@ -1383,6 +1559,151 @@ async function updateDisputeStatus(id, newStatus) {
 
 
 // ══════════════════════════════════════════════
+//   CROP CALENDAR MANAGEMENT
+// ══════════════════════════════════════════════
+let adminCrops = [];
+
+async function loadAdminCrops() {
+  const tbody = document.getElementById('adminCropsTableBody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+  try {
+    const res = await apiFetch('/api/crop-calendar');
+    if (!res) throw new Error('No response');
+    adminCrops = await res.json();
+    renderAdminCrops();
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:#ef4444;">Failed to load crops.</td></tr>';
+  }
+}
+
+function renderAdminCrops() {
+  const tbody = document.getElementById('adminCropsTableBody');
+  if (adminCrops.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">No crops found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = adminCrops.map(c => {
+    let statusClass = 'role-user';
+    if(c.status === 'APPROVED' || !c.status) statusClass = 'role-vet';
+    if(c.status === 'REJECTED') statusClass = 'role-admin';
+    if(c.status === 'PENDING') statusClass = 'role-user';
+
+    return `
+      <tr>
+        <td><strong>${c.cropName}</strong></td>
+        <td><span class="badge-pill active">${c.season}</span></td>
+        <td>${c.sowingStartMonth.substring(0,3)} - ${c.sowingEndMonth.substring(0,3)}</td>
+        <td>${c.harvestStartMonth.substring(0,3)} - ${c.harvestEndMonth.substring(0,3)}</td>
+        <td><span class="role-badge ${statusClass}">${c.status || 'APPROVED'}</span></td>
+        <td>
+          <div class="actions">
+            ${c.status === 'PENDING' ? `
+              <button class="action-btn" style="color:var(--accent)" title="Approve" onclick="updateCropStatus('${c.id}', 'APPROVED')">
+                <i class="fas fa-check-circle"></i>
+              </button>
+              <button class="action-btn" style="color:var(--error)" title="Reject" onclick="updateCropStatus('${c.id}', 'REJECTED')">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            ` : ''}
+            <button class="btn-action view" onclick='openCropModal(${JSON.stringify(c).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+            <button class="btn-action delete" onclick="confirmDeleteCrop('${c.id}', '${c.cropName.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openCropModal(crop = null) {
+  document.getElementById('cropModalTitle').innerHTML = crop ? '<i class="fas fa-edit"></i> Edit Crop' : '<i class="fas fa-seedling"></i> Add New Crop';
+  document.getElementById('cropId').value = crop ? crop.id : '';
+  document.getElementById('cropName').value = crop ? crop.cropName : '';
+  document.getElementById('cropSeason').value = crop ? crop.season : '';
+  document.getElementById('sowingStart').value = crop ? crop.sowingStartMonth : '';
+  document.getElementById('sowingEnd').value = crop ? crop.sowingEndMonth : '';
+  document.getElementById('harvestStart').value = crop ? crop.harvestStartMonth : '';
+  document.getElementById('harvestEnd').value = crop ? crop.harvestEndMonth : '';
+  document.getElementById('cropWater').value = crop ? crop.waterRequirement : '';
+  document.getElementById('cropSoil').value = crop ? crop.soilType : '';
+  document.getElementById('cropDesc').value = crop ? crop.description : '';
+  document.getElementById('cropModal').classList.add('show');
+}
+
+function closeCropModal() {
+  document.getElementById('cropModal').classList.remove('show');
+}
+
+async function saveCrop() {
+  const id = document.getElementById('cropId').value;
+  const payload = {
+    cropName: document.getElementById('cropName').value,
+    season: document.getElementById('cropSeason').value,
+    sowingStartMonth: document.getElementById('sowingStart').value,
+    sowingEndMonth: document.getElementById('sowingEnd').value,
+    harvestStartMonth: document.getElementById('harvestStart').value,
+    harvestEndMonth: document.getElementById('harvestEnd').value,
+    waterRequirement: document.getElementById('cropWater').value,
+    soilType: document.getElementById('cropSoil').value,
+    description: document.getElementById('cropDesc').value,
+    status: 'APPROVED'
+  };
+
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `/api/crop-calendar/${id}` : '/api/crop-calendar';
+
+  try {
+    const res = await apiFetch(url, { method, body: JSON.stringify(payload) });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check"></i> Crop ${id ? 'updated' : 'added'} successfully.`);
+      closeCropModal();
+      loadAdminCrops();
+    } else {
+      showToast('error', '<i class="fas fa-times"></i> Failed to save crop.');
+    }
+  } catch (e) {
+    showToast('error', '<i class="fas fa-times"></i> Network error.');
+  }
+}
+
+function confirmDeleteCrop(id, name) {
+  if(confirm(`Are you sure you want to delete ${name}?`)) {
+    deleteCropItem(id);
+  }
+}
+
+async function updateCropStatus(id, newStatus) {
+  try {
+    const res = await apiFetch(`/api/crop-calendar/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res && res.ok) {
+      showToast('success', `<i class="fas fa-check"></i> Crop ${newStatus}`);
+      loadAdminCrops();
+    } else {
+      showToast('error', `<i class="fas fa-times"></i> Failed to update status.`);
+    }
+  } catch (e) {
+    showToast('error', `<i class="fas fa-times"></i> Network error.`);
+  }
+}
+
+async function deleteCropItem(id) {
+  try {
+    const res = await apiFetch(`/api/crop-calendar/${id}`, { method: 'DELETE' });
+    if (res && res.ok) {
+      showToast('success', '<i class="fas fa-check"></i> Crop deleted.');
+      loadAdminCrops();
+    } else {
+      showToast('error', '<i class="fas fa-times"></i> Failed to delete.');
+    }
+  } catch (e) {
+    showToast('error', '<i class="fas fa-times"></i> Network error.');
+  }
+}
+
+
+// ══════════════════════════════════════════════
 //   GLOBAL SEARCH
 // ══════════════════════════════════════════════
 document.getElementById('globalSearch').addEventListener('input', function() {
@@ -1403,6 +1724,7 @@ document.getElementById('globalSearch').addEventListener('input', function() {
   await loadAllUsers();
   await loadListings();
   await loadDisputes();
+  await loadAdminCrops();
   loadActivity();
 })();
 </script>

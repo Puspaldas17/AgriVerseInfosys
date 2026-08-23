@@ -1045,7 +1045,7 @@ applyLanguage(state.currentLanguage);
     if (navCalendar) {
         navCalendar.addEventListener('click', (e) => {
             e.preventDefault();
-            showComingSoon("Farming Calendar Coming Soon", "Crop sowing, irrigation, and harvest calendar scheduling will be available in the next release.", "fa-calendar-alt");
+            window.location.href = 'calendar.html';
         });
     }
 

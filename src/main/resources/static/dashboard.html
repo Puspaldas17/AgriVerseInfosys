@@ -16,6 +16,7 @@
 
     <!-- Dashboard Stylesheet -->
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/calendar.css">
 </head>
 
 <body>
@@ -39,7 +40,7 @@
                 <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-chart-line"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
                 <li><a href="#leaderboard-section" class="nav-link" id="nav-leaderboard"><i class="fas fa-trophy"></i> <span data-i18n="nav_leaderboard">Leaderboard</span></a></li>
                 <li><a href="#marketplace" class="nav-link" id="nav-marketplace"><i class="fas fa-store"></i> <span data-i18n="nav_marketplace">Marketplace</span></a></li>
-                <li><a href="calender.html" class="nav-link" id="nav-calendar"><i class="fas fa-calendar-alt"></i> <span data-i18n="nav_calendar">Calendar</span></a></li>
+                <li><a href="calendar.html" class="nav-link" id="nav-calendar"><i class="fas fa-calendar-alt"></i> <span data-i18n="nav_calendar">Calendar</span></a></li>
             </ul>
 
 
@@ -686,6 +687,71 @@
 
 
         </div>
+
+
+
+            
+            
+                    <!-- WEATHER FILTER -->
+                    <section class="filter-section">
+            
+                        <h3>Weather need</h3>
+            
+                        <div class="weather-buttons" id="weatherButtons">
+            
+                            <button data-weather="All" class="selected">
+                                All
+                            </button>
+            
+                            <button data-weather="Low">
+                                Low
+                            </button>
+            
+                            <button data-weather="Medium">
+                                Medium
+                            </button>
+            
+                            <button data-weather="High">
+                                High
+                            </button>
+            
+                        </div>
+            
+                    </section>
+            
+            
+                    <!-- RESULT MESSAGE -->
+                    <div class="result-message">
+            
+                        Showing crops for
+                        <strong id="selectedMonth">Jan</strong>
+            
+                    </div>
+            
+            
+                    <!-- CROP CARDS -->
+                    <section>
+            
+                        <div class="crop-grid" id="cropContainer">
+            
+                        </div>
+            
+                    </section>
+            
+            
+                    <!-- LEGEND -->
+                    <div class="legend">
+            
+                        <span>
+                            🟢 Green bar = sowing window
+                        </span>
+            
+                        <span>
+                            🟠 Orange bar = harvest window
+                        </span>
+            
+                    </div>
+        </section>
 
     </main>
 

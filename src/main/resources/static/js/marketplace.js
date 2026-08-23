@@ -70,26 +70,42 @@ function renderListings() {
         if (item.isOrganic) organicTotal++;
 
         const organicBadge = item.isOrganic
-            ? '<div class="organic-tag"><i class="fas fa-check-circle"></i> Organic</div>'
+            ? '<div class="organic-badge"><i class="fas fa-check-circle"></i> Organic</div>'
             : '';
 
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = [
-            '<div class="card-header">',
-            '  <div class="crop-icon"><i class="fas ' + getIcon(item.category) + '" style="color:var(--primary-green)"></i></div>',
-            organicBadge,
-            '</div>',
-            '<h3 class="card-title">' + item.title + '</h3>',
-            '<div class="card-price">' + item.price + '</div>',
-            '<div class="card-details">',
-            '  <div class="detail-item"><i class="fas fa-map-marker-alt"></i><span>' + item.location + '</span></div>',
-            '  <div class="detail-item"><i class="fas fa-user"></i><span>' + item.seller + '</span></div>',
-            '  <div class="detail-item"><i class="fas fa-weight-hanging"></i><span>' + item.quantity + '</span></div>',
-            '  <div class="detail-item"><i class="fas fa-clock"></i><span>' + item.timePosted + '</span></div>',
-            '</div>',
-            '<button class="btn btn-outline btn-block" onclick="openContactModal(\'' + item.seller.replace(/'/g,"&#39;") + '\',\'' + item.title.replace(/'/g,"&#39;") + '\')">Contact Seller</button>'
-        ].join('');
+        card.innerHTML = `
+            <div class="card-top">
+              <div class="crop-icon-wrapper" style="background: linear-gradient(135deg, var(--primary), #34d399);">
+                <i class="fas ${getIcon(item.category)}"></i>
+              </div>
+              ${organicBadge}
+            </div>
+            
+            <h3 class="card-title">${item.title}</h3>
+            <div class="card-seller"><i class="fas fa-user-circle"></i> ${item.seller}</div>
+            
+            <div class="card-price-box">
+              <div>
+                <div class="price-label">Price</div>
+                <div class="card-price">${item.price.split(' ')[0]} <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted)">${item.price.split(' ').slice(1).join(' ')}</span></div>
+              </div>
+              <div class="card-quantity" style="text-align: right;">
+                <div class="price-label">Available</div>
+                <div>${item.quantity}</div>
+              </div>
+            </div>
+            
+            <div class="card-details">
+              <div class="detail"><i class="fas fa-map-marker-alt"></i> <span>${item.location}</span></div>
+              <div class="detail"><i class="fas fa-clock"></i> <span>${item.timePosted}</span></div>
+            </div>
+            
+            <button class="btn-primary btn-full" onclick="openContactModal('${item.seller.replace(/'/g,"&#39;")}', '${item.title.replace(/'/g,"&#39;")}')">
+              Contact Seller <i class="fas fa-arrow-right" style="margin-left: 5px; font-size: 0.85rem;"></i>
+            </button>
+        `;
         grid.appendChild(card);
     });
 

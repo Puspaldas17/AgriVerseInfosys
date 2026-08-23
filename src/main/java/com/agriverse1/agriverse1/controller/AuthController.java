@@ -69,6 +69,10 @@ public class AuthController {
         // Look up user through the service layer only
         User user = userService.findByEmail(request.getEmail());
 
+        if (user.isSuspended()) {
+            return ResponseEntity.status(403).body(new AuthResponse("Account Suspended", "NONE"));
+        }
+
         String token = jwtService.generateToken(user.getEmail());
 
         return ResponseEntity.ok(new AuthResponse(token, user.getRole()));
