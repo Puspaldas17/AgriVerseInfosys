@@ -30,44 +30,42 @@ public class AdminSeeder {
                 System.out.println("[AgriVerse] Default admin created: " + adminEmail);
             }
 
-            // Seed Mock Listings if empty
-            if (listingRepository.count() == 0) {
-                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
-                        .farmerId("f1")
-                        .farmerName("Ravi Kumar")
-                        .title("Organic Tomatoes (100kg)")
-                        .description("Freshly harvested organic tomatoes from North Plot.")
-                        .price(2500.0)
-                        .quantity(100.0)
-                        .unit("kg")
-                        .category("Crop")
-                        .status("PENDING")
-                        .build());
-                
-                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
-                        .farmerId("f2")
-                        .farmerName("Sneha Rao")
-                        .title("Used Tractor - Massey Ferguson")
-                        .description("2018 model, good condition.")
-                        .price(350000.0)
-                        .quantity(1.0)
-                        .unit("piece")
-                        .category("Equipment")
-                        .status("APPROVED")
-                        .build());
+            // Seed Marketplace Listings — re-seed if no APPROVED listings exist
+            boolean hasApproved = !listingRepository.findByStatus("APPROVED").isEmpty();
+            if (!hasApproved) {
+                listingRepository.deleteAll();  // clear stale/wrong data
 
                 listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
-                        .farmerId("f3")
-                        .farmerName("Lakshmi Narayana")
-                        .title("Premium Urea Fertilizer")
-                        .description("Surplus from last season. Sealed bags.")
-                        .price(800.0)
-                        .quantity(5.0)
-                        .unit("bags")
-                        .category("Fertilizer")
-                        .status("REJECTED")
-                        .build());
-                System.out.println("[AgriVerse] Seeded mock marketplace listings.");
+                        .farmerId("f1").farmerName("Ravi Kumar")
+                        .title("Organic Tomatoes").description("[Organic] Freshly harvested organic tomatoes from North Plot.")
+                        .price(30.0).quantity(500.0).unit("kg").category("Vegetable").status("APPROVED").build());
+
+                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
+                        .farmerId("f2").farmerName("Sneha Rao")
+                        .title("Wheat (Lokwan)").description("[Organic] Premium quality Lokwan wheat, 2025 harvest batch.")
+                        .price(2800.0).quantity(100.0).unit("quintal").category("Grain").status("APPROVED").build());
+
+                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
+                        .farmerId("f3").farmerName("Lakshmi Narayana")
+                        .title("Alphonso Mangoes").description("[Organic] Sweet GI-tagged Alphonso mangoes from Ratnagiri.")
+                        .price(800.0).quantity(50.0).unit("dozen").category("Fruit").status("APPROVED").build());
+
+                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
+                        .farmerId("f4").farmerName("Murugan Traders")
+                        .title("Turmeric (Raw)").description("High curcumin raw turmeric rhizomes from Erode, Tamil Nadu.")
+                        .price(7500.0).quantity(15.0).unit("quintal").category("Spice").status("APPROVED").build());
+
+                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
+                        .farmerId("f5").farmerName("Gurpreet Farms")
+                        .title("Basmati Rice").description("[Organic] Long-grain aromatic Basmati from Amritsar region.")
+                        .price(6000.0).quantity(50.0).unit("quintal").category("Grain").status("APPROVED").build());
+
+                listingRepository.save(com.agriverse1.agriverse1.entity.MarketplaceListing.builder()
+                        .farmerId("f6").farmerName("K Traders")
+                        .title("Toor Dal").description("Premium quality Toor Dal directly from Gulbarga farms.")
+                        .price(9500.0).quantity(40.0).unit("quintal").category("Pulse").status("APPROVED").build());
+
+                System.out.println("[AgriVerse] Seeded 6 approved marketplace listings.");
             }
 
             // Seed Mock Disputes if empty
