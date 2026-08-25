@@ -265,21 +265,27 @@
 <!-- ═══════════════ LISTINGS GRID ═══════════════ -->
 <div class="grid" id="listingsGrid"></div>
 
-<!-- ═══════════════ CONTACT SELLER MODAL ═══════════════ -->
+<!-- CONTACT SELLER MODAL -->
 <div class="modal-overlay" id="contactModal">
-    <div class="modal-box">
-        <button class="modal-close" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
-        <h2 class="modal-title">Contact Seller</h2>
-        <div class="seller-info">
-            <h3 id="modalSeller">Seller Name</h3>
-            <p id="modalCrop">Crop info</p>
-        </div>
-        <div class="form-group">
-            <label>Your Message</label>
-            <textarea rows="4" placeholder="Hi, I am interested in buying your product..."></textarea>
-        </div>
-        <button class="btn-primary btn-full" onclick="sendContactMessage()"><i class="fas fa-paper-plane"></i> Send Message</button>
-    </div>
+<div class="modal-box">
+<button class="modal-close" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
+<h2 class="modal-title">Contact Seller</h2>
+<div class="seller-info">
+<h3 id="modalSeller">Seller Name</h3>
+<p id="modalCrop">Crop Name - Location</p>
+</div>
+<div style="background:#ecfdf5;padding:20px;border-radius:16px;text-align:center;margin-bottom:15px">
+<i class="fas fa-phone" style="font-size:30px;color:#10b981"></i>
+<h2 id="modalPhone" style="color:#059669;margin:8px 0">Phone Number</h2>
+<p style="color:#64748b">Call or WhatsApp to contact seller directly</p>
+</div>
+<a id="whatsappBtn" class="btn-primary btn-full" href="#" target="_blank" style="background:#25D366;margin-bottom:10px">
+<i class="fab fa-whatsapp"></i> Open in WhatsApp
+</a>
+<a id="upiBtn" class="btn-primary btn-full" href="#" style="background:#7424d6">
+<i class="fas fa-indian-rupee-sign"></i> Pay via UPI
+</a>
+</div>
 </div>
 
 <!-- ═══════════════ POST LISTING MODAL ═══════════════ -->
@@ -304,6 +310,6 @@
     </div>
 </div>
 
-<script src="js/marketplace.js?v=5"></script>
+<script src="js/marketplace.js?v=6"></script>
 </body>
 </html>
