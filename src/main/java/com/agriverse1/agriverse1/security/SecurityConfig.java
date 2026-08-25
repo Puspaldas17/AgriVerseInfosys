@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
+                         .requestMatchers(
                                 "/",
                                 "/*.html",
                                 "/*.css",
@@ -49,7 +49,8 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/api/auth/**",
                                 "/api/crop-calendar/**",
-                                "/api/contact/**"
+                                "/api/contact/**",
+                                "/api/marketplace/**"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
