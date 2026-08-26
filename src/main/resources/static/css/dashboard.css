@@ -2239,3 +2239,113 @@ body.dark-mode .btn-link:hover {
         right: -30px;
     }
 }
+/* =========================================================
+   ADVISORY HISTORY TABLE
+   ========================================================= */
+
+#advisory-history-table-container {
+    width: 100%;
+    margin-top: 28px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+.advisory-history-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.advisory-history-table thead th {
+    background: #ffffff;
+    color: #111827;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.advisory-history-table tbody td {
+    padding: 16px;
+    vertical-align: top;
+    color: #1f2937;
+    font-size: 15px;
+    line-height: 1.5;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-wrap: anywhere;
+}
+
+.advisory-history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.advisory-history-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Column widths */
+
+.advisory-history-table th:nth-child(1),
+.advisory-history-table td:nth-child(1) {
+    width: 13%;
+}
+
+.advisory-history-table th:nth-child(2),
+.advisory-history-table td:nth-child(2) {
+    width: 12%;
+}
+
+.advisory-history-table th:nth-child(3),
+.advisory-history-table td:nth-child(3) {
+    width: 10%;
+}
+
+.advisory-history-table th:nth-child(4),
+.advisory-history-table td:nth-child(4) {
+    width: 22%;
+}
+
+.advisory-history-table th:nth-child(5),
+.advisory-history-table td:nth-child(5) {
+    width: 43%;
+}
+
+.advisory-history-table td small {
+    display: inline-block;
+    margin-top: 4px;
+    color: #777;
+    font-size: 13px;
+}
+
+.history-type {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+
+    #advisory-history-table-container {
+        overflow-x: auto;
+    }
+
+    .advisory-history-table {
+        min-width: 850px;
+    }
+
+    .advisory-history-table thead th,
+    .advisory-history-table tbody td {
+        padding: 12px;
+        font-size: 14px;
+    }
+}

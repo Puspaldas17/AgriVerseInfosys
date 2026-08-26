@@ -1736,4 +1736,242 @@ if (dropdownSettingsBtn) {
         }
     })
     .catch(err => console.log('Using local state, backend fetch failed:', err));
+    /* ==========================================================================
+   ADVISORY HISTORY
+   Loads complete history from MongoDB through the backend.
+   ========================================================================== */
+
+async function loadAdvisoryHistory() {
+
+    const historyBody =
+        document.getElementById('advisory-history-body');
+
+    if (!historyBody) {
+        return;
+    }
+
+    const jwtToken =
+        localStorage.getItem('jwt_token');
+
+    if (!jwtToken) {
+        historyBody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Please log in to view advisory history.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    try {
+
+        const response = await fetch('/api/advisory-history', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jwtToken}`
+            }
+        });
+
+        if (!response.ok) {
+
+            if (response.status === 401 ||
+                response.status === 403) {
+
+                historyBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            Session expired. Please log in again.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+            throw new Error(
+                `History request failed: ${response.status}`
+            );
+        }
+
+        const history = await response.json();
+
+        if (!Array.isArray(history) || history.length === 0) {
+
+            historyBody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        No advisory history available yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        historyBody.innerHTML = history
+            .map(record => createAdvisoryHistoryRow(record))
+            .join('');
+
+    } catch (error) {
+
+        console.error(
+            'Advisory History Error:',
+            error
+        );
+
+        historyBody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Unable to load advisory history.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+function createAdvisoryHistoryRow(record) {
+
+    const date = formatAdvisoryDate(
+        record.date,
+        record.createdAt
+    );
+
+    const crop =
+        record.crop || 'Unknown';
+
+    let issue = '';
+    let recommendation = '';
+
+    if (record.source === 'AI_ASSISTANT') {
+
+        issue =
+            record.question ||
+            'AI Assistant Advisory';
+
+        recommendation =
+            record.recommendation ||
+            'No recommendation available.';
+
+    } else if (record.source === 'PEST_DETECTOR') {
+
+        issue =
+            record.diagnosis ||
+            'Pest/Disease Detection';
+
+        recommendation =
+            record.recommendation ||
+            record.description ||
+            'No recommendation available.';
+
+    } else {
+
+        issue =
+            record.diagnosis ||
+            record.question ||
+            'Advisory';
+
+        recommendation =
+            record.recommendation ||
+            'No recommendation available.';
+    }
+
+    let statusClass = 'status-completed';
+    let statusText = 'Completed';
+
+    if (record.source === 'PEST_DETECTOR') {
+
+        if (record.healthy === true) {
+            statusClass = 'status-completed';
+            statusText = 'Healthy';
+        } else {
+            statusClass = 'status-active';
+            statusText = 'Issue Detected';
+        }
+    }
+
+    return `
+        <tr>
+            <td>${escapeHistoryHtml(date)}</td>
+
+            <td>${escapeHistoryHtml(crop)}</td>
+
+            <td>
+                ${escapeHistoryHtml(issue)}
+                ${
+                    record.source === 'PEST_DETECTOR'
+                        ? `<br>
+                           <small style="color:var(--text-muted);">
+                               Pest Detector
+                               ${
+                                   record.confidence
+                                       ? `• Confidence: ${escapeHistoryHtml(record.confidence)}`
+                                       : ''
+                               }
+                           </small>`
+                        : `<br>
+                           <small style="color:var(--text-muted);">
+                               AI Assistant
+                           </small>`
+                }
+            </td>
+
+            <td>
+                ${escapeHistoryHtml(recommendation)}
+            </td>
+
+            <td>
+                <span class="status-pill ${statusClass}">
+                    ${escapeHistoryHtml(statusText)}
+                </span>
+            </td>
+        </tr>
+    `;
+}
+
+
+function formatAdvisoryDate(dateValue, createdAtValue) {
+
+    const value =
+        dateValue || createdAtValue;
+
+    if (!value) {
+        return 'Date unavailable';
+    }
+
+    const date =
+        new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString(
+        'en-GB',
+        {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }
+    );
+}
+
+
+function escapeHistoryHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+        return '';
+    }
+
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+/* LOAD ADVISORY HISTORY */
+loadAdvisoryHistory();
 });
