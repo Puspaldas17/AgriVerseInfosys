@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 "/api/marketplace/**"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/advisory-history/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
