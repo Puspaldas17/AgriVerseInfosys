@@ -203,6 +203,67 @@ window.closeContactModal = function () {
 };
 
 // ─────────────────────────────────────────────
+//  DISPUTE MODAL
+// ─────────────────────────────────────────────
+window.openDisputeModal = function () {
+    if (!selectedListing) return;
+    
+    // Close contact modal and open dispute modal
+    document.getElementById('contactModal')?.classList.remove('active');
+    
+    document.getElementById('disputeListingTitle').textContent = selectedListing.title || 'Unknown Crop';
+    document.getElementById('disputeSellerName').textContent = selectedListing.farmerName || 'Unknown Seller';
+    document.getElementById('disputeBuyerName').value = localStorage.getItem('userName') || '';
+    document.getElementById('disputeReason').value = '';
+    
+    document.getElementById('disputeModal')?.classList.add('active');
+};
+
+window.closeDisputeModal = function () {
+    document.getElementById('disputeModal')?.classList.remove('active');
+    selectedListing = null;
+};
+
+window.submitDispute = async function () {
+    if (!selectedListing) return;
+    
+    const buyerName = document.getElementById('disputeBuyerName').value.trim() || 'Anonymous Buyer';
+    const reason = document.getElementById('disputeReason').value.trim();
+    
+    if (!reason) {
+        alert('Please enter a reason for the dispute.');
+        return;
+    }
+    
+    const payload = {
+        listingId: selectedListing.id,
+        sellerId: selectedListing.farmerId || '',
+        sellerName: selectedListing.farmerName || 'Unknown Seller',
+        buyerId: localStorage.getItem('userId') || '',
+        buyerName: buyerName,
+        reason: reason
+    };
+    
+    try {
+        const res = await fetch('/api/marketplace/disputes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (res.ok) {
+            alert('Dispute submitted successfully. Our team will review it shortly.');
+            closeDisputeModal();
+        } else {
+            alert('Failed to submit dispute. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error submitting dispute:', error);
+        alert('An error occurred. Make sure you are connected to the internet.');
+    }
+};
+
+// ─────────────────────────────────────────────
 //  POST LISTING MODAL (saves to DB)
 // ─────────────────────────────────────────────
 window.openPostModal = function () {

@@ -1,6 +1,8 @@
 package com.agriverse1.agriverse1.controller;
 
+import com.agriverse1.agriverse1.entity.Dispute;
 import com.agriverse1.agriverse1.entity.MarketplaceListing;
+import com.agriverse1.agriverse1.repository.DisputeRepository;
 import com.agriverse1.agriverse1.repository.MarketplaceListingRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,11 @@ import java.util.List;
 public class MarketplaceController {
 
     private final MarketplaceListingRepository listingRepository;
+    private final DisputeRepository disputeRepository;
 
-    public MarketplaceController(MarketplaceListingRepository listingRepository) {
+    public MarketplaceController(MarketplaceListingRepository listingRepository, DisputeRepository disputeRepository) {
         this.listingRepository = listingRepository;
+        this.disputeRepository = disputeRepository;
     }
 
     /** Returns all approved listings visible to the public. */
@@ -47,6 +51,21 @@ public class MarketplaceController {
         }
 
         MarketplaceListing saved = listingRepository.save(listing);
+        return ResponseEntity.status(201).body(saved);
+    }
+
+    /** Buyer submits a new dispute — saved as OPEN. */
+    @PostMapping("/disputes")
+    public ResponseEntity<Dispute> createDispute(@RequestBody Dispute dispute) {
+        dispute.setId(null);
+        dispute.setStatus("OPEN");
+        dispute.setCreatedAt(LocalDateTime.now());
+        
+        if (dispute.getBuyerName() == null || dispute.getBuyerName().isBlank()) {
+            dispute.setBuyerName("Anonymous Buyer");
+        }
+
+        Dispute saved = disputeRepository.save(dispute);
         return ResponseEntity.status(201).body(saved);
     }
 }
