@@ -282,10 +282,28 @@
 <a id="whatsappBtn" class="btn-primary btn-full" href="#" target="_blank" style="background:#25D366;margin-bottom:10px">
 <i class="fab fa-whatsapp"></i> Open in WhatsApp
 </a>
-<a id="upiBtn" class="btn-primary btn-full" href="#" style="background:#7424d6">
+<a id="upiBtn" class="btn-primary btn-full" href="#" style="background:#7424d6;margin-bottom:10px">
 <i class="fas fa-indian-rupee-sign"></i> Pay via UPI
 </a>
+<button id="disputeBtn" class="btn-outline btn-full" style="color:#ef4444; border-color:#ef4444;" onclick="openDisputeModal()">
+<i class="fas fa-exclamation-circle"></i> File a Dispute
+</button>
 </div>
+</div>
+
+<!-- ═══════════════ FILE DISPUTE MODAL ═══════════════ -->
+<div class="modal-overlay" id="disputeModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeDisputeModal()"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title" style="color:#ef4444;">File a Dispute</h2>
+        <div class="seller-info">
+            <h3 id="disputeListingTitle">Listing Details</h3>
+            <p id="disputeSellerName">Seller Name</p>
+        </div>
+        <div class="form-group"><label>Your Name (Buyer)</label><input type="text" id="disputeBuyerName" placeholder="Enter your name"></div>
+        <div class="form-group"><label>Reason for Dispute</label><textarea id="disputeReason" rows="4" placeholder="Explain the issue with the listing or seller..."></textarea></div>
+        <button class="btn-primary btn-full" style="background:#ef4444;" onclick="submitDispute()"><i class="fas fa-exclamation-triangle"></i> Submit Dispute</button>
+    </div>
 </div>
 
 <!-- ═══════════════ POST LISTING MODAL ═══════════════ -->
