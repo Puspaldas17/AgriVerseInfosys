@@ -722,6 +722,7 @@
                   <th>Role</th>
                   <th>Land Size</th>
                   <th>Language</th>
+                  <th>Plan</th>
                   <th>Change Role</th>
                   <th>Actions</th>
                 </tr>
@@ -1153,6 +1154,9 @@ function renderUsers(users) {
         <td style="color:var(--text-dim)">${u.landSize ? u.landSize + ' acres' : '—'}</td>
         <td style="color:var(--text-dim)">${u.language || 'English'}</td>
         <td>
+          <span class="badge-pill ${u.subscriptionPlan === 'PREMIUM' ? 'admin' : 'user'}">${u.subscriptionPlan || 'FREE'}</span>
+        </td>
+        <td>
           ${isAdmin
             ? `<span style="color:var(--muted);font-size:12px;">Protected</span>`
             : `<select class="role-select" onchange="changeRole('${u.id}', this.value)">
@@ -1170,6 +1174,9 @@ function renderUsers(users) {
                  <button class="btn-action view" onclick="promptResetPassword('${u.id}')" title="Reset Password" style="padding:5px 8px;">
                    <i class="fas fa-key"></i>
                  </button>
+                 <button class="btn-action view" onclick="toggleSubscription('${u.id}', '${u.subscriptionPlan === 'PREMIUM' ? 'FREE' : 'PREMIUM'}')" title="Toggle Premium" style="padding:5px 8px; color:var(--warning);">
+                    <i class="fas fa-star"></i>
+                  </button>
                  <button class="btn-action ${u.suspended ? 'promote' : 'delete'}" onclick="toggleSuspend('${u.id}')" title="${u.suspended ? 'Unsuspend' : 'Suspend'}" style="padding:5px 8px; margin-right:4px;">
                    <i class="fas ${u.suspended ? 'fa-check' : 'fa-ban'}"></i>
                  </button>
@@ -1222,11 +1229,25 @@ async function confirmResetPassword() {
       const data = await res.json();
       showToast('success', `<i class="fas fa-key"></i> Password reset to: <strong>${data.tempPassword}</strong>`);
     } else {
-      const data = await res.json();
-      showToast('error', `<i class="fas fa-circle-exclamation"></i> ${data.message || 'Reset failed.'}`);
+      showToast('error', `Failed to reset password`);
     }
   } catch(e) {
     showToast('error', `<i class="fas fa-circle-exclamation"></i> Network error.`);
+  }
+}
+
+async function toggleSubscription(userId, newPlan) {
+  if (confirm(`Change this user's subscription to ${newPlan}?`)) {
+    const res = await apiFetch(`/api/admin/users/${userId}/subscription`, {
+      method: 'PATCH',
+      body: JSON.stringify({ plan: newPlan })
+    });
+    if (res && res.ok) {
+      showToast('success', `User subscription updated to ${newPlan}`);
+      loadAllUsers();
+    } else {
+      showToast('error', `Failed to update subscription`);
+    }
   }
 }
 
