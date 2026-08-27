@@ -59,4 +59,8 @@ public class User {
     /** Preferred UI language: "English", "Telugu", "Hindi" */
     @Builder.Default
     private String language = "English";
+
+    // ── Subscription ────────────────────────────
+    @Builder.Default
+    private String subscriptionPlan = "FREE";
 }

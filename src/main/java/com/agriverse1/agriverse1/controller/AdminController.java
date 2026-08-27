@@ -148,4 +148,32 @@ public class AdminController {
         response.put("tempPassword", tempPassword);
         return ResponseEntity.ok(response);
     }
+
+    /** PATCH — update user subscription plan */
+    @PatchMapping("/users/{id}/subscription")
+    public ResponseEntity<Map<String, String>> updateUserSubscription(
+            @PathVariable String id,
+            @RequestBody Map<String, String> body) {
+        
+        Map<String, String> response = new HashMap<>();
+        Optional<User> optUser = userRepository.findById(id);
+
+        if (optUser.isEmpty()) {
+            response.put("message", "User not found");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        String newPlan = body.getOrDefault("plan", "FREE").toUpperCase();
+        if (!List.of("FREE", "PREMIUM").contains(newPlan)) {
+            response.put("message", "Invalid subscription plan");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        User user = optUser.get();
+        user.setSubscriptionPlan(newPlan);
+        userRepository.save(user);
+
+        response.put("message", "Subscription plan updated to " + newPlan);
+        return ResponseEntity.ok(response);
+    }
 }
