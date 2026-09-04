@@ -62,7 +62,7 @@ public class AIController {
                 return "Gemini API Key is missing. Please configure it in your environment variables before asking questions!";
             }
 
-            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + geminiApiKey;
+            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=" + geminiApiKey;
 
             // System prompt injection
             String fullPrompt = "You are an expert agricultural advisor for FarmVerse. Be concise, practical, and friendly. Answer this farmer's question: " + prompt;
