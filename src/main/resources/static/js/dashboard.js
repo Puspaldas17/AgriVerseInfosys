@@ -1093,11 +1093,7 @@ if (dropdownSettingsBtn) {
             profileDropdown.classList.remove('active');
         }
 
-        showComingSoon(
-            "Account Settings Coming Soon",
-            "Notification preferences, password management, and security controls are coming soon.",
-            "fa-cog"
-        );
+        window.location.href = "profile.html";
     });
 }
 

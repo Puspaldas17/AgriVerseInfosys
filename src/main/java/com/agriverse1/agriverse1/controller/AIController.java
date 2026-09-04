@@ -4,12 +4,21 @@ import com.agriverse1.agriverse1.advisoryhistory.AdvisoryHistoryService;
 import com.agriverse1.agriverse1.dto.ChatRequestDto;
 import com.agriverse1.agriverse1.dto.ChatResponseDto;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * AI Chat endpoint — keyword-based smart engine for farming advice.
+ * AI Chat endpoint — powered by Google Gemini 1.5 Flash.
  * POST /api/ai/chat  — Send a message, receive contextual farming advice.
  */
 @RestController
@@ -17,9 +26,14 @@ import org.springframework.web.bind.annotation.*;
 public class AIController {
 
     private final AdvisoryHistoryService advisoryHistoryService;
+    private final RestTemplate restTemplate;
+
+    @Value("${gemini.api.key}")
+    private String geminiApiKey;
 
     public AIController(AdvisoryHistoryService advisoryHistoryService) {
         this.advisoryHistoryService = advisoryHistoryService;
+        this.restTemplate = new RestTemplate();
     }
 
     @PostMapping("/chat")
@@ -28,15 +42,10 @@ public class AIController {
             Authentication authentication) {
 
         String message = request.getMessage();
-
-        String response = generateResponse(message.toLowerCase());
+        String response = generateGeminiResponse(message);
 
         /*
          * Save the interaction after generating the response.
-         *
-         * The history service handles its own errors so that
-         * an Advisory History database problem does not break
-         * the existing AI Assistant.
          */
         advisoryHistoryService.saveAiAssistantHistory(
                 authentication.getName(),
@@ -44,70 +53,45 @@ public class AIController {
                 response
         );
 
-        // Existing AI response remains unchanged.
         return ResponseEntity.ok(new ChatResponseDto(response));
     }
 
-    private String generateResponse(String msg) {
+    private String generateGeminiResponse(String prompt) {
+        try {
+            if (geminiApiKey == null || geminiApiKey.contains("YOUR_API_KEY_HERE")) {
+                return "Gemini API Key is missing. Please configure it in your environment variables before asking questions!";
+            }
 
-        if (msg.contains("hello") || msg.contains("hi") || msg.contains("help")) {
-            return "Hello, Farmer! 👋 I'm your AgriVerse AI Assistant. Ask me about weather, crop diseases, fertilizers, pests, or yield optimization!";
+            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + geminiApiKey;
+
+            // System prompt injection
+            String fullPrompt = "You are an expert agricultural advisor for FarmVerse. Be concise, practical, and friendly. Answer this farmer's question: " + prompt;
+
+            Map<String, String> textPart = Map.of("text", fullPrompt);
+            Map<String, List<Map<String, String>>> partsMap = Map.of("parts", List.of(textPart));
+            Map<String, List<Map<String, List<Map<String, String>>>>> requestBody = Map.of("contents", List.of(partsMap));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, List<Map<String, List<Map<String, String>>>>>> entity = new HttpEntity<>(requestBody, headers);
+
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+            Map<String, Object> body = response.getBody();
+
+            if (body != null && body.containsKey("candidates")) {
+                List<Map<String, Object>> candidates = (List<Map<String, Object>>) body.get("candidates");
+                if (!candidates.isEmpty()) {
+                    Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+                    List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+                    if (parts != null && !parts.isEmpty()) {
+                        return (String) parts.get(0).get("text");
+                    }
+                }
+            }
+            return "Sorry, I could not generate a response at this time.";
+        } catch (Exception e) {
+            System.err.println("Gemini API Error: " + e.getMessage());
+            return "An error occurred while connecting to the AI: " + e.getMessage();
         }
-
-        if (msg.contains("weather") || msg.contains("rain") || msg.contains("forecast")) {
-            return "Based on current patterns, expect moderate rainfall in the next 48 hours. Delay pesticide application until skies clear to prevent chemical run-off and reduced efficacy.";
-        }
-
-        if (msg.contains("tomato") || msg.contains("blight")) {
-            return "For tomatoes, Early Blight (Alternaria solani) is common in high humidity. Ensure proper plant spacing for airflow and apply a preventative copper-based fungicide spray weekly.";
-        }
-
-        if (msg.contains("rice") || msg.contains("paddy")) {
-            return "For rice crops, maintain water level at 5cm during tillering. Watch for Blast disease — apply Tricyclazole 75% WP @ 0.6g/litre at the first sign of lesions.";
-        }
-
-        if (msg.contains("wheat")) {
-            return "Wheat requires balanced NPK. Apply nitrogen in split doses — 50% at sowing, 25% at crown root initiation, and 25% at jointing stage for optimal grain filling.";
-        }
-
-        if (msg.contains("fertilizer") || msg.contains("npk")
-                || msg.contains("urea") || msg.contains("nutrient")) {
-
-            return "For nitrogen-based fertilizers like Urea, apply in split doses to minimize volatilization loss. Try 50% at sowing and remainder at the flowering stage for optimal yield.";
-        }
-
-        if (msg.contains("water") || msg.contains("irrigation")
-                || msg.contains("drip")) {
-
-            return "Based on standard soil moisture recommendations, schedule 45 minutes of drip irrigation in the early morning (before 7 AM) to minimize evaporation losses.";
-        }
-
-        if (msg.contains("pest") || msg.contains("insect")
-                || msg.contains("bug") || msg.contains("aphid")) {
-
-            return "For aphid or soft-bodied pest infestations, a neem oil solution (5ml per litre of water) is highly effective and organic. Spray during cool morning hours for best results.";
-        }
-
-        if (msg.contains("fungus") || msg.contains("fungal")
-                || msg.contains("mold") || msg.contains("mould")) {
-
-            return "For fungal diseases, ensure your crops have good air circulation and avoid waterlogging. Apply Mancozeb 75% WP @ 2g/litre as a broad-spectrum preventive treatment.";
-        }
-
-        if (msg.contains("yield") || msg.contains("harvest")
-                || msg.contains("production")) {
-
-            return "To maximize harvest yield, track your crop growth in the Analytics tab daily and maintain consistent soil moisture. A balanced NPK ratio can increase yield by 15-20%.";
-        }
-
-        if (msg.contains("soil") || msg.contains("ph")) {
-            return "Ideal soil pH is 6.0–7.0 for most crops. If too acidic, apply agricultural lime. If too alkaline, use gypsum or elemental sulfur. Conduct a soil test every season!";
-        }
-
-        if (msg.contains("organic") || msg.contains("compost")) {
-            return "Adding compost at 5 tonnes/acre before sowing significantly improves water retention and microbial activity in the soil, reducing your need for chemical fertilizers.";
-        }
-
-        return "That's a great farming question! While my current Smart Engine covers common topics, I'm always improving. In the meantime, check the Analytics tab for data-driven insights about your field, or ask about specific crops, pests, fertilizers, or weather!";
     }
 }
