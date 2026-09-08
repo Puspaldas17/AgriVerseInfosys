@@ -1,125 +1,120 @@
-<div align="center">
-  <img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot" alt="Spring Boot" />
-  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-  <img src="https://img.shields.io/badge/Java_21-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java" />
-  <img src="https://img.shields.io/badge/JWT_Security-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT Security" />
-</div>
+# 🌱 FarmVerse: Precision Agriculture Management Platform
 
-<br />
+![Java](https://img.shields.io/badge/Java-21-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248.svg)
+![AI](https://img.shields.io/badge/AI-Google%20Gemini%203.6-blue.svg)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)
 
-<div align="center">
-  <h1>🌱 AgriVerse (FarmVerse)</h1>
-  <p><strong>Precision Agriculture Management & E-Commerce Ecosystem</strong></p>
-</div>
+## 📖 Executive Summary
+**FarmVerse** is a robust, full-stack Precision Agriculture Management Platform designed to empower modern farmers by bringing cutting-edge technology directly to the field. Agriculture remains a critical economic sector, yet traditional farming suffers from fragmented management, delayed disease detection, and exploitation by middlemen. 
 
----
-
-**AgriVerse** is an advanced, AI-powered agricultural platform designed to bridge the gap between traditional farming and modern precision agriculture. By offering real-time telemetry, AI crop advisories, and a fully integrated peer-to-peer marketplace, AgriVerse equips farmers with the digital infrastructure needed to maximize crop yield, reduce waste, and connect directly with markets.
-
-## 📑 Table of Contents
-- [Core Features](#-core-features)
-  - [Farmer Ecosystem (Client Facing)](#farmer-ecosystem-client-facing)
-  - [Command Center (Admin Facing)](#command-center-admin-facing)
-- [System Architecture](#%EF%B8%8F-system-architecture)
-- [Tech Stack](#%EF%B8%8F-tech-stack)
-- [Getting Started](#-getting-started)
-- [Security & Authentication](#-security--authentication)
+FarmVerse bridges the gap between traditional farming and modern software solutions by serving as a unified ecosystem. It integrates **Cloud NoSQL data management, Gamified Analytics, Direct Marketplace trading, and Real-time Generative AI** to optimize yields, simplify agricultural commerce, and drive data-backed decision-making.
 
 ---
 
-## 🚀 Core Features
+## ✨ Key Innovations & Core Features
 
-### 👨‍🌾 Farmer Ecosystem (Client Facing)
-The core application is built to be accessible, fast, and feature-rich for end-users (farmers).
-* 🤖 **AI Crop Advisory 24/7:** Instant, intelligent recommendations on soil health, pest control, and watering schedules.
-* 📸 **Disease Detection:** Upload crop photos to receive immediate AI diagnostics and treatment recommendations.
-* 🌦️ **Real-Time Weather Integration:** Hyper-local weather forecasting for optimal planting and harvesting operations.
-* 📈 **Live Market Prices:** Track real-time commodity rates across different markets to ensure fair pricing.
-* 🗣️ **Multilingual Voice Support:** Native language accessibility allowing voice-driven commands (currently supporting 3 major languages).
-* 🛒 **P2P Marketplace:** A dedicated marketplace for farmers to buy, sell, or lease crops, fertilizers, and heavy equipment.
+### 1. 🤖 Smart AI Agricultural Advisor (Powered by Gemini 3.6 Flash)
+Unlike traditional static chatbots, FarmVerse integrates directly with **Google's Gemini 3.6 Flash AI API**. Farmers can ask highly specific questions regarding weather delays, pest control, or NPK fertilizer ratios, and receive instant, context-aware, generative AI advice tailored to their specific crop scenarios.
 
-### 🛡️ Command Center (Admin Facing)
-A highly restricted, aesthetically distinct (dark-mode) portal for platform administrators and moderators.
-* 👥 **User & Role Management:** Complete CRUD capabilities over the user base. Seamlessly promote users to `VET` (agricultural experts) or `ADMIN` roles.
-* 🏪 **Marketplace Moderation:** Review newly created marketplace listings. Ensure platform integrity by approving legitimate listings or rejecting fraudulent ones.
-* ⚖️ **Dispute Resolution Engine:** Act as a mediator for failed e-commerce transactions, overseeing and resolving buyer/seller conflicts.
-* 📊 **Platform Telemetry:** Live dashboards displaying active sessions, total registered users, and marketplace health.
-* ⚡ **Live Activity Stream:** Real-time log of critical platform events (auth failures, new registrations, database backups).
+### 2. 🎮 Gamified Farmer Engagement
+To drive daily active usage, the platform features a highly interactive **Gamification Engine**. Farmers earn XP (Experience Points) and level up by completing daily agricultural missions, checking analytics, and utilizing the AI advisor. 
+
+### 3. 🛒 Direct-to-Buyer Digital Marketplace
+Eliminating the need for traditional middlemen, FarmVerse includes a robust Farmer's Marketplace. Farmers can securely list their harvest, connect directly with buyers, and manage their agricultural commerce within a moderated ecosystem.
+
+### 4. 🔐 Enterprise-Grade Security
+Built with **Spring Security and JWT (JSON Web Tokens)**, the platform enforces strict Role-Based Access Control (RBAC). It isolates data securely across different user roles including Farmers, Administrators, and Agricultural Experts.
+
+---
+
+## 🛠️ Technology Stack
+
+| Component | Technology Used | Description |
+| :--- | :--- | :--- |
+| **Frontend** | HTML5, CSS3, Vanilla JS | Lightweight, high-performance, responsive UI without heavy framework overhead. |
+| **Backend** | Java 21, Spring Boot | Robust, scalable enterprise REST API handling business logic and security. |
+| **Database** | MongoDB Atlas | Cloud-hosted NoSQL document database for flexible, scalable data storage. |
+| **AI Engine** | Google Gemini API | `gemini-3.6-flash` model accessed via Spring `RestTemplate` for generative advisory. |
+| **Security** | Spring Security, JWT | Stateless, secure authentication and authorization pipeline. |
 
 ---
 
 ## 🏗️ System Architecture
 
-AgriVerse employs a **stateless RESTful API** architecture, utilizing Spring Boot on the backend and native web technologies on the frontend. Data is persisted in a NoSQL MongoDB cluster, allowing for highly flexible schemas (ideal for diverse marketplace listings and user profiles).
-
-* **Authentication Layer:** Spring Security intercepts incoming requests. Public assets (`/css`, `/js`) and auth routes (`/api/auth`) are permitted. Protected resources (`/api/admin`) require a valid JWT token validated by the `JwtAuthenticationFilter`.
-* **Data Access Layer:** Utilizes `MongoRepository` interfaces for robust, boilerplate-free database operations.
-
----
-
-## 🛠️ Tech Stack
-
-| Domain | Technologies |
-| :--- | :--- |
-| **Backend Framework** | Java 21, Spring Boot 3, Spring Web |
-| **Security** | Spring Security, JWT (JSON Web Tokens), BCrypt |
-| **Database** | MongoDB Atlas, Spring Data MongoDB |
-| **Frontend** | HTML5, CSS3 (Neumorphism / Glassmorphism), Vanilla ES6 JS |
-| **Build Tool** | Apache Maven |
-
----
-
-## 🏁 Getting Started
-
-Follow these instructions to run the AgriVerse ecosystem locally on your machine.
-
-### 1. Prerequisites
-- **Java 21** or higher installed.
-- **Maven** installed and added to your system `PATH`.
-- A valid **MongoDB** Cluster URI (or local instance).
-
-### 2. Installation
-Clone the repository to your local machine:
-```bash
-git clone https://github.com/Puspaldas17/AgriVerseInfosys.git
-cd AgriVerseInfosys
+```mermaid
+graph TD
+    Client[Frontend: HTML/CSS/JS] -->|REST API Requests + JWT| Gateway(Spring Boot REST Controllers)
+    
+    subgraph Spring Boot Backend
+        Gateway --> Auth[Spring Security / JWT Auth]
+        Auth --> UserService[User & Gamification Service]
+        Auth --> MarketService[Marketplace Service]
+        Auth --> AIService[AI Controller]
+        
+        AIService -->|HTTP POST| Gemini(Google Gemini 3.6 Flash API)
+    end
+    
+    UserService -->|Spring Data MongoDB| DB[(MongoDB Atlas Cloud)]
+    MarketService -->|Spring Data MongoDB| DB
+    AIService -->|Log Advisory History| DB
 ```
 
-### 3. Environment Variables
-The application relies on an environment variable for database authentication. Set `MONGO_PASSWORD` in your terminal session before starting the application.
+---
 
-### 4. Running the Application
-Use Maven to start the Spring Boot server:
+## 🚀 Installation & Setup Guide
 
-**For Windows (PowerShell):**
-```powershell
-$env:MONGO_PASSWORD="your_actual_password_here"
-mvn spring-boot:run
-```
+### Prerequisites
+- **Java JDK 21+** installed.
+- **Maven** installed.
+- A valid **Google Gemini API Key** (`AIzaSy...`).
+- A **MongoDB Atlas** Cluster.
 
-**For Mac/Linux:**
-```bash
-export MONGO_PASSWORD="your_actual_password_here"
-mvn spring-boot:run
-```
+### Local Environment Setup
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/YourUsername/FarmVerse.git
+   cd FarmVerse
+   ```
 
-### 5. Accessing the Portals
-Once the server reports `Started Agriverse1Application in X seconds`, open your browser:
-* **Farmer Portal:** `http://localhost:8082`
-* **Admin Portal:** `http://localhost:8082/admin-login.html`
+2. **Set Environment Variables:**
+   The application requires secure credentials to be injected via environment variables prior to runtime.
+   
+   **Windows (PowerShell):**
+   ```powershell
+   $env:GEMINI_API_KEY="AIzaSy_YOUR_API_KEY"
+   $env:MONGO_PASSWORD="your_mongo_password"
+   ```
+   **Linux/Mac (Bash):**
+   ```bash
+   export GEMINI_API_KEY="AIzaSy_YOUR_API_KEY"
+   export MONGO_PASSWORD="your_mongo_password"
+   ```
 
-> **Note:** The database seeder will automatically generate a default administrator account (`admin@agriverse.in` / `admin123`) and inject mock marketplace data upon the first boot.
+3. **Compile & Run:**
+   ```bash
+   mvn clean verify
+   mvn spring-boot:run
+   ```
+
+4. **Access the Application:**
+   Open your browser and navigate to `http://localhost:8082`
 
 ---
 
-## 🔒 Security & Authentication
-AgriVerse takes platform security seriously:
-- **Stateless Sessions:** The application does not rely on Tomcat HTTP sessions, completely mitigating CSRF attacks.
-- **JWT Lifecycles:** Tokens contain embedded roles (`ROLE_USER`, `ROLE_ADMIN`) and are verified on every secure request.
-- **Password Hashing:** All user credentials are irreversibly hashed using `BCryptPasswordEncoder` with an appropriate work factor before persistence.
-- **CORS Policies:** Cross-Origin Resource Sharing is strictly defined to prevent unauthorized frontend clients from polling the API.
+## 🔮 Future Scope
+- **IoT Sensor Integration:** Real-time ingestion of soil moisture and NPK sensor data directly into the dashboard.
+- **AI Vision Diagnostics:** Expanding the Gemini integration to support multimodal vision, allowing farmers to upload images of diseased crops for instant identification.
+- **Government Scheme Integration:** Automated alerts for local agricultural subsidies and policy changes.
 
 ---
-<div align="center">
-  <i>Developed with ❤️ for the future of farming.</i>
-</div>
+
+## 👥 Team Credentials
+- **Project Name:** FarmVerse
+- **Presented by:** Team C
+- **Project Guide:** Ragul S
+- **Domain:** Agriculture, Food Tech & Rural Development
+
+---
+*Empowering the farmers of today with the technology of tomorrow.*
