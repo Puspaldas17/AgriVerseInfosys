@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmVerse - Comprehensive Project Report</title>
+    <title>FarmVerse - Detailed Project Report</title>
     <style>
         :root {
             --primary: #2E7D32;
@@ -106,101 +106,89 @@
     <h1>Project Report: FarmVerse</h1>
     <div class="subtitle">Precision Agriculture Management Platform</div>
 
-    <h2>1. Abstract</h2>
-    <p><strong>FarmVerse</strong> is a comprehensive, Java Full Stack Precision Agriculture Management Platform designed to digitize and optimize traditional farming. By integrating Cloud NoSQL data management, Gamified Analytics, Direct Marketplace trading, and Real-time Generative AI, FarmVerse bridges the gap between traditional agricultural practices and modern software solutions. The primary objective is to empower farmers with data-driven insights, direct market access, and intelligent advisory, ultimately improving crop yields and agricultural commerce.</p>
+    <h2>1. Project Overview</h2>
+    <p><strong>FarmVerse</strong> is a fully functional, Java Full Stack platform designed to modernize agricultural management. It bridges the gap between traditional farming and modern software by providing a centralized hub for AI advisory, crop planning, pest detection, and direct market trading.</p>
+    <p>This report details the <strong>exact features, modules, and workflows</strong> that have been successfully developed and integrated into the current state of the application.</p>
 
-    <h2>2. Problem Statement</h2>
-    <p>Agriculture remains a critical sector of the global economy, yet many farmers struggle with:</p>
-    <ol>
-        <li><strong>Lack of Expert Guidance:</strong> Farmers often face delays in identifying crop diseases or determining optimal fertilizer usage.</li>
-        <li><strong>Exploitation by Middlemen:</strong> Traditional supply chains restrict farmers from getting fair market prices for their harvest.</li>
-        <li><strong>Fragmented Data:</strong> Lack of a centralized platform to manage crop life cycles, track weather, and monitor overall farm health.</li>
-        <li><strong>Low Technology Adoption:</strong> Existing agricultural apps suffer from poor user engagement and complex user interfaces.</li>
-    </ol>
+    <h2>2. Implemented Modules & Features</h2>
 
-    <h2>3. Proposed Solution</h2>
-    <p>FarmVerse solves these issues by providing a single, unified ecosystem. It leverages a Gamified Dashboard to encourage daily platform engagement, a secure Farmer's Marketplace for direct buyer connections, and a cutting-edge integration with Google's Gemini AI for instant, 24/7 expert agricultural advisory.</p>
-
-    <h2>4. Comprehensive Feature Details</h2>
-
-    <h3>4.1. Smart AI Agricultural Advisor</h3>
-    <p>At the heart of FarmVerse is a dynamic, intelligent chatbot powered by <strong>Google Gemini 3.6 Flash</strong>.</p>
+    <h3>2.1. Secure Authentication & Role Management</h3>
+    <p><em>(Managed by <code>AuthController.java</code>)</em></p>
     <ul>
-        <li><strong>Real-time Generative Advisory:</strong> Instead of relying on hardcoded responses, the system makes secure HTTP POST requests to the Gemini API, generating highly specific answers regarding pest control, NPK fertilizer ratios, and yield optimization.</li>
-        <li><strong>Resilience & Reliability:</strong> The backend <code>AIController</code> features custom retry logic. If the AI server experiences high demand (HTTP 503 errors), the system automatically retries the request up to 3 times before gracefully informing the user, ensuring a highly stable user experience.</li>
-        <li><strong>Context-Aware Prompting:</strong> The backend utilizes strict prompt injection techniques to instruct the AI to act exclusively as an expert agricultural advisor, preventing off-topic conversations.</li>
+        <li><strong>JWT-Based Security:</strong> The platform uses JSON Web Tokens (JWT) for stateless, encrypted sessions.</li>
+        <li><strong>Role-Based Workflows:</strong> Distinct login portals and dashboards for <strong>Farmers</strong> (<code>login.html</code>) and <strong>Administrators</strong> (<code>admin-login.html</code>).</li>
+        <li><strong>Registration:</strong> Secure user signup process mapping users to their specific roles and saving them into MongoDB.</li>
     </ul>
 
-    <h3>4.2. Gamified Analytics Dashboard</h3>
-    <p>To solve the issue of low technology adoption among farmers, FarmVerse implements a sophisticated Gamification Engine.</p>
+    <h3>2.2. The Farmer Dashboard (<code>dashboard.html</code>)</h3>
+    <p>The core interface for farmers, serving as a unified control center.</p>
     <ul>
-        <li><strong>Experience Points (XP) & Leveling:</strong> Farmers earn XP for interacting with the platform (e.g., asking the AI questions, updating crop statuses). This XP contributes to a dynamic leveling system visible directly on their dashboard.</li>
-        <li><strong>Daily Missions:</strong> The dashboard tracks daily objectives, encouraging farmers to log in regularly to check crop health and market prices.</li>
+        <li><strong>Gamification Engine (<code>UserController.java</code>):</strong> Implements an Experience Point (XP) and Leveling system. Farmers are assigned daily missions (e.g., "Check weather", "Log crop status") to drive daily app engagement.</li>
+        <li><strong>Smart AI Assistant (<code>AIController.java</code>):</strong> A real-time chat interface connected to Google's <strong>Gemini 3.6 Flash</strong> model. It answers complex agricultural queries, with built-in retry logic to handle server load (503 errors).</li>
+        <li><strong>Advisory History:</strong> Securely logs all AI interactions to the database, allowing farmers to review past advice.</li>
+        <li><strong>Pest Detection Module (<code>PestController.java</code>):</strong> A dedicated interface allowing farmers to identify crop diseases and pests.</li>
     </ul>
 
-    <h3>4.3. Digital Farmer-to-Buyer Marketplace</h3>
-    <p>FarmVerse eliminates traditional middlemen by providing a secure Digital Marketplace.</p>
+    <h3>2.3. Crop Sowing Calendar (<code>calendar.html</code>)</h3>
+    <p><em>(Managed by <code>CropCalendarController.java</code>)</em></p>
     <ul>
-        <li><strong>Direct Listings:</strong> Farmers can list their harvest inventory directly on the platform without third-party fees.</li>
-        <li><strong>Secure Commerce:</strong> Buyers can browse verified agricultural products and connect directly with the farmers, ensuring fair trade and higher profit margins for the growers.</li>
+        <li><strong>Visual Planning:</strong> A dedicated calendar UI that allows farmers to visually plan out their crop cycles.</li>
+        <li><strong>Task Management:</strong> Full Create, Read, Update, and Delete (CRUD) operations for agricultural events, sowing dates, and harvest timelines.</li>
     </ul>
 
-    <h3>4.4. Advisory History Tracking</h3>
+    <h3>2.4. Digital Farmer's Marketplace (<code>marketplace.html</code>)</h3>
+    <p><em>(Managed by <code>MarketplaceController.java</code>)</em></p>
     <ul>
-        <li><strong>Audit Trail:</strong> Every interaction a farmer has with the AI Advisor is securely logged into the MongoDB database via the backend <code>AdvisoryHistoryService</code>.</li>
-        <li><strong>Reference & Tracking:</strong> Farmers can look back at past advice given by the AI for historical crop management, ensuring no vital seasonal information is lost.</li>
+        <li><strong>Direct Selling:</strong> Eliminates middlemen by allowing farmers to list their agricultural products directly on the platform.</li>
+        <li><strong>Product Management:</strong> Farmers can create product listings with prices, descriptions, and available quantities.</li>
+        <li><strong>Secure Commerce:</strong> Buyers can view and interact with these listings in a dedicated marketplace interface.</li>
     </ul>
 
-    <h3>4.5. Secure Role-Based Access Control (RBAC)</h3>
+    <h3>2.5. Admin Command Center (<code>admin-dashboard.html</code>)</h3>
+    <p>A highly privileged portal for platform administrators to monitor and control the ecosystem.</p>
     <ul>
-        <li><strong>JWT Authentication:</strong> The entire platform is secured using JSON Web Tokens (JWT). Once a user logs in, they receive a stateless, encrypted token used to verify all subsequent requests.</li>
-        <li><strong>Role Isolation:</strong> The Spring Security configuration ensures that Farmers, Administrators, and Experts only have access to their respective modules, preventing unauthorized data modification.</li>
+        <li><strong>User Analytics & Management (<code>AdminController.java</code>):</strong> Allows admins to view total registered users, track platform usage statistics, and manage user accounts.</li>
+        <li><strong>Marketplace Moderation (<code>AdminMarketplaceController.java</code>):</strong> Provides oversight over the marketplace. Admins can review listings, handle disputes, and remove fraudulent or inappropriate products to ensure a safe trading environment.</li>
     </ul>
 
-    <h2>5. Technology Stack Details</h2>
-    <div class="highlight">
-        <p>The project utilizes a highly scalable, modern Full Stack architecture designed for maximum performance and security.</p>
-    </div>
-    
+    <h3>2.6. Public Landing Page (<code>index.html</code>)</h3>
+    <ul>
+        <li><strong>Interactive Front:</strong> A modern, responsive landing page explaining the platform's benefits.</li>
+        <li><strong>Contact Management (<code>ContactRequestController.java</code>):</strong> Allows public users to submit inquiries, which are routed to the backend database for admin review.</li>
+    </ul>
+
+    <h2>3. Technology Stack (Actual Implementation)</h2>
     <div class="tech-grid">
         <div class="tech-card">
-            <strong>Frontend Layer</strong>
-            Built using purely native HTML5, CSS3, and Vanilla JavaScript. This ensures a lightweight, ultra-fast, and highly responsive user interface without the heavy overhead of large frameworks.
+            <strong>Frontend</strong>
+            HTML5, CSS3, Vanilla JavaScript. No heavy frontend frameworks, ensuring maximum performance and low load times.
         </div>
         <div class="tech-card">
-            <strong>Backend Layer</strong>
-            Powered by Java 21 and Spring Boot 3.x. The backend exposes secure RESTful APIs to handle all business logic, AI routing, and database transactions.
+            <strong>Backend</strong>
+            Java 21, Spring Boot 3.x, Spring Web, Spring Security. Robust REST APIs.
         </div>
         <div class="tech-card">
-            <strong>Database Layer</strong>
-            MongoDB Atlas (Cloud NoSQL). A document-based database was chosen over traditional relational databases to allow for flexible, scalable storage of unstructured AI chat histories.
+            <strong>Database</strong>
+            MongoDB Atlas (Cloud NoSQL) managed via Spring Data MongoDB.
         </div>
         <div class="tech-card">
-            <strong>AI Engine</strong>
-            Google Gemini API (gemini-3.6-flash), securely integrated via Spring's RestTemplate network requests.
+            <strong>AI & Tools</strong>
+            Google Gemini REST API accessed via Spring RestTemplate. Maven for project building.
         </div>
     </div>
 
-    <h2>6. System Architecture Workflow</h2>
+    <h2>4. End-to-End User Workflow</h2>
     <ol>
-        <li><strong>Client Request:</strong> The farmer interacts with the UI, which sends an asynchronous JavaScript <code>fetch()</code> request containing a secure JWT to the backend.</li>
-        <li><strong>Security Filter:</strong> Spring Security intercepts the request, validates the JWT signature, and checks the user's role permissions.</li>
-        <li><strong>Controller Processing:</strong> The request is routed to the appropriate REST Controller (e.g., <code>AIController</code>, <code>UserController</code>).</li>
-        <li><strong>External API Routing:</strong> If the user asks an AI question, the Controller constructs a JSON payload and transmits it to the Google Gemini servers.</li>
-        <li><strong>Database Persistence:</strong> Responses, XP updates, and mission completions are persisted asynchronously to MongoDB Atlas.</li>
-        <li><strong>Client Response:</strong> The processed data is returned to the frontend as a clean JSON response and dynamically rendered on the dashboard.</li>
+        <li><strong>Onboarding:</strong> A user lands on <code>index.html</code>, navigates to <code>signup.html</code>, and registers as a Farmer.</li>
+        <li><strong>Authentication:</strong> The user logs in via <code>login.html</code>. The backend validates the credentials against MongoDB, generates a secure JWT, and redirects the user to <code>dashboard.html</code>.</li>
+        <li><strong>Daily Usage:</strong> The farmer checks their daily missions on the dashboard. They open the <strong>AI Assistant</strong> to ask a question about fertilizer. The backend routes this to the Gemini API, logs the conversation, and returns the answer. The farmer earns XP for this action.</li>
+        <li><strong>Planning:</strong> The farmer navigates to <code>calendar.html</code> to schedule their upcoming wheat harvest.</li>
+        <li><strong>Selling:</strong> Once harvested, the farmer goes to <code>marketplace.html</code> and creates a listing for their wheat.</li>
+        <li><strong>Moderation:</strong> An administrator logs into <code>admin-login.html</code>, navigates to the <code>admin-dashboard.html</code>, reviews the new marketplace listing via the Moderation tab, and monitors the overall platform health.</li>
     </ol>
 
-    <h2>7. Future Scope</h2>
-    <p>While the current platform is highly robust, future iterations of FarmVerse will aim to include:</p>
-    <ul>
-        <li><strong>Multimodal AI Vision:</strong> Upgrading the Gemini integration to process images, allowing farmers to take a photo of a diseased leaf and receive an instant diagnosis.</li>
-        <li><strong>IoT Sensor Integration:</strong> Integrating hardware sensors to stream live soil moisture and temperature data directly into the FarmVerse Analytics dashboard.</li>
-        <li><strong>Automated Government Scheme Alerts:</strong> A notification engine to inform farmers about regional agricultural subsidies.</li>
-    </ul>
-
-    <h2>8. Conclusion</h2>
-    <p>FarmVerse successfully demonstrates how modern web technologies and Generative AI can be combined to solve real-world agricultural problems. By prioritizing user engagement through gamification and providing direct access to both markets and expert AI knowledge, the platform serves as a blueprint for the future of digital farming.</p>
+    <h2>5. Conclusion</h2>
+    <p>The FarmVerse project successfully delivers on its promise of a unified agricultural platform. By combining a gamified interface with real-time AI and direct marketplace trading, it provides a functional, secure, and highly modern solution to the problems faced by traditional farmers.</p>
 
     <footer>
         FarmVerse Precision Agriculture Management Platform &copy; 2026
