@@ -3,6 +3,7 @@ package com.agriverse1.agriverse1.security;
 import com.agriverse1.agriverse1.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -48,10 +49,15 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/api/auth/**",
-                                "/api/crop-calendar/**",
                                 "/api/contact/**",
                                 "/api/marketplace/**"
                         ).permitAll()
+                        // Crop Calendar: GET is public (farmers can view), write ops require ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/crop-calendar", "/api/crop-calendar/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/crop-calendar/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/crop-calendar/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/crop-calendar/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/crop-calendar/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/advisory-history/**").authenticated()
                         .anyRequest().authenticated()

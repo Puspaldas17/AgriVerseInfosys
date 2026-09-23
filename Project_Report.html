@@ -1,199 +1,1225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmVerse - Detailed Project Report</title>
-    <style>
-        :root {
-            --primary: #2E7D32;
-            --secondary: #4CAF50;
-            --dark: #1b2f21;
-            --light: #f4f9f4;
-            --text: #333;
-            --border: #e0e0e0;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background-color: #fafafa;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: #fff;
-            padding: 50px 60px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            border-top: 6px solid var(--primary);
-        }
-        h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            font-weight: 300;
-        }
-        h2 {
-            color: var(--dark);
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 8px;
-            margin-top: 40px;
-            font-size: 1.6rem;
-        }
-        h3 {
-            color: var(--primary);
-            margin-top: 25px;
-            font-size: 1.3rem;
-        }
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-        ul, ol {
-            margin-bottom: 20px;
-            padding-left: 25px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        .highlight {
-            background-color: var(--light);
-            padding: 15px 20px;
-            border-left: 4px solid var(--secondary);
-            border-radius: 4px;
-            margin: 20px 0;
-        }
-        .tech-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .tech-card {
-            background: #f9f9f9;
-            padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-        }
-        .tech-card strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 5px;
-        }
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            color: #777;
-            font-size: 0.9rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmVerse — Internship Project Report | Infosys Springboard 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --green-dark: #14532d;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --gold: #d97706;
+    --gold-light: #fef3c7;
+    --dark: #0f172a;
+    --dark-2: #1e293b;
+    --dark-3: #334155;
+    --mid: #64748b;
+    --light: #f8fafc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.7;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    background: linear-gradient(135deg, #0f172a 0%, #14532d 50%, #16a34a 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(22,163,74,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(22,163,74,0.3);
+    border: 1px solid rgba(22,163,74,0.6);
+    color: #86efac;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover h1 span { color: #86efac; }
+  .cover .subtitle {
+    font-size: 20px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 40px;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-meta-item { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .cover-meta-item strong { display: block; color: white; font-size: 15px; margin-bottom: 2px; }
+  .cover-divider {
+    height: 6px;
+    background: linear-gradient(90deg, #16a34a, #2563eb, #16a34a);
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* TABLE OF CONTENTS */
+  .toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow);
+  }
+  .toc h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toc h2::before { content: '📋'; font-size: 20px; }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .toc a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .toc a:hover { background: var(--green-light); }
+  .toc-num { font-weight: 700; color: var(--mid); font-size: 12px; min-width: 20px; }
+
+  /* SECTIONS */
+  section {
+    margin-bottom: 56px;
+    scroll-margin-top: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-number {
+    width: 44px; height: 44px;
+    background: var(--green);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--dark);
+  }
+  p { margin-bottom: 14px; color: #374151; font-size: 15px; }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .highlight-box.blue {
+    background: var(--blue-light);
+    border-left-color: var(--blue);
+  }
+  .highlight-box.gold {
+    background: var(--gold-light);
+    border-left-color: var(--gold);
+  }
+  .highlight-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--dark); text-transform: uppercase; letter-spacing: 0.5px; }
+  .highlight-box p { margin: 0; font-size: 14px; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; background: white; }
+  thead { background: var(--dark); color: white; }
+  th { padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  td { padding: 13px 18px; font-size: 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: var(--green-light); }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-green { background: var(--green-light); color: var(--green-dark); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-gold { background: var(--gold-light); color: var(--gold); }
+  .badge-gray { background: #f1f5f9; color: var(--mid); }
+
+  /* CODE BLOCKS */
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: var(--shadow-lg);
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .inline-code {
+    background: #f1f5f9;
+    color: #dc2626;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* FEATURE CARDS */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .feature-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .feature-icon { font-size: 28px; margin-bottom: 12px; }
+  .feature-card h3 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--mid); margin: 0; line-height: 1.5; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin: 20px 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .flow-step:last-child { margin-bottom: 0; }
+  .flow-num {
+    width: 34px; height: 34px;
+    background: var(--green);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .flow-content h4 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .flow-content p { font-size: 13px; color: var(--mid); margin: 0; }
+  .flow-arrow { text-align: left; margin-left: 17px; color: var(--green); font-size: 20px; line-height: 1; margin-bottom: 4px; }
+
+  /* TECH STACK PILLS */
+  .tech-pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+  .tech-pill {
+    background: var(--dark-2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* MODULE CARDS */
+  .module-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .module-header {
+    background: linear-gradient(135deg, var(--dark), var(--dark-2));
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .module-icon { font-size: 24px; }
+  .module-header h3 { font-size: 16px; font-weight: 700; }
+  .module-header .module-tag { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 400; }
+  .module-body { padding: 24px; }
+  .module-body ul { padding-left: 20px; margin: 10px 0; }
+  .module-body li { font-size: 14px; color: #374151; margin-bottom: 6px; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .stat-val { font-size: 36px; font-weight: 800; color: var(--green); line-height: 1; }
+  .stat-card .stat-label { font-size: 12px; color: var(--mid); margin-top: 6px; font-weight: 500; }
+
+  /* PASS FAIL */
+  .pass { color: var(--green); font-weight: 700; }
+  .fail { color: #dc2626; font-weight: 700; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+  }
+  footer strong { color: white; }
+
+  h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin: 24px 0 12px; }
+  h4 { font-size: 15px; font-weight: 600; color: var(--dark-3); margin: 18px 0 8px; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+
+  @media(max-width: 700px) {
+    .cover h1 { font-size: 32px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .container { padding: 30px 20px; }
+  }
+</style>
 </head>
 <body>
 
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Infosys Springboard Virtual Internship 6.0</div>
+  <h1>🌾 Farm<span>Verse</span></h1>
+  <p class="subtitle">Precision Agriculture Management Platform — Internship Project Report</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><strong>Submitted By</strong>Puspal Das</div>
+    <div class="cover-meta-item"><strong>Team</strong>Team C</div>
+    <div class="cover-meta-item"><strong>Project Guide</strong>Ragul S</div>
+    <div class="cover-meta-item"><strong>Platform</strong>Infosys Springboard</div>
+    <div class="cover-meta-item"><strong>Date</strong>September 2026</div>
+  </div>
+</div>
+<div class="cover-divider"></div>
+
 <div class="container">
-    <h1>Project Report: FarmVerse</h1>
-    <div class="subtitle">Precision Agriculture Management Platform</div>
 
-    <h2>1. Project Overview</h2>
-    <p><strong>FarmVerse</strong> is a fully functional, Java Full Stack platform designed to modernize agricultural management. It bridges the gap between traditional farming and modern software by providing a centralized hub for AI advisory, crop planning, pest detection, and direct market trading.</p>
-    <p>This report details the <strong>exact features, modules, and workflows</strong> that have been successfully developed and integrated into the current state of the application.</p>
+  <!-- STATS -->
+  <div class="stat-grid" style="margin-bottom:40px;">
+    <div class="stat-card"><div class="stat-val">9</div><div class="stat-label">REST Controllers</div></div>
+    <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">DB Collections</div></div>
+    <div class="stat-card"><div class="stat-val">9</div><div class="stat-label">Frontend Pages</div></div>
+    <div class="stat-card"><div class="stat-val">7</div><div class="stat-label">Core Modules</div></div>
+  </div>
 
-    <h2>2. Implemented Modules & Features</h2>
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#s1"><span class="toc-num">01</span>Project Title</a>
+      <a href="#s2"><span class="toc-num">02</span>Project Objective</a>
+      <a href="#s3"><span class="toc-num">03</span>Project Description</a>
+      <a href="#s4"><span class="toc-num">04</span>Technology Stack</a>
+      <a href="#s5"><span class="toc-num">05</span>System Architecture</a>
+      <a href="#s6"><span class="toc-num">06</span>Module-Wise Features</a>
+      <a href="#s7"><span class="toc-num">07</span>Database Design</a>
+      <a href="#s8"><span class="toc-num">08</span>API Design</a>
+      <a href="#s9"><span class="toc-num">09</span>Security Implementation</a>
+      <a href="#s10"><span class="toc-num">10</span>AI Integration</a>
+      <a href="#s11"><span class="toc-num">11</span>Key Code Snippets</a>
+      <a href="#s12"><span class="toc-num">12</span>Challenges and Resolutions</a>
+      <a href="#s13"><span class="toc-num">13</span>Learnings Acquired</a>
+      <a href="#s14"><span class="toc-num">14</span>Future Enhancements</a>
+      <a href="#s15"><span class="toc-num">15</span>Conclusion</a>
+    </div>
+  </div>
 
-    <h3>2.1. Secure Authentication & Role Management</h3>
-    <p><em>(Managed by <code>AuthController.java</code>)</em></p>
-    <ul>
-        <li><strong>JWT-Based Security:</strong> The platform uses JSON Web Tokens (JWT) for stateless, encrypted sessions.</li>
-        <li><strong>Role-Based Workflows:</strong> Distinct login portals and dashboards for <strong>Farmers</strong> (<code>login.html</code>) and <strong>Administrators</strong> (<code>admin-login.html</code>).</li>
-        <li><strong>Registration:</strong> Secure user signup process mapping users to their specific roles and saving them into MongoDB.</li>
-    </ul>
+  <!-- S1: TITLE -->
+  <section id="s1">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <h2>Project Title</h2>
+    </div>
+    <div class="highlight-box">
+      <h3>FarmVerse — Precision Agriculture Management Platform</h3>
+      <p>A full-stack, AI-powered web application designed to bridge the technological gap in Indian agriculture by providing farmers with real-time AI advisory, computer-vision pest detection, a digital marketplace, gamified learning, and an administrative oversight system — all secured with enterprise-grade JWT authentication.</p>
+    </div>
+    <div class="tech-pills">
+      <div class="tech-pill">☕ Java 21</div>
+      <div class="tech-pill">🌿 Spring Boot 4.1</div>
+      <div class="tech-pill">🗄️ MongoDB Atlas</div>
+      <div class="tech-pill">🔐 JWT Security</div>
+      <div class="tech-pill">🤖 Google Gemini AI</div>
+      <div class="tech-pill">🌐 Vanilla JS</div>
+    </div>
+  </section>
 
-    <h3>2.2. The Farmer Dashboard (<code>dashboard.html</code>)</h3>
-    <p>The core interface for farmers, serving as a unified control center.</p>
-    <ul>
-        <li><strong>Gamification Engine (<code>UserController.java</code>):</strong> Implements an Experience Point (XP) and Leveling system. Farmers are assigned daily missions (e.g., "Check weather", "Log crop status") to drive daily app engagement.</li>
-        <li><strong>Smart AI Assistant (<code>AIController.java</code>):</strong> A real-time chat interface connected to Google's <strong>Gemini 3.6 Flash</strong> model. It answers complex agricultural queries, with built-in retry logic to handle server load (503 errors).</li>
-        <li><strong>Advisory History:</strong> Securely logs all AI interactions to the database, allowing farmers to review past advice.</li>
-        <li><strong>Pest Detection Module (<code>PestController.java</code>):</strong> A dedicated interface allowing farmers to identify crop diseases and pests.</li>
-    </ul>
+  <!-- S2: OBJECTIVE -->
+  <section id="s2">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <h2>Project Objective</h2>
+    </div>
+    <p>The primary objective of this internship project was to design, develop, and deploy a comprehensive Precision Agriculture Management Platform that achieves the following goals:</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>Generative AI Advisory</h3>
+        <p>Provide real-time, contextual AI advisory to farmers for crop management, fertilizer selection, and irrigation planning using Large Language Models (LLMs).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <h3>Computer-Vision Pest Detection</h3>
+        <p>Enable computer-vision-based pest and disease detection from leaf photographs uploaded by farmers, providing instant diagnosis and remedy recommendations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏪</div>
+        <h3>Digital Marketplace</h3>
+        <p>Create a direct farmer-to-buyer digital marketplace for agricultural products, seeds, equipment, and fertilizers — eliminating middlemen and increasing farmer income.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <h3>Gamification Engine</h3>
+        <p>Implement an XP-based gamification engine to drive farmer engagement and behavioral change through Daily Missions, Levels, and Village Leaderboards.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍💼</div>
+        <h3>Admin Command Center</h3>
+        <p>Provide administrators with a dedicated Command Center to moderate the marketplace, manage user roles, resolve disputes, and maintain platform integrity.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏗️</div>
+        <h3>Enterprise Architecture</h3>
+        <p>Demonstrate proficiency in full-stack engineering using Java 21, Spring Boot 4.x, MongoDB Atlas, Spring Security with JWT, and Google Gemini AI.</p>
+      </div>
+    </div>
+  </section>
 
-    <h3>2.3. Crop Sowing Calendar (<code>calendar.html</code>)</h3>
-    <p><em>(Managed by <code>CropCalendarController.java</code>)</em></p>
-    <ul>
-        <li><strong>Visual Planning:</strong> A dedicated calendar UI that allows farmers to visually plan out their crop cycles.</li>
-        <li><strong>Task Management:</strong> Full Create, Read, Update, and Delete (CRUD) operations for agricultural events, sowing dates, and harvest timelines.</li>
-    </ul>
+  <!-- S3: DESCRIPTION -->
+  <section id="s3">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <h2>Project Description</h2>
+    </div>
+    <p>FarmVerse is a single, unified platform that replaces the fragmented digital experience of Indian farmers. Prior to this platform, a farmer would use one app for weather, a different website for crop prices, a WhatsApp group for pest advice, and an unregulated channel for selling produce. FarmVerse consolidates all these functions into a single, secure, AI-powered ecosystem.</p>
 
-    <h3>2.4. Digital Farmer's Marketplace (<code>marketplace.html</code>)</h3>
-    <p><em>(Managed by <code>MarketplaceController.java</code>)</em></p>
-    <ul>
-        <li><strong>Direct Selling:</strong> Eliminates middlemen by allowing farmers to list their agricultural products directly on the platform.</li>
-        <li><strong>Product Management:</strong> Farmers can create product listings with prices, descriptions, and available quantities.</li>
-        <li><strong>Secure Commerce:</strong> Buyers can view and interact with these listings in a dedicated marketplace interface.</li>
-    </ul>
-
-    <h3>2.5. Admin Command Center (<code>admin-dashboard.html</code>)</h3>
-    <p>A highly privileged portal for platform administrators to monitor and control the ecosystem.</p>
-    <ul>
-        <li><strong>User Analytics & Management (<code>AdminController.java</code>):</strong> Allows admins to view total registered users, track platform usage statistics, and manage user accounts.</li>
-        <li><strong>Marketplace Moderation (<code>AdminMarketplaceController.java</code>):</strong> Provides oversight over the marketplace. Admins can review listings, handle disputes, and remove fraudulent or inappropriate products to ensure a safe trading environment.</li>
-    </ul>
-
-    <h3>2.6. Public Landing Page (<code>index.html</code>)</h3>
-    <ul>
-        <li><strong>Interactive Front:</strong> A modern, responsive landing page explaining the platform's benefits.</li>
-        <li><strong>Contact Management (<code>ContactRequestController.java</code>):</strong> Allows public users to submit inquiries, which are routed to the backend database for admin review.</li>
-    </ul>
-
-    <h2>3. Technology Stack (Actual Implementation)</h2>
-    <div class="tech-grid">
-        <div class="tech-card">
-            <strong>Frontend</strong>
-            HTML5, CSS3, Vanilla JavaScript. No heavy frontend frameworks, ensuring maximum performance and low load times.
+    <h3>Three-Tier Architecture Approach</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-content">
+          <h4>Presentation Tier — Lightweight Frontend</h4>
+          <p>A responsive, lightweight frontend using native HTML5, CSS3, and Vanilla JavaScript. The deliberate choice to avoid heavy frameworks like React ensures lightning-fast load times for farmers with low-bandwidth rural internet connections.</p>
         </div>
-        <div class="tech-card">
-            <strong>Backend</strong>
-            Java 21, Spring Boot 3.x, Spring Web, Spring Security. Robust REST APIs.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-content">
+          <h4>Application Tier — Spring Boot REST API</h4>
+          <p>A robust Spring Boot 4.x backend with 9 specialized REST Controllers exposing a secure JSON API. Spring Security with JWT ensures only authenticated users access protected resources, with role-based separation between Farmers and Admins.</p>
         </div>
-        <div class="tech-card">
-            <strong>Database</strong>
-            MongoDB Atlas (Cloud NoSQL) managed via Spring Data MongoDB.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-content">
+          <h4>Data Tier — MongoDB Atlas (Cloud NoSQL)</h4>
+          <p>MongoDB Atlas, a cloud-hosted NoSQL document database, stores all platform data in a flexible document format, making it easy to evolve the data model as new features are added without requiring database migrations.</p>
         </div>
-        <div class="tech-card">
-            <strong>AI & Tools</strong>
-            Google Gemini REST API accessed via Spring RestTemplate. Maven for project building.
-        </div>
+      </div>
     </div>
 
-    <h2>4. End-to-End User Workflow</h2>
-    <ol>
-        <li><strong>Onboarding:</strong> A user lands on <code>index.html</code>, navigates to <code>signup.html</code>, and registers as a Farmer.</li>
-        <li><strong>Authentication:</strong> The user logs in via <code>login.html</code>. The backend validates the credentials against MongoDB, generates a secure JWT, and redirects the user to <code>dashboard.html</code>.</li>
-        <li><strong>Daily Usage:</strong> The farmer checks their daily missions on the dashboard. They open the <strong>AI Assistant</strong> to ask a question about fertilizer. The backend routes this to the Gemini API, logs the conversation, and returns the answer. The farmer earns XP for this action.</li>
-        <li><strong>Planning:</strong> The farmer navigates to <code>calendar.html</code> to schedule their upcoming wheat harvest.</li>
-        <li><strong>Selling:</strong> Once harvested, the farmer goes to <code>marketplace.html</code> and creates a listing for their wheat.</li>
-        <li><strong>Moderation:</strong> An administrator logs into <code>admin-login.html</code>, navigates to the <code>admin-dashboard.html</code>, reviews the new marketplace listing via the Moderation tab, and monitors the overall platform health.</li>
-    </ol>
+    <h3>Real-World Impact</h3>
+    <div class="highlight-box blue">
+      <h3>Democratization of AI</h3>
+      <p>By embedding Google Gemini AI directly into the farmer's dashboard, FarmVerse makes cutting-edge AI technology accessible to rural farmers who previously had no access to such tools.</p>
+    </div>
+    <div class="highlight-box">
+      <h3>Market Transparency</h3>
+      <p>The digital marketplace eliminates middlemen and allows farmers to list produce directly for buyers at their own prices, potentially increasing farmer income significantly.</p>
+    </div>
+    <div class="highlight-box gold">
+      <h3>Food Security</h3>
+      <p>By helping farmers identify crop diseases early and plan their sowing seasons correctly, the platform directly contributes to improving agricultural yield and national food security.</p>
+    </div>
+  </section>
 
-    <h2>5. Conclusion</h2>
-    <p>The FarmVerse project successfully delivers on its promise of a unified agricultural platform. By combining a gamified interface with real-time AI and direct marketplace trading, it provides a functional, secure, and highly modern solution to the problems faced by traditional farmers.</p>
+  <!-- S4: TECH STACK -->
+  <section id="s4">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <h2>Technology Stack</h2>
+    </div>
+    <h3>Backend Technologies</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Technology</th><th>Version</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Java</strong></td><td><span class="badge badge-green">21 LTS</span></td><td>Core application programming language</td></tr>
+          <tr><td><strong>Spring Boot</strong></td><td><span class="badge badge-green">4.1.0</span></td><td>Primary backend web framework (REST API)</td></tr>
+          <tr><td><strong>Spring Security</strong></td><td><span class="badge badge-blue">6.x</span></td><td>Authentication, authorization, and security filters</td></tr>
+          <tr><td><strong>Spring Data MongoDB</strong></td><td><span class="badge badge-gray">Built-in</span></td><td>Object-Document Mapping (ODM) for MongoDB</td></tr>
+          <tr><td><strong>JJWT (io.jsonwebtoken)</strong></td><td><span class="badge badge-gold">0.12.7</span></td><td>JWT token creation, signing, and validation</td></tr>
+          <tr><td><strong>Lombok</strong></td><td><span class="badge badge-gray">Latest</span></td><td>Annotation-based boilerplate elimination (@Data, @Builder)</td></tr>
+          <tr><td><strong>RestTemplate</strong></td><td><span class="badge badge-gray">Built-in</span></td><td>HTTP client for calling Google Gemini API</td></tr>
+          <tr><td><strong>Maven</strong></td><td><span class="badge badge-gray">3.x</span></td><td>Build automation and dependency management</td></tr>
+          <tr><td><strong>Jackson</strong></td><td><span class="badge badge-gray">Built-in</span></td><td>Automatic Java-to-JSON serialization/deserialization</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <footer>
-        FarmVerse Precision Agriculture Management Platform &copy; 2026
-    </footer>
+    <h3>Frontend Technologies</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Technology</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>HTML5</strong></td><td>Semantic page structure for all 9 frontend pages</td></tr>
+          <tr><td><strong>CSS3</strong></td><td>Visual styling, animations, glassmorphism UI effects</td></tr>
+          <tr><td><strong>Vanilla JavaScript</strong></td><td>Business logic, DOM manipulation, and API communication</td></tr>
+          <tr><td><strong>Fetch API</strong></td><td>Asynchronous REST API calls to the Spring Boot backend</td></tr>
+          <tr><td><strong>LocalStorage API</strong></td><td>Client-side JWT token and user data persistence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Cloud and External Services</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Service</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>MongoDB Atlas</strong></td><td>Cloud-hosted NoSQL document database (Free M0 Cluster)</td></tr>
+          <tr><td><strong>Google Gemini 3.6 Flash</strong></td><td>Large Language Model for AI advisory and pest analysis</td></tr>
+          <tr><td><strong>GitHub</strong></td><td>Source code version control and repository hosting</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S5: ARCHITECTURE -->
+  <section id="s5">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <h2>System Architecture</h2>
+    </div>
+    <h3>End-to-End Data Flow (AI Advisory Example)</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-content"><h4>Farmer Input (Browser)</h4><p>Farmer types a question in dashboard.html. Vanilla JavaScript captures the input and prepares an HTTP POST request.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-content"><h4>HTTP Request with JWT</h4><p>JavaScript sends POST to <span class="inline-code">/api/ai/chat</span> with the <span class="inline-code">Authorization: Bearer {token}</span> header attached.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-content"><h4>JwtAuthenticationFilter Intercepts</h4><p>Validates the JWT signature and extracts the user's email. Sets the Authentication context in Spring's SecurityContextHolder.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-content"><h4>AIController Processes Request</h4><p>Injects system prompt ("You are an expert agricultural advisor..."), constructs the Gemini API request payload, and loads GEMINI_API_KEY from environment variables.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-content"><h4>Google Gemini API (with Retry Logic)</h4><p>RestTemplate sends the request to Google. If HTTP 503 is received, the retry loop waits 1.5s and tries again — up to 3 times total.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-content"><h4>Response and Logging</h4><p>AI response extracted from Gemini JSON, logged to MongoDB advisory_history collection, and returned to the frontend for display.</p></div>
+      </div>
+    </div>
+
+    <h3>MVC Design Pattern</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Components</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Model</strong></td><td>User.java, MarketplaceListing.java, Dispute.java, CropCalendar.java</td><td>MongoDB document representation</td></tr>
+          <tr><td><strong>View</strong></td><td>index.html, dashboard.html, admin-dashboard.html, etc.</td><td>Frontend UI served as static resources</td></tr>
+          <tr><td><strong>Controller</strong></td><td>9 @RestController classes</td><td>HTTP routing and request orchestration</td></tr>
+          <tr><td><strong>Service</strong></td><td>UserService, AdvisoryHistoryService</td><td>Business logic and data transformation</td></tr>
+          <tr><td><strong>Repository</strong></td><td>UserRepository, MarketplaceListingRepository, etc.</td><td>MongoDB database access (zero boilerplate)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S6: MODULES -->
+  <section id="s6">
+    <div class="section-header">
+      <div class="section-number">06</div>
+      <h2>Module-Wise Feature Details</h2>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">🔐</div>
+        <div><h3>Module 1: Authentication &amp; Security System</h3><div class="module-tag">AuthController.java | JwtService.java | SecurityConfig.java</div></div>
+      </div>
+      <div class="module-body">
+        <p>Manages user registration, login, and JWT token issuance. Ensures each user only accesses resources appropriate to their role.</p>
+        <ul>
+          <li>BCrypt password hashing — raw passwords are never stored</li>
+          <li>JWT generation with HMAC-SHA256 digital signature (24-hour validity)</li>
+          <li>Role-based access control: USER vs. ADMIN</li>
+          <li>Account suspension check (HTTP 403 returned even with correct credentials)</li>
+          <li>Duplicate email detection with clear error messages during registration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">🤖</div>
+        <div><h3>Module 2: AI Agricultural Advisory System</h3><div class="module-tag">AIController.java | AdvisoryHistoryService.java | AppConfig.java</div></div>
+      </div>
+      <div class="module-body">
+        <p>Integrates Google Gemini 3.6 Flash LLM for real-time, contextual crop management advice. The most technically sophisticated module in the platform.</p>
+        <ul>
+          <li><strong>System Prompt Injection:</strong> Constrains AI to agricultural topics only</li>
+          <li><strong>Retry Mechanism:</strong> Custom loop — 3 retries with 1.5s delay for HTTP 503 errors</li>
+          <li><strong>API Key Security:</strong> GEMINI_API_KEY loaded from system environment variables via @Value</li>
+          <li><strong>Advisory History Logging:</strong> Every interaction saved to MongoDB with user email, query, response, and timestamp</li>
+          <li>Topics covered: Fertilizers, irrigation, organic practices, pest prevention, crop rotation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">🔬</div>
+        <div><h3>Module 3: Computer-Vision Pest &amp; Disease Detector</h3><div class="module-tag">PestController.java | Gemini Vision API</div></div>
+      </div>
+      <div class="module-body">
+        <p>Allows farmers to upload a photograph of a diseased crop leaf. Processed using Google Gemini's multimodal (vision + text) capability.</p>
+        <ul>
+          <li>Supports JPG, PNG, WEBP image formats</li>
+          <li>Detected pest/disease name (e.g., "Fall Armyworm", "Leaf Blight")</li>
+          <li>Severity assessment and chemical/organic remedy recommendations</li>
+          <li>Dosage and application timing provided</li>
+          <li>Result automatically logged to Advisory History for future reference</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">🏪</div>
+        <div><h3>Module 4: Digital Farmer's Marketplace</h3><div class="module-tag">MarketplaceController.java | AdminMarketplaceController.java</div></div>
+      </div>
+      <div class="module-body">
+        <p>A direct-to-buyer trading platform with an Admin moderation workflow to prevent fraudulent or low-quality listings.</p>
+        <ul>
+          <li>Categories: Crop, Vegetable, Fruit, Fertilizer, Equipment</li>
+          <li>Listing lifecycle: PENDING → APPROVED/REJECTED → SOLD</li>
+          <li>Buyer-seller dispute filing and Admin resolution system</li>
+          <li>Organic Certification badge support for verified produce</li>
+          <li>Location-based listing with quantity and unit price details</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">📅</div>
+        <div><h3>Module 5: Crop Sowing Calendar</h3><div class="module-tag">CropCalendarController.java | Admin CRUD</div></div>
+      </div>
+      <div class="module-body">
+        <p>Visual, data-driven reference for farmers to plan sowing and harvesting activities by season and crop type.</p>
+        <ul>
+          <li><strong>Kharif (June-Oct):</strong> Rice, Maize, Mango, Cotton, Groundnut</li>
+          <li><strong>Rabi (Oct-Mar):</strong> Tomato, Cucumber, Chickpea, Mustard, Barley</li>
+          <li><strong>Summer (Mar-Jun):</strong> Okra, Watermelon, Muskmelon, Moong Dal</li>
+          <li>Farmers can submit "Suggest a Crop" requests via the Admin moderation queue</li>
+          <li>Admins have full CRUD control over calendar entries from the Command Center</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">🎮</div>
+        <div><h3>Module 6: Gamification Engine</h3><div class="module-tag">UserController.java | /api/user/sync</div></div>
+      </div>
+      <div class="module-body">
+        <p>Applies game design psychology to drive consistent farmer engagement and behavioral adoption of good farming practices.</p>
+        <ul>
+          <li><strong>Daily Missions:</strong> "Log Soil Moisture" (+10 XP), "Ask AI" (+15 XP), "Browse Marketplace" (+5 XP)</li>
+          <li><strong>Leveling System:</strong> Level 1 (Seed) → Level 2 (Growing) → Level 3 (Expert) → Level 4 (Master)</li>
+          <li><strong>Village Leaderboard:</strong> Regional rankings by XP encouraging healthy competition</li>
+          <li><strong>Achievements:</strong> Unlockable badges for milestones (First Harvest, AI Expert, Market Veteran)</li>
+          <li>XP and mission state persisted to MongoDB via /api/user/sync on every change</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <div class="module-icon">👨‍💼</div>
+        <div><h3>Module 7: Admin Command Center</h3><div class="module-tag">AdminController.java | AdminMarketplaceController.java</div></div>
+      </div>
+      <div class="module-body">
+        <p>A completely separate, dark-themed dashboard accessible only to ADMIN role users, providing centralized platform oversight.</p>
+        <ul>
+          <li><strong>Overview Dashboard:</strong> Live user counts (13 total, 10 farmers, 15 active) pulled from MongoDB</li>
+          <li><strong>User Management:</strong> Full table with role change (Farmer/Vet/Admin) and suspend functionality</li>
+          <li><strong>Marketplace Moderation:</strong> Filter by status (Pending/Approved/Rejected), one-click approve/reject</li>
+          <li><strong>Dispute Resolution:</strong> Mark disputes OPEN → RESOLVED or DISMISSED</li>
+          <li><strong>Live Activity Feed:</strong> Real-time log of logins, registrations, JWT refreshes, and listing submissions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7: DATABASE -->
+  <section id="s7">
+    <div class="section-header">
+      <div class="section-number">07</div>
+      <h2>Database Design</h2>
+    </div>
+    <h3>Why NoSQL (MongoDB) over SQL?</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Aspect</th><th>Traditional SQL</th><th>MongoDB Atlas (Chosen)</th></tr></thead>
+        <tbody>
+          <tr><td>Schema</td><td>Rigid, requires migrations</td><td>Flexible document model</td></tr>
+          <tr><td>Gamification Fields</td><td>Requires separate JOIN table</td><td>Embedded directly in User document</td></tr>
+          <tr><td>Data Format</td><td>Rows and columns (SQL)</td><td>BSON/JSON (no translation overhead)</td></tr>
+          <tr><td>Scaling</td><td>Vertical only (expensive)</td><td>Horizontal sharding (built-in Atlas)</td></tr>
+          <tr><td>Cloud Hosting</td><td>Self-managed required</td><td>Atlas Free M0 cluster (managed)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Collections Overview</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Collection</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>users</strong></td><td>Core user accounts with embedded gamification state (XP, level, missions)</td></tr>
+          <tr><td>2</td><td><strong>marketplace_listings</strong></td><td>Agricultural product and equipment listings with status lifecycle</td></tr>
+          <tr><td>3</td><td><strong>disputes</strong></td><td>Buyer-seller conflict records with resolution status</td></tr>
+          <tr><td>4</td><td><strong>crop_calendars</strong></td><td>Seasonal crop sowing and harvesting window data</td></tr>
+          <tr><td>5</td><td><strong>contact_requests</strong></td><td>Contact form submissions from the landing page</td></tr>
+          <tr><td>6</td><td><strong>advisory_history</strong></td><td>Complete log of all AI chat and pest detection interactions</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>User Document Schema</h3>
+    <pre><code>{
+  "_id":              "ObjectId (auto-generated)",
+  "name":             "String",
+  "email":            "String (unique, indexed)",
+  "password":         "String (BCrypt hashed — NEVER plaintext)",
+  "role":             "String [ USER | ADMIN ]",
+
+  // Gamification Engine Fields
+  "xp":               "Integer (default: 40)",
+  "level":            "Integer (default: 1)",
+  "missionsState":    "[Boolean, Boolean, Boolean, Boolean, Boolean]",
+
+  // Farmer Profile
+  "phone":            "String",
+  "soilType":         "String [ Black | Red | Alluvial | Clay | Sandy ]",
+  "landSize":         "Double (acres)",
+  "language":         "String [ English | Telugu | Hindi ]",
+
+  // Admin Control
+  "suspended":        "Boolean (default: false)",
+  "subscriptionPlan": "String [ FREE | PREMIUM ]"
+}</code></pre>
+  </section>
+
+  <!-- S8: API -->
+  <section id="s8">
+    <div class="section-header">
+      <div class="section-number">08</div>
+      <h2>API Design &amp; Controller Details</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Controller</th><th>Base Path</th><th>Methods</th><th>Role Required</th></tr></thead>
+        <tbody>
+          <tr><td><strong>AuthController</strong></td><td>/api/auth</td><td>POST</td><td><span class="badge badge-green">Public</span></td></tr>
+          <tr><td><strong>UserController</strong></td><td>/api/user</td><td>GET, POST</td><td><span class="badge badge-blue">Authenticated</span></td></tr>
+          <tr><td><strong>AIController</strong></td><td>/api/ai</td><td>POST</td><td><span class="badge badge-blue">Authenticated</span></td></tr>
+          <tr><td><strong>PestController</strong></td><td>/api/pest</td><td>POST</td><td><span class="badge badge-blue">Authenticated</span></td></tr>
+          <tr><td><strong>MarketplaceController</strong></td><td>/api/marketplace</td><td>GET, POST</td><td><span class="badge badge-green">Public</span></td></tr>
+          <tr><td><strong>CropCalendarController</strong></td><td>/api/crop-calendar</td><td>GET</td><td><span class="badge badge-green">Public</span></td></tr>
+          <tr><td><strong>ContactRequestController</strong></td><td>/api/contact</td><td>POST</td><td><span class="badge badge-green">Public</span></td></tr>
+          <tr><td><strong>AdminController</strong></td><td>/api/admin</td><td>GET, PATCH, DELETE</td><td><span class="badge badge-gold">ADMIN Only</span></td></tr>
+          <tr><td><strong>AdminMarketplaceController</strong></td><td>/api/admin/marketplace</td><td>GET, PATCH</td><td><span class="badge badge-gold">ADMIN Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Spring Boot Annotations Used</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Annotation</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><span class="inline-code">@RestController</span></td><td>Marks class as REST controller; all methods automatically return JSON via Jackson</td></tr>
+          <tr><td><span class="inline-code">@RequestMapping</span></td><td>Defines base URL path for all endpoints in the controller class</td></tr>
+          <tr><td><span class="inline-code">@CrossOrigin</span></td><td>Enables CORS headers so browser does not block JS-to-backend requests</td></tr>
+          <tr><td><span class="inline-code">@GetMapping / @PostMapping / @PatchMapping</span></td><td>Maps specific HTTP methods to Java methods</td></tr>
+          <tr><td><span class="inline-code">@RequestBody</span></td><td>Binds incoming JSON payload directly to a Java DTO object</td></tr>
+          <tr><td><span class="inline-code">@PathVariable</span></td><td>Extracts dynamic values from URL path (e.g., /disputes/{id})</td></tr>
+          <tr><td><span class="inline-code">@Valid</span></td><td>Triggers JSR-380 validation on request body before method executes</td></tr>
+          <tr><td><span class="inline-code">@Value</span></td><td>Injects values from application.properties (e.g., GEMINI_API_KEY)</td></tr>
+          <tr><td><span class="inline-code">@Document</span></td><td>Marks class as a MongoDB document (collection mapping)</td></tr>
+          <tr><td><span class="inline-code">@Indexed(unique=true)</span></td><td>Creates a unique index in MongoDB (used on email field)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S9: SECURITY -->
+  <section id="s9">
+    <div class="section-header">
+      <div class="section-number">09</div>
+      <h2>Security Implementation</h2>
+    </div>
+    <h3>Multi-Layer Defence-in-Depth Architecture</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">L1</div>
+        <div class="flow-content"><h4>CORS Filter</h4><p>CorsConfigurationSource allows frontend JavaScript (running in browser) to make API calls to the backend without being blocked by browser Same-Origin Policy.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">L2</div>
+        <div class="flow-content"><h4>JWT Authentication Filter</h4><p>JwtAuthenticationFilter extends OncePerRequestFilter — intercepts every HTTP request, reads the Authorization header, validates JWT signature using HMAC-SHA256, and populates SecurityContextHolder.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">L3</div>
+        <div class="flow-content"><h4>SecurityFilterChain (Role-Based Access Control)</h4><p>Public: /api/auth/**, /api/marketplace/**, static files. Admin-only: /api/admin/** (hasRole("ADMIN")). All others: require any valid JWT.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">L4</div>
+        <div class="flow-content"><h4>BCrypt Password Hashing</h4><p>All passwords are hashed using BCryptPasswordEncoder (cost factor 10) before being stored in MongoDB. Raw passwords are never persisted anywhere.</p></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">L5</div>
+        <div class="flow-content"><h4>Account Suspension Check</h4><p>AuthController checks user.isSuspended() AFTER successful credential validation. Suspended users receive HTTP 403 Forbidden even with correct credentials.</p></div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <h3>Why JWT instead of Session Cookies?</h3>
+      <p>JWT makes the backend completely stateless — the server does not store session data in RAM. This means: (1) It scales to unlimited users without memory issues, (2) It works seamlessly with future Android/iOS apps, (3) Multiple load-balanced servers can validate any JWT without shared session storage.</p>
+    </div>
+  </section>
+
+  <!-- S10: AI -->
+  <section id="s10">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2>AI Integration</h2>
+    </div>
+    <h3>Google Gemini 3.6 Flash — Integration Architecture</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td><strong>API Endpoint</strong></td><td>https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent</td></tr>
+          <tr><td><strong>HTTP Client</strong></td><td>Spring RestTemplate (synchronous HTTP)</td></tr>
+          <tr><td><strong>Auth Method</strong></td><td>API Key in URL query parameter (?key={GEMINI_API_KEY})</td></tr>
+          <tr><td><strong>Request Format</strong></td><td>JSON with contents[].parts[].text (System Prompt + User Question)</td></tr>
+          <tr><td><strong>Response Parsing</strong></td><td>extractTextFromGeminiResponse() navigates nested JSON path</td></tr>
+          <tr><td><strong>Error Handling</strong></td><td>3 retries with 1.5s delay on HTTP 503; graceful fallback message</td></tr>
+          <tr><td><strong>History Logging</strong></td><td>Every interaction saved to advisory_history MongoDB collection</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Retry Logic Flow</h3>
+    <pre><code>MAX_RETRIES = 3
+RETRY_DELAY = 1500ms
+
+Attempt 1 → Call Google Gemini API
+  ✅ Success → Extract text → Log to MongoDB → Return to frontend
+  ❌ 503 Error → Wait 1.5 seconds
+
+Attempt 2 → Retry Google Gemini API
+  ✅ Success → Extract text → Log to MongoDB → Return to frontend
+  ❌ 503 Error → Wait 1.5 seconds
+
+Attempt 3 → Final retry
+  ✅ Success → Extract text → Log to MongoDB → Return to frontend
+  ❌ 503 Error → Return: "The AI is experiencing high demand. Please try again shortly."</code></pre>
+  </section>
+
+  <!-- S11: CODE SNIPPETS -->
+  <section id="s11">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <h2>Key Code Snippets</h2>
+    </div>
+
+    <h3>1. JWT Authentication (AuthController.java)</h3>
+    <pre><code>@PostMapping("/login")
+public ResponseEntity&lt;AuthResponse&gt; login(@Valid @RequestBody LoginRequest request) {
+
+    // Validates credentials (throws BadCredentialsException if wrong)
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+    );
+
+    User user = userService.findByEmail(request.getEmail());
+
+    // Security: Block suspended accounts even with correct credentials
+    if (user.isSuspended()) {
+        return ResponseEntity.status(403).body(new AuthResponse("Account Suspended", "NONE"));
+    }
+
+    // Generate stateless JWT token signed with HMAC-SHA256
+    String token = jwtService.generateToken(user.getEmail());
+    return ResponseEntity.ok(new AuthResponse(token, user.getRole()));
+}</code></pre>
+
+    <h3>2. Google Gemini AI with Retry Logic (AIController.java)</h3>
+    <pre><code>// Custom retry loop — handles temporary Google server overload (HTTP 503)
+int maxRetries = 3;
+for (int attempt = 1; attempt &lt;= maxRetries; attempt++) {
+    try {
+        ResponseEntity&lt;Map&gt; response = restTemplate.exchange(
+            url, HttpMethod.POST, entity, Map.class
+        );
+        Map&lt;String, Object&gt; body = response.getBody();
+
+        if (body != null &amp;&amp; body.containsKey("candidates")) {
+            return extractTextFromGeminiResponse(body); // ✅ Success
+        }
+    } catch (Exception e) {
+        System.err.println("Gemini API attempt " + attempt + " failed: " + e.getMessage());
+        if (attempt &lt; maxRetries) {
+            Thread.sleep(1500); // Wait 1.5 seconds before retry
+        } else {
+            return "The AI is currently experiencing high demand. Please try again! 🌱";
+        }
+    }
+}</code></pre>
+
+    <h3>3. Spring Security Filter Chain (SecurityConfig.java)</h3>
+    <pre><code>@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -&gt; csrf.disable())  // Stateless API — no CSRF needed
+        .cors(cors -&gt; cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(auth -&gt; auth
+            .requestMatchers(
+                "/", "/*.html", "/*.css", "/*.js",
+                "/api/auth/**", "/api/marketplace/**", "/api/crop-calendar/**"
+            ).permitAll()
+            .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin-only guard
+            .anyRequest().authenticated()
+        )
+        .sessionManagement(s -&gt;
+            s.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No server sessions
+        )
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+}</code></pre>
+
+    <h3>4. MongoDB User Entity with Gamification (User.java)</h3>
+    <pre><code>@Document(collection = "users")
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
+public class User {
+
+    @Id
+    private String id;
+
+    @Indexed(unique = true) // MongoDB unique index on email
+    private String email;
+
+    private String password; // BCrypt hashed — never plaintext
+
+    /** Allowed values: USER, ADMIN */
+    private String role;
+
+    // ── Gamification Engine ──────────────────────────────────────────────
+    @Builder.Default private int xp = 40;
+    @Builder.Default private int level = 1;
+    private java.util.List&lt;Boolean&gt; missionsState;
+
+    // ── Farmer Profile ───────────────────────────────────────────────────
+    private String phone;
+    private String soilType;   // "Black Soil", "Red Soil", "Alluvial Soil"
+    private Double landSize;   // in acres
+
+    // ── Admin Control ────────────────────────────────────────────────────
+    @Builder.Default private boolean suspended = false;
+    @Builder.Default private String subscriptionPlan = "FREE";
+    @Builder.Default private String language = "English";
+}</code></pre>
+
+    <h3>5. Gamification XP Sync Endpoint (UserController.java)</h3>
+    <pre><code>/** POST /api/user/sync — Save XP, level, and mission checkbox state to MongoDB */
+@PostMapping("/sync")
+public ResponseEntity&lt;ApiResponse&gt; syncUserData(@RequestBody UserSyncDto syncDto) {
+
+    // Get the currently logged-in user from JWT Security Context
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    User user = userService.findByEmail(auth.getName());
+
+    if (user == null) {
+        return ResponseEntity.status(401).body(new ApiResponse("Unauthorized"));
+    }
+
+    // Update gamification fields from frontend
+    user.setXp(syncDto.getXp());
+    user.setLevel(syncDto.getLevel());
+    user.setMissionsState(syncDto.getMissionsState());
+
+    // Persist to MongoDB Atlas
+    userService.saveUser(user);
+
+    return ResponseEntity.ok(new ApiResponse("Data synced successfully"));
+}</code></pre>
+  </section>
+
+  <!-- S12: CHALLENGES -->
+  <section id="s12">
+    <div class="section-header">
+      <div class="section-number">12</div>
+      <h2>Challenges Faced &amp; Resolutions</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Challenge</th><th>Problem</th><th>Resolution</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>AI API Deprecation</strong></td>
+            <td>Google deprecated the older Gemini endpoint, causing HTTP 404 errors for all AI requests</td>
+            <td>Updated AIController to use the latest Gemini 3.6 Flash endpoint. Externalized URL to configuration for future-proofing.</td>
+            <td><span class="pass">✅ RESOLVED</span></td>
+          </tr>
+          <tr>
+            <td><strong>HTTP 503 AI Errors</strong></td>
+            <td>Intermittent Google server overload caused the AI chatbot to crash with error messages</td>
+            <td>Engineered a custom 3-retry loop with 1.5s delay. Only after all 3 failures does it return a friendly error message.</td>
+            <td><span class="pass">✅ RESOLVED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Credential Security</strong></td>
+            <td>Hardcoded MongoDB password and Gemini API key in source code posed a critical security risk</td>
+            <td>Moved all secrets to system environment variables. Spring @Value injects them at runtime. Never in source code.</td>
+            <td><span class="pass">✅ RESOLVED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Frontend Route Guarding</strong></td>
+            <td>Users could navigate directly to admin-dashboard.html via URL, bypassing the login check</td>
+            <td>Added JavaScript session guards on page load that check localStorage for JWT and redirect unauthorized users.</td>
+            <td><span class="pass">✅ RESOLVED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Low-Bandwidth Performance</strong></td>
+            <td>Heavy frontend frameworks (React, Angular) would cause slow load times for rural farmers with weak internet</td>
+            <td>Decided to use only native HTML, CSS, and Vanilla JavaScript — keeping all pages lightweight and fast-loading.</td>
+            <td><span class="pass">✅ RESOLVED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S13: LEARNINGS -->
+  <section id="s13">
+    <div class="section-header">
+      <div class="section-number">13</div>
+      <h2>Learnings &amp; Skills Acquired</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">☕</div>
+        <h3>Java 21 &amp; Spring Boot 4.x</h3>
+        <p>Deep understanding of building scalable RESTful APIs, managing dependencies with Maven, and applying the MVC architecture pattern in a real project.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3>Enterprise Security (JWT)</h3>
+        <p>Practical implementation of stateless authentication using JSON Web Tokens, BCrypt password hashing, and Spring Security for Role-Based Access Control.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗄️</div>
+        <h3>MongoDB Atlas (NoSQL)</h3>
+        <p>Transitioned from traditional SQL databases to mastering NoSQL document storage and Spring Data MongoDB ODM for cloud-connected database operations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>Generative AI Integration</h3>
+        <p>Gained cutting-edge experience working with LLMs — integrating Google Gemini 3.6 Flash into a Java backend with custom retry logic for network resilience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Frontend Web Development</h3>
+        <p>Mastered native HTML5, CSS3, and Vanilla JavaScript — specifically asynchronous fetch() calls to build dynamic, SPA-like applications without frameworks.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Security-First Development</h3>
+        <p>Learned the critical importance of credential abstraction using environment variables, preventing common vulnerabilities like credential leakage in source code.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S14: FUTURE -->
+  <section id="s14">
+    <div class="section-header">
+      <div class="section-number">14</div>
+      <h2>Future Enhancements</h2>
+    </div>
+    <div class="module-card">
+      <div class="module-header"><div class="module-icon">🎙️</div><div><h3>Voice-to-Text AI Advisory</h3><div class="module-tag">Accessibility Enhancement</div></div></div>
+      <div class="module-body"><p>Allow farmers to speak queries in regional languages (Telugu, Hindi, Kannada) and receive spoken audio responses from the AI — making the platform accessible to farmers with low digital literacy or visual impairments.</p></div>
+    </div>
+    <div class="module-card">
+      <div class="module-header"><div class="module-icon">📡</div><div><h3>IoT Sensor Integration</h3><div class="module-tag">Hardware Integration</div></div></div>
+      <div class="module-body"><p>Connect low-cost soil sensors to transmit real-time moisture and nitrogen data directly to the farmer's dashboard, enabling automated irrigation alerts without manual data entry.</p></div>
+    </div>
+    <div class="module-card">
+      <div class="module-header"><div class="module-icon">⛓️</div><div><h3>Blockchain Marketplace</h3><div class="module-tag">Trust and Transparency</div></div></div>
+      <div class="module-body"><p>Implement an immutable blockchain ledger for product certifications and transactions — ensuring organic certifications are tamper-proof and buyers can trace products back to their exact farm of origin.</p></div>
+    </div>
+    <div class="module-card">
+      <div class="module-header"><div class="module-icon">🤖</div><div><h3>ML Yield Prediction</h3><div class="module-tag">Python / TensorFlow Microservice</div></div></div>
+      <div class="module-body"><p>A dedicated Python TensorFlow microservice that analyzes a farmer's historical crop calendar data, soil type, and seasonal weather forecasts to predict expected harvest yield — enabling pre-negotiation of marketplace prices.</p></div>
+    </div>
+  </section>
+
+  <!-- S15: CONCLUSION -->
+  <section id="s15">
+    <div class="section-header">
+      <div class="section-number">15</div>
+      <h2>Conclusion</h2>
+    </div>
+    <div class="highlight-box">
+      <h3>Project Achievement Summary</h3>
+      <p>The FarmVerse internship project was a comprehensive, end-to-end software engineering experience that resulted in a fully functional, enterprise-grade Precision Agriculture Management Platform. Every phase of the Software Development Lifecycle (SDLC) — from architectural design to security implementation, AI integration, and user-facing feature delivery — was executed in full.</p>
+    </div>
+    <p>This project demonstrates that modern technology — specifically Generative AI, cloud NoSQL databases, and secure stateless web architectures — can be applied directly to solving India's pressing agricultural challenges.</p>
+    <p>The key engineering decisions made during this project — using JWT for stateless security, Spring Boot's annotation-driven architecture, MongoDB's flexible document model, and Google Gemini's generative capabilities — represent industry-standard best practices that are directly applicable in professional software engineering roles.</p>
+    <p>Ultimately, FarmVerse serves as both a technically impressive platform and a demonstration that software engineering can be a tool for meaningful social impact — directly empowering the farmers who form the backbone of India's economy.</p>
+
+    <h3>Acknowledgements</h3>
+    <p>I sincerely thank <strong>Infosys Springboard</strong> for providing the platform and resources for this internship. I express my deepest gratitude to my Project Guide, <strong>Ragul S</strong>, for his technical expertise and patient mentorship throughout the development of FarmVerse. I am also deeply thankful to my fellow teammates in <strong>Team C</strong> for their collaborative spirit and shared dedication that made this project a success.</p>
+  </section>
+
 </div>
+
+<footer>
+  <strong>FarmVerse — Precision Agriculture Management Platform</strong><br>
+  Infosys Springboard Virtual Internship 6.0 | Team C | Built with ❤️ for Indian Farmers | © 2026
+</footer>
 
 </body>
 </html>
