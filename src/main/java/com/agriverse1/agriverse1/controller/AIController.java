@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AI Chat endpoint — powered by Google Gemini 1.5 Flash.
+ * AI Chat endpoint — powered by Google Gemini 2.5 Flash.
  * POST /api/ai/chat  — Send a message, receive contextual farming advice.
  */
 @RestController
@@ -61,7 +61,7 @@ public class AIController {
             return "Gemini API Key is missing. Please configure it in your environment variables before asking questions!";
         }
 
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=" + geminiApiKey;
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + geminiApiKey;
 
         // System prompt injection
         String fullPrompt = "You are an expert agricultural advisor for FarmVerse. Be concise, practical, and friendly. Answer this farmer's question: " + prompt;
@@ -104,4 +104,4 @@ public class AIController {
         }
         return "Sorry, I could not connect to the AI at this time.";
     }
-}
+}
